@@ -37,3 +37,4 @@ def run_get_map():
 if __name__ == '__main__':
     logging.basicConfig()
     run_update()
+    run_get_map()

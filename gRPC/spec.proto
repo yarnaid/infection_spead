@@ -21,7 +21,7 @@ message UpdateRequest {
 
 message UpdateResponse {
     Metadata meta = 1;
-    State state=2;
+    State state = 2;
 
 }
 
