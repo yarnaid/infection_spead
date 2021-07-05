@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\nspec.proto\"j\n\x08Metadata\x12$\n\x06status\x18\x01 \x01(\x0e\x32\x14.Metadata.statusCode\x12\x12\n\nrequest_id\x18\x02 \x01(\x05\"$\n\nstatusCode\x12\x0b\n\x07SUCCESS\x10\x00\x12\t\n\x05\x45RROR\x10\x01\"(\n\rUpdateRequest\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\")\n\x0eUpdateResponse\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\"\xb5\x01\n\x03Map\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\x12\x1f\n\x08\x62uilding\x18\x02 \x01(\x0b\x32\r.Map.Building\x1at\n\x08\x42uilding\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\x05\x12\x0f\n\x07\x63oord_x\x18\x03 \x01(\x05\x12\x0f\n\x07\x63oord_y\x18\x04 \x01(\x05\x12\r\n\x05width\x18\x05 \x01(\x05\x12\x0e\n\x06length\x18\x06 \x01(\x05\x12\r\n\x05\x61ngle\x18\x07 \x01(\x05\"\x0c\n\nHelloReply\"\x07\n\x05State\"\x07\n\x05\x45mpty2V\n\x08Modeling\x12.\n\tGetUpdate\x12\x0e.UpdateRequest\x1a\x0f.UpdateResponse\"\x00\x12\x1a\n\x06GetMap\x12\x06.Empty\x1a\x04.Map\"\x00\x30\x01\x62\x06proto3'
+  serialized_pb=b'\n\nspec.proto\"j\n\x08Metadata\x12$\n\x06status\x18\x01 \x01(\x0e\x32\x14.Metadata.statusCode\x12\x12\n\nrequest_id\x18\x02 \x01(\x05\"$\n\nstatusCode\x12\x0b\n\x07SUCCESS\x10\x00\x12\t\n\x05\x45RROR\x10\x01\"(\n\rUpdateRequest\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\"@\n\x0eUpdateResponse\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\x12\x15\n\x05state\x18\x02 \x01(\x0b\x32\x06.State\"\xb5\x01\n\x03Map\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\x12\x1f\n\x08\x62uilding\x18\x02 \x01(\x0b\x32\r.Map.Building\x1at\n\x08\x42uilding\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\x05\x12\x0f\n\x07\x63oord_x\x18\x03 \x01(\x05\x12\x0f\n\x07\x63oord_y\x18\x04 \x01(\x05\x12\r\n\x05width\x18\x05 \x01(\x05\x12\x0e\n\x06length\x18\x06 \x01(\x05\x12\r\n\x05\x61ngle\x18\x07 \x01(\x05\"C\n\x05State\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\x05\x12\x0f\n\x07\x63oord_x\x18\x03 \x01(\x05\x12\x0f\n\x07\x63oord_y\x18\x04 \x01(\x05\"\x07\n\x05\x45mpty2X\n\x08Modeling\x12\x30\n\tGetUpdate\x12\x0e.UpdateRequest\x1a\x0f.UpdateResponse\"\x00\x30\x01\x12\x1a\n\x06GetMap\x12\x06.Empty\x1a\x04.Map\"\x00\x30\x01\x62\x06proto3'
 )
 
 
@@ -137,6 +137,13 @@ _UPDATERESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='state', full_name='UpdateResponse.state', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -150,7 +157,7 @@ _UPDATERESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=164,
-  serialized_end=205,
+  serialized_end=228,
 )
 
 
@@ -223,8 +230,8 @@ _MAP_BUILDING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=273,
-  serialized_end=389,
+  serialized_start=296,
+  serialized_end=412,
 )
 
 _MAP = _descriptor.Descriptor(
@@ -261,33 +268,8 @@ _MAP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=208,
-  serialized_end=389,
-)
-
-
-_HELLOREPLY = _descriptor.Descriptor(
-  name='HelloReply',
-  full_name='HelloReply',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=391,
-  serialized_end=403,
+  serialized_start=231,
+  serialized_end=412,
 )
 
 
@@ -299,6 +281,34 @@ _STATE = _descriptor.Descriptor(
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='State.id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='type', full_name='State.type', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='coord_x', full_name='State.coord_x', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='coord_y', full_name='State.coord_y', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -311,8 +321,8 @@ _STATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=405,
-  serialized_end=412,
+  serialized_start=414,
+  serialized_end=481,
 )
 
 
@@ -336,14 +346,15 @@ _EMPTY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=414,
-  serialized_end=421,
+  serialized_start=483,
+  serialized_end=490,
 )
 
 _METADATA.fields_by_name['status'].enum_type = _METADATA_STATUSCODE
 _METADATA_STATUSCODE.containing_type = _METADATA
 _UPDATEREQUEST.fields_by_name['meta'].message_type = _METADATA
 _UPDATERESPONSE.fields_by_name['meta'].message_type = _METADATA
+_UPDATERESPONSE.fields_by_name['state'].message_type = _STATE
 _MAP_BUILDING.containing_type = _MAP
 _MAP.fields_by_name['meta'].message_type = _METADATA
 _MAP.fields_by_name['building'].message_type = _MAP_BUILDING
@@ -351,7 +362,6 @@ DESCRIPTOR.message_types_by_name['Metadata'] = _METADATA
 DESCRIPTOR.message_types_by_name['UpdateRequest'] = _UPDATEREQUEST
 DESCRIPTOR.message_types_by_name['UpdateResponse'] = _UPDATERESPONSE
 DESCRIPTOR.message_types_by_name['Map'] = _MAP
-DESCRIPTOR.message_types_by_name['HelloReply'] = _HELLOREPLY
 DESCRIPTOR.message_types_by_name['State'] = _STATE
 DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -392,13 +402,6 @@ Map = _reflection.GeneratedProtocolMessageType('Map', (_message.Message,), {
 _sym_db.RegisterMessage(Map)
 _sym_db.RegisterMessage(Map.Building)
 
-HelloReply = _reflection.GeneratedProtocolMessageType('HelloReply', (_message.Message,), {
-  'DESCRIPTOR' : _HELLOREPLY,
-  '__module__' : 'spec_pb2'
-  # @@protoc_insertion_point(class_scope:HelloReply)
-  })
-_sym_db.RegisterMessage(HelloReply)
-
 State = _reflection.GeneratedProtocolMessageType('State', (_message.Message,), {
   'DESCRIPTOR' : _STATE,
   '__module__' : 'spec_pb2'
@@ -422,8 +425,8 @@ _MODELING = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=423,
-  serialized_end=509,
+  serialized_start=492,
+  serialized_end=580,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetUpdate',

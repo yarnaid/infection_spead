@@ -2,7 +2,7 @@ syntax = "proto3";
 
 
 service Modeling {
-    rpc GetUpdate (UpdateRequest) returns (UpdateResponse) {}
+    rpc GetUpdate (UpdateRequest) returns (stream UpdateResponse) {}
     rpc GetMap (Empty) returns (stream Map) {}
 }
 
@@ -21,6 +21,8 @@ message UpdateRequest {
 
 message UpdateResponse {
     Metadata meta = 1;
+    State state=2;
+
 }
 
 message Map {
@@ -38,12 +40,12 @@ message Map {
     Building building = 2;
 }
 
-message HelloReply {
-  // list of requested states
-}
-
 message State {
   // people statuses and coordinates
+    int32 id =1;
+    int32 type = 2;
+    int32 coord_x = 3;
+    int32 coord_y = 4;
 }
 
 message Empty{
