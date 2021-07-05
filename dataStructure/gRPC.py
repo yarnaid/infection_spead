@@ -1,4 +1,4 @@
-gRPC_status_creator = {'SUCCESS': 1, 'ERROR': 0}
+gRPC_status_creator = {'SUCCESS': 0, 'ERROR': 1}
 
 
 class RequestCounter:
