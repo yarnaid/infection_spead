@@ -5,6 +5,7 @@ from concurrent import futures
 
 import logging
 import grpc
+import uuid
 from dataStructure.gRPC import gRPC_status_creator
 
 
@@ -17,7 +18,9 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
     def GetUpdate(self, request, context):  # Generator of people on modeling
         status = spec_pb2.Metadata(status=gRPC_status_creator["SUCCESS"],
                                    request_id=request.meta.request_id)
+
         for elem in self.model_objects:
+            status.UUID = str(uuid.uuid1())
             grpc_state = ModelingServicer.create_update_response(elem, status)
             yield grpc_state
 
@@ -35,6 +38,7 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
         status = spec_pb2.Metadata(status=gRPC_status_creator["SUCCESS"],
                                    request_id=request.meta.request_id)
         for building in self.map:
+            status.UUID = str(uuid.uuid1())
             grpc_building = self.create_grpc_building(building, status)
             yield grpc_building
 
