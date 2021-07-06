@@ -11,10 +11,10 @@ message Metadata {
         UNDEFINED = 0;
         SUCCESS = 1;
         ERROR = 2;
-
     }
     statusCode status = 1;
     int32  request_id = 2;
+    string UUID = 4;
 }
 
 message UpdateRequest {
@@ -31,24 +31,36 @@ message Map {
     Metadata meta = 1;
     // get buildings
     message Building{
-        int32 id=1; //unique key
-        int32 type = 2; // building specification (house, road, clinic)
-        int32 coord_x = 3; // location on plain
-        int32 coord_y = 4;
-        int32 width = 5; // size of building
-        int32 length = 6;
-        int32 angle = 7; // angle from North going by hour hand
+        BaseUnit base =1;
+        enum Type{// building specification (house, road, clinic)
+            HOUSE = 0;
+            ROAD = 1;
+        }
+        Type type = 2;
+        int32 width = 3; // size of building
+        int32 length = 4;
+        int32 angle = 5; // angle from North going by hour hand
     }
     Building building = 2;
 }
 
 message State {
   // people statuses and coordinates
-    int32 id =1;
-    int32 type = 2;
-    int32 coord_x = 3;
-    int32 coord_y = 4;
+    BaseUnit base = 1;
+    enum Type{
+        NORMAL = 0;
+        ILL = 1;
+        RECOVERED = 2;
+        DEAD = 4;
+    }
+    Type type =2;
 }
 
 message Empty{
+}
+
+message BaseUnit{
+   int32 id =1; //unique key
+   int32 coord_x = 2; // location on plain
+   int32 coord_y = 3;
 }
