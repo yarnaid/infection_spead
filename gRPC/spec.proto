@@ -51,7 +51,7 @@ message State {
         NORMAL = 0;
         ILL = 1;
         RECOVERED = 2;
-        DEAD = 4;
+        DEAD = 3;
     }
     Type type =2;
 }
