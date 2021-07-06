@@ -1,3 +1,5 @@
+import os
+
 from gRPC import spec_pb2_grpc, spec_pb2
 from concurrent import futures
 
@@ -51,7 +53,7 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 
 
 def serve():  # Responsible for the operation of the server
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=os.cpu_count()))
     spec_pb2_grpc.add_ModelingServicer_to_server(
         ModelingServicer(None, None), server)  # NEED BACKEND OUTPUT INSTEAD OF NONE
     server.add_insecure_port('[::]:50051')
