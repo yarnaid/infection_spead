@@ -1,7 +1,6 @@
 import pytest
 from backend import server
 from collections import namedtuple
-
 backend_building = namedtuple('Building', ['id', 'type', 'x', 'y', 'width', 'length', 'angle'])
 backend_human = namedtuple('Human', ['id', 'type', 'x', 'y'])
 Meta = namedtuple('meta', ['status', 'request_id'])
