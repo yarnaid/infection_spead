@@ -27,7 +27,7 @@ class ServerModelingServicer(unittest.TestCase):
         # work with server function
         resp = servicer.GetMap(request, context=None)
         result = []
-        for _, elem in enumerate(resp):
+        for elem in resp:
             result.append(elem)
         msg = "Wrong id while yielding map object"
         self.assertEqual(result[0].building.id, 1, msg=msg)
@@ -46,7 +46,7 @@ class ServerModelingServicer(unittest.TestCase):
         resp = servicer.GetUpdate(request, context=None)
         result = []
         # study result
-        for _, elem in enumerate(resp):
+        for elem in resp:
             result.append(elem)
         msg = "Wrong id while yielding human object"
         self.assertEqual(result[0].state.coord_x, 3, msg=msg)
