@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\nspec.proto\"j\n\x08Metadata\x12$\n\x06status\x18\x01 \x01(\x0e\x32\x14.Metadata.statusCode\x12\x12\n\nrequest_id\x18\x02 \x01(\x05\"$\n\nstatusCode\x12\x0b\n\x07SUCCESS\x10\x00\x12\t\n\x05\x45RROR\x10\x01\"(\n\rUpdateRequest\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\"@\n\x0eUpdateResponse\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\x12\x15\n\x05state\x18\x02 \x01(\x0b\x32\x06.State\"\xb5\x01\n\x03Map\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\x12\x1f\n\x08\x62uilding\x18\x02 \x01(\x0b\x32\r.Map.Building\x1at\n\x08\x42uilding\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\x05\x12\x0f\n\x07\x63oord_x\x18\x03 \x01(\x05\x12\x0f\n\x07\x63oord_y\x18\x04 \x01(\x05\x12\r\n\x05width\x18\x05 \x01(\x05\x12\x0e\n\x06length\x18\x06 \x01(\x05\x12\r\n\x05\x61ngle\x18\x07 \x01(\x05\"C\n\x05State\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\x05\x12\x0f\n\x07\x63oord_x\x18\x03 \x01(\x05\x12\x0f\n\x07\x63oord_y\x18\x04 \x01(\x05\"\x07\n\x05\x45mpty2X\n\x08Modeling\x12\x30\n\tGetUpdate\x12\x0e.UpdateRequest\x1a\x0f.UpdateResponse\"\x00\x30\x01\x12\x1a\n\x06GetMap\x12\x06.Empty\x1a\x04.Map\"\x00\x30\x01\x62\x06proto3'
+  serialized_pb=b'\n\nspec.proto\"y\n\x08Metadata\x12$\n\x06status\x18\x01 \x01(\x0e\x32\x14.Metadata.statusCode\x12\x12\n\nrequest_id\x18\x02 \x01(\x05\"3\n\nstatusCode\x12\r\n\tUNDEFINED\x10\x00\x12\x0b\n\x07SUCCESS\x10\x01\x12\t\n\x05\x45RROR\x10\x02\"(\n\rUpdateRequest\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\"@\n\x0eUpdateResponse\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\x12\x15\n\x05state\x18\x02 \x01(\x0b\x32\x06.State\"\xb5\x01\n\x03Map\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\x12\x1f\n\x08\x62uilding\x18\x02 \x01(\x0b\x32\r.Map.Building\x1at\n\x08\x42uilding\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\x05\x12\x0f\n\x07\x63oord_x\x18\x03 \x01(\x05\x12\x0f\n\x07\x63oord_y\x18\x04 \x01(\x05\x12\r\n\x05width\x18\x05 \x01(\x05\x12\x0e\n\x06length\x18\x06 \x01(\x05\x12\r\n\x05\x61ngle\x18\x07 \x01(\x05\"C\n\x05State\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\x05\x12\x0f\n\x07\x63oord_x\x18\x03 \x01(\x05\x12\x0f\n\x07\x63oord_y\x18\x04 \x01(\x05\"\x07\n\x05\x45mpty2X\n\x08Modeling\x12\x30\n\tGetUpdate\x12\x0e.UpdateRequest\x1a\x0f.UpdateResponse\"\x00\x30\x01\x12\x1a\n\x06GetMap\x12\x06.Empty\x1a\x04.Map\"\x00\x30\x01\x62\x06proto3'
 )
 
 
@@ -32,12 +32,17 @@ _METADATA_STATUSCODE = _descriptor.EnumDescriptor(
   create_key=_descriptor._internal_create_key,
   values=[
     _descriptor.EnumValueDescriptor(
-      name='SUCCESS', index=0, number=0,
+      name='UNDEFINED', index=0, number=0,
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
-      name='ERROR', index=1, number=1,
+      name='SUCCESS', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='ERROR', index=2, number=2,
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
@@ -45,7 +50,7 @@ _METADATA_STATUSCODE = _descriptor.EnumDescriptor(
   containing_type=None,
   serialized_options=None,
   serialized_start=84,
-  serialized_end=120,
+  serialized_end=135,
 )
 _sym_db.RegisterEnumDescriptor(_METADATA_STATUSCODE)
 
@@ -86,7 +91,7 @@ _METADATA = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=14,
-  serialized_end=120,
+  serialized_end=135,
 )
 
 
@@ -117,8 +122,8 @@ _UPDATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=122,
-  serialized_end=162,
+  serialized_start=137,
+  serialized_end=177,
 )
 
 
@@ -156,8 +161,8 @@ _UPDATERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=164,
-  serialized_end=228,
+  serialized_start=179,
+  serialized_end=243,
 )
 
 
@@ -230,8 +235,8 @@ _MAP_BUILDING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=296,
-  serialized_end=412,
+  serialized_start=311,
+  serialized_end=427,
 )
 
 _MAP = _descriptor.Descriptor(
@@ -268,8 +273,8 @@ _MAP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=231,
-  serialized_end=412,
+  serialized_start=246,
+  serialized_end=427,
 )
 
 
@@ -321,8 +326,8 @@ _STATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=414,
-  serialized_end=481,
+  serialized_start=429,
+  serialized_end=496,
 )
 
 
@@ -346,8 +351,8 @@ _EMPTY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=483,
-  serialized_end=490,
+  serialized_start=498,
+  serialized_end=505,
 )
 
 _METADATA.fields_by_name['status'].enum_type = _METADATA_STATUSCODE
@@ -425,8 +430,8 @@ _MODELING = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=492,
-  serialized_end=580,
+  serialized_start=507,
+  serialized_end=595,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetUpdate',

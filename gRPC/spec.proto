@@ -8,8 +8,10 @@ service Modeling {
 
 message Metadata {
     enum statusCode{
-        SUCCESS = 0;
-        ERROR = 1;
+        UNDEFINED = 0;
+        SUCCESS = 1;
+        ERROR = 2;
+
     }
     statusCode status = 1;
     int32  request_id = 2;
