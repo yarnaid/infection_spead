@@ -4,15 +4,6 @@ from pure_protobuf.types import int32
 from enum import IntEnum
 
 
-class RequestCounter:  # counter of unique request id
-    id = 0
-
-    @staticmethod
-    def give_id():
-        RequestCounter.id += 1
-        return RequestCounter.id
-
-
 class statusCode(IntEnum):
     UNDEFINED = 0
     SUCCESS = 1
