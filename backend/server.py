@@ -1,12 +1,13 @@
 import os
 
 from gRPC import spec_pb2_grpc, spec_pb2
+from dataStructure.gRPC import Map, UpdateResponse, Metadata, statusCode, State, BaseUnit, BuildingType, HumanType, \
+    Building
 from concurrent import futures
-
+from pure_protobuf.types import int32
 import logging
 import grpc
 import uuid
-from dataStructure.gRPC import gRPC_status_creator
 
 
 class ModelingServicer(spec_pb2_grpc.ModelingServicer):
@@ -16,8 +17,8 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
         self.model_objects = model_objects
 
     def GetUpdate(self, request, context):  # Generator of people on modeling
-        status = spec_pb2.Metadata(status=gRPC_status_creator["SUCCESS"],
-                                   request_id=request.meta.request_id)
+        status = Metadata(status=statusCode.SUCCESS,
+                          request_id=int32(request.meta.request_id))
 
         for elem in self.model_objects:
             status.UUID = str(uuid.uuid1())
@@ -26,17 +27,15 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 
     @staticmethod
     def create_update_response(human, status):  # create pb2 object from backed human
-        return spec_pb2.UpdateResponse(meta=status,
-                                       state=spec_pb2.State(
-                                           id=human.id,
-                                           type=human.type,
-                                           coord_x=human.x,
-                                           coord_y=human.y
-                                       ))
+        return UpdateResponse(meta=status,
+                              state=State(
+                                  base=BaseUnit(id=int32(human.id), coord_x=int32(human.x), coord_y=int32(human.y)),
+                                  type=HumanType(human.type),
+                              ))
 
     def GetMap(self, request, context):  # Generator of map objects
-        status = spec_pb2.Metadata(status=gRPC_status_creator["SUCCESS"],
-                                   request_id=request.meta.request_id)
+        status = Metadata(status=statusCode.SUCCESS,
+                          request_id=int32(request.meta.request_id))
         for building in self.map:
             status.UUID = str(uuid.uuid1())
             grpc_building = self.create_grpc_building(building, status)
@@ -44,16 +43,14 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 
     @staticmethod
     def create_grpc_building(building, status):  # create pb2 object from backend building
-        return spec_pb2.Map(meta=status,
-                            building=spec_pb2.Map.Building(
-                                id=building.id,
-                                type=building.type,
-                                coord_x=building.x,
-                                coord_y=building.y,
-                                width=building.width,
-                                length=building.length,
-                                angle=building.angle
-                            ))
+        return Map(meta=status,
+                   building=Building(
+                       base=BaseUnit(id=int32(building.id), coord_x=int32(building.x), coord_y=int32(building.y)),
+                       type=BuildingType(building.type),
+                       width=int32(building.width),
+                       length=int32(building.length),
+                       angle=int32(building.angle)
+                   ))
 
 
 def serve():  # Responsible for the operation of the server

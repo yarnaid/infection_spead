@@ -1,14 +1,16 @@
 from __future__ import print_function
 from gRPC import spec_pb2_grpc, spec_pb2
-from dataStructure.gRPC import gRPC_status_creator, RequestCounter
+from dataStructure.gRPC import RequestCounter, statusCode
+from pure_protobuf.types import int32
+
 import logging
 import uuid
 import grpc
 
 
 def update_request(stub):  # Request to update the states of modeling objects
-    req = spec_pb2.UpdateRequest(meta=spec_pb2.Metadata(status=gRPC_status_creator["SUCCESS"],
-                                                        request_id=RequestCounter.give_id(), UUID=str(uuid.uuid1()))
+    req = spec_pb2.UpdateRequest(meta=spec_pb2.Metadata(status=statusCode.SUCCESS,
+                                                        request_id=int32(RequestCounter.give_id()), UUID=str(uuid.uuid1()))
                                  )
     object_generator = stub.GetUpdate(req)  # We get a generator of people in the simulation from the server
     return object_generator
@@ -40,4 +42,3 @@ if __name__ == '__main__':
     logging.basicConfig()
     # run_update()
     run_get_map()
-

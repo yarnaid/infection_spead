@@ -14,7 +14,7 @@ message Metadata {
     }
     statusCode status = 1;
     int32  request_id = 2;
-    string UUID = 4;
+    string UUID = 3;
 }
 
 message UpdateRequest {
@@ -32,11 +32,11 @@ message Map {
     // get buildings
     message Building{
         BaseUnit base =1;
-        enum Type{// building specification (house, road, clinic)
+        enum BuildingType{// building specification (house, road, clinic)
             HOUSE = 0;
             ROAD = 1;
         }
-        Type type = 2;
+        BuildingType type = 2;
         int32 width = 3; // size of building
         int32 length = 4;
         int32 angle = 5; // angle from North going by hour hand
@@ -47,13 +47,13 @@ message Map {
 message State {
   // people statuses and coordinates
     BaseUnit base = 1;
-    enum Type{
+    enum HumanType{
         NORMAL = 0;
         ILL = 1;
         RECOVERED = 2;
         DEAD = 3;
     }
-    Type type =2;
+    HumanType type =2;
 }
 
 message Empty{
