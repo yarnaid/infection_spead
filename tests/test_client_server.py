@@ -1,6 +1,7 @@
 import pytest
 from backend import server
 from collections import namedtuple
+from backend.server import ModelingSerializer
 backend_building = namedtuple('Building', ['id', 'type', 'x', 'y', 'width', 'length', 'angle'])
 backend_human = namedtuple('Human', ['id', 'type', 'x', 'y'])
 Meta = namedtuple('meta', ['status', 'request_id'])
@@ -18,7 +19,7 @@ def test_getting_map():
     build_1 = backend_building(1, 1, 1, 1, 1, 1, 1)
     build_2 = backend_building(10, 0, 10, 10, 10, 10, 10)
     map_items = [build_1, build_2]
-    servicer = server.ModelingServicer(map_items, None)
+    servicer = server.ModelingServicer(map_items, None, ModelingSerializer)
     # setting up request
     request = create_null_request()
 
@@ -37,7 +38,7 @@ def test_update_request():
     human_1 = backend_human(1, 1, 1, 1)
     human_2 = backend_human(3, 3, 3, 3)
     humans = [human_2, human_1]
-    servicer = server.ModelingServicer(None, humans)
+    servicer = server.ModelingServicer(None, humans, ModelingSerializer)
     # send request
     request = create_null_request()
     resp = servicer.GetUpdate(request, context=None)

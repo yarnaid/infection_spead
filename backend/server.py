@@ -10,21 +10,7 @@ import grpc
 import uuid
 
 
-class ModelingServicer(spec_pb2_grpc.ModelingServicer):
-
-    def __init__(self, map_obj, model_objects):  # Remember our Backend output exists
-        self.map = map_obj
-        self.model_objects = model_objects
-
-    def GetUpdate(self, request, context):  # Generator of people on modeling
-        status = Metadata(status=statusCode.SUCCESS,
-                          request_id=int32(request.meta.request_id))
-
-        for elem in self.model_objects:
-            status.UUID = str(uuid.uuid1())
-            grpc_state = ModelingServicer.create_update_response(elem, status)
-            yield grpc_state
-
+class ModelingSerializer:
     @staticmethod
     def create_update_response(human, status):  # create pb2 object from backed human
         return UpdateResponse(meta=status,
@@ -32,14 +18,6 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
                                   base=BaseUnit(id=int32(human.id), coord_x=int32(human.x), coord_y=int32(human.y)),
                                   type=HumanType(human.type),
                               ))
-
-    def GetMap(self, request, context):  # Generator of map objects
-        status = Metadata(status=statusCode.SUCCESS,
-                          request_id=int32(request.meta.request_id))
-        for building in self.map:
-            status.UUID = str(uuid.uuid1())
-            grpc_building = self.create_grpc_building(building, status)
-            yield grpc_building
 
     @staticmethod
     def create_grpc_building(building, status):  # create pb2 object from backend building
@@ -52,11 +30,39 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
                        angle=int32(building.angle)
                    ))
 
+    @staticmethod
+    def create_success_meta_response(request):
+        return Metadata(status=statusCode.SUCCESS,
+                        request_id=int32(request.meta.request_id))
+
+
+class ModelingServicer(spec_pb2_grpc.ModelingServicer):
+
+    def __init__(self, map_obj, model_objects, serializer):  # Remember our Backend output exists
+        self.map = map_obj
+        self.model_objects = model_objects
+        self.serializer = serializer
+
+    def GetUpdate(self, request, context):  # Generator of people on modeling
+        status = self.serializer.create_success_meta_response(request)
+
+        for elem in self.model_objects:
+            status.UUID = str(uuid.uuid1())
+            grpc_state = self.serializer.create_update_response(elem, status)
+            yield grpc_state
+
+    def GetMap(self, request, context):  # Generator of map objects
+        status = self.serializer.create_success_meta_response(request)
+        for building in self.map:
+            status.UUID = str(uuid.uuid1())
+            grpc_building = self.serializer.create_grpc_building(building, status)
+            yield grpc_building
+
 
 def serve():  # Responsible for the operation of the server
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=os.cpu_count()))
     spec_pb2_grpc.add_ModelingServicer_to_server(
-        ModelingServicer(None, None), server)  # NEED BACKEND OUTPUT INSTEAD OF NONE
+        ModelingServicer(None, None, ModelingSerializer), server)  # NEED BACKEND OUTPUT INSTEAD OF NONE
     server.add_insecure_port('[::]:50051')
     server.start()
     server.wait_for_termination()
