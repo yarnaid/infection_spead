@@ -16,7 +16,7 @@ def create_null_request():  # creating request with meta(state = SUCCESS, reques
 def test_getting_map():
     # setting up Servicer
     build_1 = backend_building(1, 1, 1, 1, 1, 1, 1)
-    build_2 = backend_building(10, 10, 10, 10, 10, 10, 10)
+    build_2 = backend_building(10, 0, 10, 10, 10, 10, 10)
     map_items = [build_1, build_2]
     servicer = server.ModelingServicer(map_items, None)
     # setting up request
@@ -27,8 +27,8 @@ def test_getting_map():
     result = []
     for elem in resp:
         result.append(elem)
-    assert result[0].building.id == 1  # Wrong id while yielding map object
-    assert result[1].building.id == 10
+    assert result[0].building.base.id == 1  # Wrong id while yielding map object
+    assert result[1].building.base.id == 10
     assert result[1].meta.request_id == request.meta.request_id  # Wrong returned request id while yielding map object
 
 
@@ -45,6 +45,6 @@ def test_update_request():
     # study result
     for elem in resp:
         result.append(elem)
-    assert result[0].state.coord_x == 3  # Wrong id while yielding human object
-    assert result[1].state.id == 1
+    assert result[0].state.base.coord_x == 3  # Wrong id while yielding human object
+    assert result[1].state.base.id == 1
     assert result[1].meta.request_id == request.meta.request_id  # Wrong returned request id while yielding human object"
