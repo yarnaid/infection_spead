@@ -23,7 +23,7 @@ message UpdateRequest {
 
 message UpdateResponse {
     Metadata meta = 1;
-    State state = 2;
+    HumanState state = 2;
 
 }
 
@@ -44,7 +44,7 @@ message Map {
     Building building = 2;
 }
 
-message State {
+message HumanState {
   // people statuses and coordinates
     BaseUnit base = 1;
     enum HumanType{

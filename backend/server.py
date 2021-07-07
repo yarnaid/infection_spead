@@ -1,7 +1,7 @@
 import os
 
 from gRPC import spec_pb2_grpc, spec_pb2
-from dataStructure.gRPC import Map, UpdateResponse, Metadata, statusCode, State, BaseUnit, BuildingType, HumanType, \
+from dataStructure.gRPC import Map, UpdateResponse, Metadata, statusCode, HumanState, BaseUnit, BuildingType, HumanType, \
     Building
 from concurrent import futures
 from pure_protobuf.types import int32
@@ -28,7 +28,7 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
     @staticmethod
     def create_update_response(human, status):  # create pb2 object from backed human
         return UpdateResponse(meta=status,
-                              state=State(
+                              state=HumanState(
                                   base=BaseUnit(id=int32(human.id), coord_x=int32(human.x), coord_y=int32(human.y)),
                                   type=HumanType(human.type),
                               ))

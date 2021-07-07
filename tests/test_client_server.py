@@ -47,4 +47,5 @@ def test_update_request():
         result.append(elem)
     assert result[0].state.base.coord_x == 3  # Wrong id while yielding human object
     assert result[1].state.base.id == 1
-    assert result[1].meta.request_id == request.meta.request_id  # Wrong returned request id while yielding human object"
+    assert result[1].meta.request_id == request.meta.request_id  # Wrong returned request id while yielding human
+    # object"

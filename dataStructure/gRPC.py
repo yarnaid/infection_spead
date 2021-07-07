@@ -44,7 +44,7 @@ class HumanType(IntEnum):
 
 @message
 @dataclass
-class State:
+class HumanState:
     base: BaseUnit = field(1)
     type: HumanType = field(2)
 
@@ -75,4 +75,4 @@ class Map:
 @dataclass
 class UpdateResponse:
     meta: Metadata = field(1)
-    state: State = field(2)
+    state: HumanState = field(2)
