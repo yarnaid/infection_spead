@@ -44,6 +44,7 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
         self.serializer = serializer
 
     def GetUpdate(self, request, context):  # Generator of people on modeling
+        logger.info("Get update request")
         status = self.serializer.create_success_meta_response(request)
 
         for elem in self.model_objects:
@@ -52,6 +53,7 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
             yield grpc_state
 
     def GetMap(self, request, context):  # Generator of map objects
+        logger.info("Get map request")
         status = self.serializer.create_success_meta_response(request)
         for building in self.map:
             status.UUID = str(uuid.uuid1())
@@ -63,11 +65,16 @@ def serve():  # Responsible for the operation of the server
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=os.cpu_count()))
     spec_pb2_grpc.add_ModelingServicer_to_server(
         ModelingServicer(None, None, ModelingSerializer), server)  # NEED BACKEND OUTPUT INSTEAD OF NONE
+    logger.info("Set Modeling Servicer")
     server.add_insecure_port('[::]:50051')
     server.start()
+    logger.info("Start server")
     server.wait_for_termination()
 
 
+logging.basicConfig(format='%(relativeCreated)5d %(name)-15s %(levelname)-8s %(message)s')
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 if __name__ == '__main__':
-    logging.basicConfig()
+
     serve()

@@ -14,12 +14,14 @@ def update_request(stub):  # Request to update the states of modeling objects
                                       UUID=str(uuid.uuid1()))
                         )
     object_generator = stub.GetUpdate(req)  # We get a generator of people in the simulation from the server
+    logger.info("Receive update response")
     return object_generator
 
 
 def get_map(stub):  # Request for getting map objects
     req = spec_pb2.Empty()
     map_generator = stub.GetMap(req)  # We received a generator of objects on the map from the server
+    logger.info("Receive map from server ")
     return map_generator
 
 
@@ -28,20 +30,22 @@ def run_update():
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
     with grpc.insecure_channel('localhost:50051') as channel:
+        logger.info("Set channel to server")
         stub = spec_pb2_grpc.ModelingStub(channel)
         update_request(stub)
 
 
 def run_get_map():
     with grpc.insecure_channel('localhost:50051') as channel:
+        logger.info("Set channel to server")
         stub = spec_pb2_grpc.ModelingStub(channel)
         get_map(stub)
 
 
+logging.basicConfig(format='%(relativeCreated)5d %(name)-15s %(levelname)-8s %(message)s')
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 if __name__ == '__main__':
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
-    logger.debug('black betty')
-    counter = count(1)
+    counter = count(1)  # set counter for requests
     # run_get_map()
     # run_update()
