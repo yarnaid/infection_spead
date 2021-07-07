@@ -67,3 +67,9 @@ class Map:
 class UpdateResponse:
     meta: Metadata = field(1)
     state: HumanState = field(2)
+
+
+@message
+@dataclass
+class UpdateRequest:
+    meta : Metadata = field(1)
