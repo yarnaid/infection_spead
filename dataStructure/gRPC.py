@@ -72,4 +72,4 @@ class UpdateResponse:
 @message
 @dataclass
 class UpdateRequest:
-    meta : Metadata = field(1)
+    meta: Metadata = field(1)
