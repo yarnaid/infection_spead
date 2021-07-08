@@ -31,6 +31,17 @@ class ResearchMap:
         self.__map_population = self.create_generation_list()  # for population keeping
         self.__map_buildings = self.create_buildings_list()  # for keeping buildings information
 
+    def iter_buildings(self):
+        for elem in self.get_buildings():
+            yield elem
+
+    def iter_population(self):
+        for elem in self.get_population():
+            yield elem
+
+    def size(self):
+        return self.get_map_length(), self.get_map_width()
+
     def create_buildings_list(self):  # function of creating objects of buildings on the map
         buildings_list = []
         buildings_quantity = self.config_data.get(ConfigParameters.BUILDINGS_QUANTITY.value)
