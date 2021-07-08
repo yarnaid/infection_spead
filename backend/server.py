@@ -50,14 +50,20 @@ class ModelingSerializer:
 
 class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 
-    def __init__(self, map_obj, model_objects, serializer):  # Remember our Backend output exists
+    def __init__(self, map_obj, human_objects, serializer):
+        """
+         Remember our Backend output exits
+        :param map_obj: iterable obj : obj from which we can read map objects
+        :param human_objects: iterable obj : obj from which we can read humans object
+        :param serializer: class : serializer so that you can bring the modeling objects to the proto form
+        """
         self.map = map_obj
-        self.model_objects = model_objects
+        self.human_objects = human_objects
         self.serializer = serializer
 
     def GetUpdate(self, request, context):  # Generator of people on modeling
         logger.info("Get update request")
-        return self.serializer.create_update_response(request, self.model_objects)
+        return self.serializer.create_update_response(request, self.human_objects)
 
     def GetMap(self, request, context):  # Generator of map objects
         logger.info("Get map request")

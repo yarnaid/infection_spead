@@ -8,21 +8,31 @@ import uuid
 import grpc
 
 
-def update_request(stub):  # Request to update the states of modeling objects
+def update_request(stub):
+    """
+    Request to update the states of modeling objects
+    :param stub: a stub that we can use to use the functions described in spec. proto
+    :return: spec.proto Request Response obj : containing list of all Human and their par in modeling
+    """
     req = UpdateRequest(meta=Metadata(status=statusCode.SUCCESS,
                                       request_id=int32(next(counter)),
                                       UUID=str(uuid.uuid1()))
                         )
-    object_generator = stub.GetUpdate(req)  # We get a generator of people in the simulation from the server
+    human_list = stub.GetUpdate(req)  # We get a list of people in the simulation from the server
     logger.info("Receive update response")
-    return object_generator
+    return human_list
 
 
-def get_map(stub):  # Request for getting map objects
+def get_map(stub):
+    """
+    Request for getting map objects
+    :param stub: a stub that we can use to use the functions described in spec. proto
+    :return: spec.proto Map obj : containing Map data and list of all building and their par in modeling
+    """
     req = spec_pb2.Empty()
-    map_generator = stub.GetMap(req)  # We received a generator of objects on the map from the server
+    map_objects = stub.GetMap(req)  # We received a generator of objects on the map from the server
     logger.info("Receive map from server ")
-    return map_generator
+    return map_objects
 
 
 def run_update():
