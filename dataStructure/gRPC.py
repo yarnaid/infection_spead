@@ -59,7 +59,9 @@ class Building:
 @dataclass
 class Map:
     meta: Metadata = field(1)
-    building: Building = field(2)
+    map_size_w: float = field(2)
+    map_size_h: float = field(3)
+    building: Building = field(4)
 
 
 @message

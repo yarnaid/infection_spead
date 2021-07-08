@@ -20,8 +20,8 @@ class ModelingSerializer:
                               ))
 
     @staticmethod
-    def create_grpc_building(building, status):  # create pb2 object from backend building
-        return Map(meta=status,
+    def create_grpc_building(building, status, map_w, map_h):  # create pb2 object from backend building
+        return Map(meta=status, map_size_w=map_w, map_size_h=map_h,
                    building=Building(
                        base=BaseUnit(id=int32(building.id), coord_x=int32(building.x), coord_y=int32(building.y)),
                        type=BuildingType(building.type),
@@ -55,9 +55,10 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
     def GetMap(self, request, context):  # Generator of map objects
         logger.info("Get map request")
         status = self.serializer.create_success_meta_response(request)
+        map_w, map_h = self.map.size()  # method to get size of map
         for building in self.map:
             status.UUID = str(uuid.uuid1())
-            grpc_building = self.serializer.create_grpc_building(building, status)
+            grpc_building = self.serializer.create_grpc_building(building, status, map_w, map_h)
             yield grpc_building
 
 
@@ -76,5 +77,4 @@ logging.basicConfig(format='%(relativeCreated)5d %(name)-15s %(levelname)-8s %(m
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 if __name__ == '__main__':
-
     serve()

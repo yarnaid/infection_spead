@@ -2,6 +2,7 @@ import pytest
 from backend import server
 from collections import namedtuple
 from backend.server import ModelingSerializer
+
 backend_building = namedtuple('Building', ['id', 'type', 'x', 'y', 'width', 'length', 'angle'])
 backend_human = namedtuple('Human', ['id', 'type', 'x', 'y'])
 Meta = namedtuple('meta', ['status', 'request_id'])
@@ -14,11 +15,30 @@ def create_null_request():  # creating request with meta(state = SUCCESS, reques
     return request
 
 
+class mock_map:
+    def __init__(self, *args):
+        self.obj = args
+        self.count = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.count == len(self.obj):
+            raise StopIteration
+        res = self.obj[self.count]
+        self.count += 1
+        return res
+
+    def size(self):
+        return 10, 20
+
+
 def test_getting_map():
     # setting up Servicer
     build_1 = backend_building(1, 1, 1, 1, 1, 1, 1)
     build_2 = backend_building(10, 0, 10, 10, 10, 10, 10)
-    map_items = [build_1, build_2]
+    map_items = mock_map(build_1, build_2)
     servicer = server.ModelingServicer(map_items, None, ModelingSerializer)
     # setting up request
     request = create_null_request()

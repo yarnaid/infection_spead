@@ -29,6 +29,8 @@ message UpdateResponse {
 
 message Map {
     Metadata meta = 1;
+    float map_size_w = 2;
+    float map_size_h  =3;
     // get buildings
     message Building{
         BaseUnit base =1;
@@ -41,7 +43,7 @@ message Map {
         int32 length = 4;
         int32 angle = 5; // angle from North going by hour hand
     }
-    Building building = 2;
+    Building building = 4;
 }
 
 message HumanState {
