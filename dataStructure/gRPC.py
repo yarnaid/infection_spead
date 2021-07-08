@@ -22,8 +22,8 @@ class Metadata:
 @dataclass
 class BaseUnit:
     id: int32 = field(1, default=int32(0))
-    coord_x: int32 = field(2, default=int32(0))
-    coord_y: int32 = field(3, default=int32(0))
+    coord_x: float = field(2, default=float(0))
+    coord_y: float = field(3, default=float(0))
 
 
 class HumanType(IntEnum):

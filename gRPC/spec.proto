@@ -61,6 +61,6 @@ message Empty{
 
 message BaseUnit{
    int32 id =1; //unique key
-   int32 coord_x = 2; // location on plain
-   int32 coord_y = 3;
+   float coord_x = 2; // location on plain
+   float coord_y = 3;
 }
