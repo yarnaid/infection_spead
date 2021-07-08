@@ -15,7 +15,7 @@ class ModelingSerializer:
     def create_update_response(human, status):  # create pb2 object from backed human
         return UpdateResponse(meta=status,
                               state=HumanState(
-                                  base=BaseUnit(id=int32(human.id), coord_x=int32(human.x), coord_y=int32(human.y)),
+                                  base=BaseUnit(id=int32(human.id), coord_x=float(human.x), coord_y=float(human.y)),
                                   type=HumanType(human.type),
                               ))
 
@@ -23,7 +23,7 @@ class ModelingSerializer:
     def create_grpc_building(building, status, map_w, map_h):  # create pb2 object from backend building
         return Map(meta=status, map_size_w=map_w, map_size_h=map_h,
                    building=Building(
-                       base=BaseUnit(id=int32(building.id), coord_x=int32(building.x), coord_y=int32(building.y)),
+                       base=BaseUnit(id=int32(building.id), coord_x=float(building.x), coord_y=float(building.y)),
                        type=BuildingType(building.type),
                        width=int32(building.width),
                        length=int32(building.length),
