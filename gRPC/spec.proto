@@ -2,8 +2,8 @@ syntax = "proto3";
 
 
 service Modeling {
-    rpc GetUpdate (UpdateRequest) returns (stream UpdateResponse) {}
-    rpc GetMap (Empty) returns (stream Map) {}
+    rpc GetUpdate (UpdateRequest) returns (UpdateResponse) {}
+    rpc GetMap (Empty) returns (Map) {}
 }
 
 message Metadata {
@@ -23,7 +23,7 @@ message UpdateRequest {
 
 message UpdateResponse {
     Metadata meta = 1;
-    HumanState state = 2;
+    repeated HumanState state = 2;
 
 }
 
@@ -43,7 +43,7 @@ message Map {
         int32 length = 4;
         int32 angle = 5; // angle from North going by hour hand
     }
-    Building building = 4;
+    repeated Building building = 4;
 }
 
 message HumanState {

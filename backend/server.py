@@ -12,28 +12,40 @@ import uuid
 
 class ModelingSerializer:
     @staticmethod
-    def create_update_response(human, status):  # create pb2 object from backed human
+    def create_update_response(request, humans):  # create pb2 object from backed human
+        status = ModelingSerializer.create_success_meta_response(request)
         return UpdateResponse(meta=status,
-                              state=HumanState(
-                                  base=BaseUnit(id=int32(human.id), coord_x=float(human.x), coord_y=float(human.y)),
-                                  type=HumanType(human.type),
-                              ))
+                              state=[ModelingSerializer.create_human(human) for human in humans]
+                              )
 
     @staticmethod
-    def create_grpc_building(building, status, map_w, map_h):  # create pb2 object from backend building
+    def create_get_map_response(request, map_w, map_h, buildings):  # create pb2 object from backend building
+        status = ModelingSerializer.create_success_meta_response(request)
         return Map(meta=status, map_size_w=map_w, map_size_h=map_h,
-                   building=Building(
-                       base=BaseUnit(id=int32(building.id), coord_x=float(building.x), coord_y=float(building.y)),
-                       type=BuildingType(building.type),
-                       width=int32(building.width),
-                       length=int32(building.length),
-                       angle=int32(building.angle)
-                   ))
+                   building=[ModelingSerializer.create_building(building) for building in buildings]
+                   )
 
     @staticmethod
     def create_success_meta_response(request):
         return Metadata(status=statusCode.SUCCESS,
-                        request_id=int32(request.meta.request_id))
+                        request_id=int32(request.meta.request_id), UUID=str(uuid.uuid1()))
+
+    @staticmethod
+    def create_human(human):
+        return HumanState(
+            base=BaseUnit(id=int32(human.id), coord_x=float(human.x), coord_y=float(human.y)),
+            type=HumanType(human.type),
+        )
+
+    @staticmethod
+    def create_building(building):
+        return Building(
+            base=BaseUnit(id=int32(building.id), coord_x=float(building.x), coord_y=float(building.y)),
+            type=BuildingType(building.type),
+            width=int32(building.width),
+            length=int32(building.length),
+            angle=int32(building.angle)
+        )
 
 
 class ModelingServicer(spec_pb2_grpc.ModelingServicer):
@@ -45,21 +57,12 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 
     def GetUpdate(self, request, context):  # Generator of people on modeling
         logger.info("Get update request")
-        status = self.serializer.create_success_meta_response(request)
-
-        for elem in self.model_objects:
-            status.UUID = str(uuid.uuid1())
-            grpc_state = self.serializer.create_update_response(elem, status)
-            yield grpc_state
+        return self.serializer.create_update_response(request, self.model_objects)
 
     def GetMap(self, request, context):  # Generator of map objects
         logger.info("Get map request")
-        status = self.serializer.create_success_meta_response(request)
         map_w, map_h = self.map.size()  # method to get size of map
-        for building in self.map:
-            status.UUID = str(uuid.uuid1())
-            grpc_building = self.serializer.create_grpc_building(building, status, map_w, map_h)
-            yield grpc_building
+        return self.serializer.create_get_map_response(request, map_w, map_h, self.map)
 
 
 def serve():  # Responsible for the operation of the server

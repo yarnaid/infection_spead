@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from pure_protobuf.dataclasses_ import field, message
 from pure_protobuf.types import int32
 from enum import IntEnum
+from typing import List
 
 
 class statusCode(IntEnum):
@@ -61,14 +62,14 @@ class Map:
     meta: Metadata = field(1)
     map_size_w: float = field(2)
     map_size_h: float = field(3)
-    building: Building = field(4)
+    building: List[Building] = field(4, default_factory=list)
 
 
 @message
 @dataclass
 class UpdateResponse:
     meta: Metadata = field(1)
-    state: HumanState = field(2)
+    state: List[HumanState] = field(2, default_factory=list)
 
 
 @message
