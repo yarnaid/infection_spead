@@ -12,6 +12,7 @@ class BuildingType(Enum):  # a set of constants for the designation of building 
     HOUSE = 2
     STREET = 3
 
+
 # conditionally, for now, we believe that a minimum should fit into the city along each coordinate axis
 # 5 houses, so we will store the limitation on the length of the wall as a field of the map instance,
 # depending on the length / width of the random card
@@ -27,7 +28,8 @@ class ResearchMap:
 
     def __init__(self, config_name: str):  # map object constructor for research
         self.config_data = ConfigParser(config_name).parse_config()
-        self.__wall_len_limit = self.config_data.get(ConfigParameters.MAP_WIDTH.value) // 5  # why 5-written in the comm above
+        self.__wall_len_limit = self.config_data.get(
+            ConfigParameters.MAP_WIDTH.value) // 5  # why 5-written in the comm above
         self.__map_population = self.create_generation_list()  # for population keeping
         self.__map_buildings = self.create_buildings_list()  # for keeping buildings information
 
@@ -39,9 +41,6 @@ class ResearchMap:
         for elem in self.get_population():
             yield elem
 
-    def size(self):
-        return self.get_map_length(), self.get_map_width()
-
     def create_buildings_list(self):  # function of creating objects of buildings on the map
         buildings_list = []
         buildings_quantity = self.config_data.get(ConfigParameters.BUILDINGS_QUANTITY.value)
@@ -51,7 +50,7 @@ class ResearchMap:
                 buildings_list.append(new_building)
             else:
                 iterations = 0
-                while ResearchMap.has_intersection(buildings_list, new_building)\
+                while ResearchMap.has_intersection(buildings_list, new_building) \
                         and iterations < ITERATION_CONSTRAINT:
                     new_building = ResearchMap.create_building_data(self.__wall_len_limit, self.config_data)
                     iterations += 1
@@ -75,8 +74,8 @@ class ResearchMap:
         human_objects = []
         for i in range(self.config_data.get(ConfigParameters.POPULATION_QUANTITY.value)):
             rand.seed(datetime.datetime.now().microsecond)
-            human_x = rand.triangular(0, self.get_map_length())
-            human_y = rand.triangular(0, self.get_map_width())
+            human_x = rand.triangular(0, self.length())
+            human_y = rand.triangular(0, self.width())
             human_objects.append(Human(x=human_x, y=human_y))
         return human_objects
 
@@ -109,10 +108,10 @@ class ResearchMap:
                 return True
         return False
 
-    def get_map_length(self):
+    def length(self):
         return self.config_data.get(ConfigParameters.MAP_LENGTH.value)
 
-    def get_map_width(self):
+    def width(self):
         return self.config_data.get(ConfigParameters.MAP_WIDTH.value)
 
     def get_population(self):
