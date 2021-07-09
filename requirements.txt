@@ -5,3 +5,5 @@ grpcio
 mypy
 # numpy
 # pyqt5
+
+pytest

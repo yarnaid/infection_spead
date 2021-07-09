@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+
+service Modeling {
+    rpc GetUpdate (UpdateRequest) returns (UpdateResponse) {}
+    rpc GetMap (Empty) returns (Map) {}
+}
+
+message Metadata {
+    enum statusCode{
+        UNDEFINED = 0;
+        SUCCESS = 1;
+        ERROR = 2;
+    }
+    statusCode status = 1;
+    int32  request_id = 2;
+    string UUID = 3;
+}
+
+message UpdateRequest {
+    Metadata meta = 1;
+}
+
+message UpdateResponse {
+    Metadata meta = 1;
+    repeated HumanState state = 2;
+
+}
+
+message Map {
+    Metadata meta = 1;
+    float map_size_w = 2;
+    float map_size_h  =3;
+    // get buildings
+    message Building{
+        BaseUnit base =1;
+        enum BuildingType{// building specification (house, road, clinic)
+            HOUSE = 0;
+            ROAD = 1;
+        }
+        BuildingType type = 2;
+        int32 width = 3; // size of building
+        int32 length = 4;
+        int32 angle = 5; // angle from North going by hour hand
+    }
+    repeated Building building = 4;
+}
+
+message HumanState {
+  // people statuses and coordinates
+    BaseUnit base = 1;
+    enum HumanType{
+        NORMAL = 0;
+        ILL = 1;
+        RECOVERED = 2;
+        DEAD = 3;
+    }
+    HumanType type =2;
+}
+
+message Empty{
+}
+
+message BaseUnit{
+   int32 id =1; //unique key
+   float coord_x = 2; // location on plain
+   float coord_y = 3;
+}
