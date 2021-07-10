@@ -121,9 +121,6 @@ class ResearchMap:
     def get_buildings(self):
         return self.__map_buildings
 
-    # def generate_city_walls(self):  # we create city walls so that the population does not change
-    #     pass  # need to be completed
-
 
 class Building:  # city building class
 
