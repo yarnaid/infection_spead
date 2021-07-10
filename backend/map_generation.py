@@ -28,7 +28,8 @@ class ResearchMap:
 
     def __init__(self, config_name: str):  # map object constructor for research
         self.config_data = ConfigParser(config_name).parse_config()
-        self.__wall_len_limit = self.config_data.get(ConfigParameters.MAP_WIDTH.value) // 5  # why 5-written in the comm above
+        self.__wall_len_limit = self.config_data.get(
+            ConfigParameters.MAP_WIDTH.value) // 5  # why 5-written in the comm above
         self.__map_population = self.create_generation_list()  # for population keeping
         self.__map_buildings = self.create_buildings_list()  # for keeping buildings information
 
@@ -40,10 +41,13 @@ class ResearchMap:
         for elem in self.get_population():
             yield elem
 
-    def size(self):
-        return self.get_map_length(), self.get_map_width()
+    def create_buildings_list(self):
 
-    def create_buildings_list(self):  # function of creating objects of buildings on the map
+        """
+        Method of creating objects of buildings on the map
+        :return: List of Building-objects
+        """
+
         buildings_list = []
         buildings_quantity = self.config_data.get(ConfigParameters.BUILDINGS_QUANTITY.value)
         for i in range(buildings_quantity):
@@ -62,9 +66,15 @@ class ResearchMap:
 
     @staticmethod
     def create_building_data(wall_len_limit, config_data: dict):
+
+        """
+        Method for generating parameters of each building on map
+        :return: Building-object, storing the geometric data of the building on the map
+        """
+
         rand.seed(datetime.datetime.now().microsecond)
         width = rand.randint(MIN_WALL_LEN, wall_len_limit)
-        length = rand.randint(MIN_WALL_LEN, wall_len_limit)  # generating length and width of buildings
+        length = rand.randint(MIN_WALL_LEN, wall_len_limit)
         x = INDENT_FROM_BORDERS + rand.randint(0, config_data.get(ConfigParameters.MAP_LENGTH.value)
                                                - length - 2 * INDENT_FROM_BORDERS)
         y = INDENT_FROM_BORDERS + rand.randint(0, config_data.get(ConfigParameters.MAP_WIDTH.value)
@@ -72,7 +82,11 @@ class ResearchMap:
         angle = 0  # for now we don't use this field in map generation
         return Building(x, y, width, length, angle)
 
-    def create_generation_list(self):  # generating population of the city
+    def create_generation_list(self):
+        """
+        Method for random generating population of the city
+        :return: List of Human-objects
+        """
         human_objects = []
         for i in range(self.config_data.get(ConfigParameters.POPULATION_QUANTITY.value)):
             rand.seed(datetime.datetime.now().microsecond)
@@ -82,7 +96,20 @@ class ResearchMap:
         return human_objects
 
     @staticmethod
-    def intersection_check(first_building, second_building):  # checking buildings intersections
+    def intersection_check(first_building, second_building):
+
+        """
+        Method for checking buildings intersections
+
+        Parameters:
+        ----------
+            :param first_building: Building
+            :param second_building: Building
+                Two objects of class Building for to check for intersection
+
+        :return: True, if buildings have intersection, or False in other cases
+        """
+
         if not isinstance(first_building, Building) or not isinstance(second_building, Building):
             return False  # while we handle the error of object types in this way
         semi_length_1 = first_building.get_length() / 2
@@ -124,7 +151,35 @@ class ResearchMap:
 
 
 @dataclass
-class Building:  # city building class
+class Building:
+
+    """
+    City building class
+
+    Parameters:
+    -----------
+        __x: float
+            x coordinate of center of the building on map
+        __y: float
+            y coordinate of center of the building on map
+        __length: float
+            the size of the building along the x-axis
+        __width: float
+            the size of the building along the y-axis
+        __angle: float
+            the angle of deviation of the building from the horizontal position
+
+    Methods:
+    -------
+        get_length()
+            Returns the size of the building along the x-axis
+        get_width()
+            Returns the size of the building along the y-axis
+        get_x()
+            Returns x coordinate of center of the building
+        get_y()
+            Returns y coordinate of center of the building
+    """
 
     __x: float
     __y: float
@@ -146,8 +201,19 @@ class Building:  # city building class
 
 
 @dataclass
-class Human:  # population unit class
+class Human:
+    """
+    Population unit class
 
+    Parameters:
+    -----------
+        __x: float
+            x coordinate of human dote
+        __y: float
+            y coordinate of human dote
+        __human_type: HumanType
+            type of person in infectious research
+    """
     __x: float
     __y: float
     __human_type: HumanType = HumanType.NORMAL
