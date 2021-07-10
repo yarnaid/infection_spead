@@ -7,7 +7,12 @@ import datetime
 from dataclasses import dataclass
 
 
-class BuildingType(Enum):  # a set of constants for the designation of building types on the map
+class BuildingType(Enum):
+
+    """
+    Class with set of constants for the designation of building types on the map
+    """
+
     HOSPITAL = 0
     OFFICE = 1
     HOUSE = 2
@@ -62,7 +67,7 @@ class ResearchMap:
         return buildings_list
 
     @staticmethod
-    def create_building_parameters(wall_len_limit, config_data: dict):
+    def create_building_parameters(wall_len_limit, config_data):
 
         """
         Method for generating parameters of each building on map
