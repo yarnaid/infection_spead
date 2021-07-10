@@ -103,8 +103,9 @@ class ResearchMap:
         :return: True, if buildings have intersection, or False in other cases
         """
 
-        if not isinstance(first_building, Building) or not isinstance(second_building, Building):
-            return False  # while we handle the error of object types in this way
+        assert isinstance(first_building, Building), "Invalid type of first input argument"
+        assert isinstance(second_building, Building), "Invalid type of second input arguments"
+
         semi_length_1 = first_building.get_length() / 2
         semi_width_1 = first_building.get_width() / 2
 
