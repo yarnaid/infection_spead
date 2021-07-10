@@ -4,6 +4,7 @@ import math
 from dataStructure.gRPC import HumanType
 from config_parser import ConfigParser, ConfigParameters
 import datetime
+from dataclasses import dataclass
 
 
 class BuildingType(Enum):  # a set of constants for the designation of building types on the map
@@ -77,7 +78,7 @@ class ResearchMap:
             rand.seed(datetime.datetime.now().microsecond)
             human_x = rand.triangular(0, self.get_map_length())
             human_y = rand.triangular(0, self.get_map_width())
-            human_objects.append(Human(x=human_x, y=human_y))
+            human_objects.append(Human(human_x, human_y))
         return human_objects
 
     @staticmethod
@@ -122,14 +123,14 @@ class ResearchMap:
         return self.__map_buildings
 
 
+@dataclass
 class Building:  # city building class
 
-    def __init__(self, x, y, width: float, length: float, angle: float):
-        self.__x = x
-        self.__y = y
-        self.__width = width
-        self.__length = length
-        self.__angle = angle
+    __x: float
+    __y: float
+    __width: float = 500
+    __length: float = 500
+    __angle: float = 0
 
     def get_length(self):
         return self.__length
@@ -144,9 +145,9 @@ class Building:  # city building class
         return self.__y
 
 
+@dataclass
 class Human:  # population unit class
 
-    def __init__(self, x: float, y: float):
-        self.__x = x
-        self.__y = y
-        self.__human_type = HumanType.NORMAL
+    __x: float
+    __y: float
+    __human_type: HumanType = HumanType.NORMAL
