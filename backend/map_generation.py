@@ -105,7 +105,7 @@ class ResearchMap:
         :param second_building: Building
             Two objects of class Building for to check for intersection
 
-        :return: True, if buildings have intersection, or False in other cases
+        :return: True, if buildings have an intersection, or False in other cases
         """
 
         assert isinstance(first_building, Building), "Invalid type of first input argument"
