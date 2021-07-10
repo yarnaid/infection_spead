@@ -106,23 +106,19 @@ class ResearchMap:
         assert isinstance(first_building, Building), "Invalid type of first input argument"
         assert isinstance(second_building, Building), "Invalid type of second input arguments"
 
-        semi_length_1 = first_building.get_length() / 2
-        semi_width_1 = first_building.get_width() / 2
+        cond_1 = first_building.get_y() - first_building.get_width() / 2 < \
+                 second_building.get_y() + second_building.get_width() / 2
 
-        semi_length_2 = second_building.get_length() / 2
-        semi_width_2 = second_building.get_width() / 2
+        cond_2 = first_building.get_y() + first_building.get_width() / 2 > \
+                 second_building.get_y() - second_building.get_width() / 2
 
-        x_1 = first_building.get_x()
-        y_1 = first_building.get_y()
+        cond_3 = first_building.get_x() + first_building.get_length() / 2 > \
+                 second_building.get_x() - second_building.get_length() / 2
 
-        x_2 = second_building.get_x()
-        y_2 = second_building.get_y()
+        cond_4 = first_building.get_x() - first_building.get_length() / 2 < \
+                 second_building.get_x() + second_building.get_length() / 2
 
-        if math.fabs(x_2 - x_1) <= math.fabs(semi_length_1 - semi_length_2):
-            return True
-        elif math.fabs(y_2 - y_1) <= math.fabs(semi_width_1 - semi_width_2):
-            return True
-        return False  # returns True, if current buildings have an intersection
+        return cond_1 or cond_2 or cond_3 or cond_4
 
     @staticmethod
     def has_intersection(buildings_list, new_building):
