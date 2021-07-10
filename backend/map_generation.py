@@ -18,18 +18,12 @@ class BuildingType(Enum):  # a set of constants for the designation of building 
 # depending on the length / width of the random card
 
 
-MIN_WALL_LEN = 10  # minimal wall length value
-
-ITERATION_CONSTRAINT = 1000  # restriction on iterations in building a city map
-INDENT_FROM_BORDERS = 3  # indent from city borders
-
-
 class ResearchMap:
 
     def __init__(self, config_name: str):  # map object constructor for research
         self.config_data = ConfigParser(config_name).parse_config()
         self.__wall_len_limit = self.config_data.get(
-            ConfigParameters.MAP_WIDTH.value) // 5  # why 5-written in the comm above
+            ConfigParameters.MAP_WIDTH.value) // 5  # why 5-written in the comment above
         self.__map_population = self.create_generation_list()  # for population keeping
         self.__map_buildings = self.create_buildings_list()  # for keeping buildings information
 
@@ -57,10 +51,10 @@ class ResearchMap:
             else:
                 iterations = 0
                 while ResearchMap.has_intersection(buildings_list, new_building)\
-                        and iterations < ITERATION_CONSTRAINT:
+                        and iterations < self.config_data.get(ConfigParameters.ITERATION_CONSTRAINT.value):
                     new_building = ResearchMap.create_building_parameters(self.__wall_len_limit, self.config_data)
                     iterations += 1
-                if iterations < ITERATION_CONSTRAINT:
+                if iterations < self.config_data.get(ConfigParameters.ITERATION_CONSTRAINT.value):
                     buildings_list.append(new_building)
         return buildings_list
 
@@ -73,12 +67,13 @@ class ResearchMap:
         """
 
         rand.seed(datetime.datetime.now().microsecond)
-        width = rand.randint(MIN_WALL_LEN, wall_len_limit)
-        length = rand.randint(MIN_WALL_LEN, wall_len_limit)
-        x = INDENT_FROM_BORDERS + rand.randint(0, config_data.get(ConfigParameters.MAP_LENGTH.value)
-                                               - length - 2 * INDENT_FROM_BORDERS)
-        y = INDENT_FROM_BORDERS + rand.randint(0, config_data.get(ConfigParameters.MAP_WIDTH.value)
-                                               - width - 2 * INDENT_FROM_BORDERS)
+        width = rand.randint(config_data.get(ConfigParameters.MIN_WALL_LEN.value), wall_len_limit)
+        length = rand.randint(config_data.get(ConfigParameters.MIN_WALL_LEN.value), wall_len_limit)
+        borders_indent = config_data.get(ConfigParameters.BORDERS_INDENT.value)
+        x = borders_indent + rand.randint(0, config_data.get(ConfigParameters.MAP_LENGTH.value)
+                                          - length - 2 * borders_indent)
+        y = borders_indent + rand.randint(0, config_data.get(ConfigParameters.MAP_WIDTH.value)
+                                          - width - 2 * borders_indent)
         angle = 0  # for now we don't use this field in map generation
         return Building(x, y, width, length, angle)
 

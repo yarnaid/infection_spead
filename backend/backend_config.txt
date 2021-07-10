@@ -2,3 +2,6 @@ map_length = 500
 map_width = 500
 buildings = 4
 population = 6
+minimal_wall_length = 10
+iteration_constraint = 1000
+indent_from_borders = 3

@@ -8,6 +8,9 @@ class ConfigParameters(Enum):  # a set of configuration options for creating a m
     BUILDINGS_QUANTITY = "buildings"
     MAP_LENGTH = "map_length"
     MAP_WIDTH = "map_width"
+    MIN_WALL_LEN = "minimal_wall_length"
+    ITERATION_CONSTRAINT = "iteration_constraint"
+    BORDERS_INDENT = "indent_from_borders"
 
 
 class ConfigParser:
