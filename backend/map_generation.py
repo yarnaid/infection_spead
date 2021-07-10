@@ -51,21 +51,21 @@ class ResearchMap:
         buildings_list = []
         buildings_quantity = self.config_data.get(ConfigParameters.BUILDINGS_QUANTITY.value)
         for i in range(buildings_quantity):
-            new_building = ResearchMap.create_building_data(self.__wall_len_limit, self.config_data)
+            new_building = ResearchMap.create_building_parameters(self.__wall_len_limit, self.config_data)
             if not buildings_list:  # if there is no buildings on map
                 buildings_list.append(new_building)
             else:
                 iterations = 0
                 while ResearchMap.has_intersection(buildings_list, new_building)\
                         and iterations < ITERATION_CONSTRAINT:
-                    new_building = ResearchMap.create_building_data(self.__wall_len_limit, self.config_data)
+                    new_building = ResearchMap.create_building_parameters(self.__wall_len_limit, self.config_data)
                     iterations += 1
                 if iterations < ITERATION_CONSTRAINT:
                     buildings_list.append(new_building)
         return buildings_list
 
     @staticmethod
-    def create_building_data(wall_len_limit, config_data: dict):
+    def create_building_parameters(wall_len_limit, config_data: dict):
 
         """
         Method for generating parameters of each building on map
@@ -101,11 +101,9 @@ class ResearchMap:
         """
         Method for checking buildings intersections
 
-        Parameters:
-        ----------
-            :param first_building: Building
-            :param second_building: Building
-                Two objects of class Building for to check for intersection
+        :param first_building: Building
+        :param second_building: Building
+            Two objects of class Building for to check for intersection
 
         :return: True, if buildings have intersection, or False in other cases
         """
@@ -132,6 +130,19 @@ class ResearchMap:
 
     @staticmethod
     def has_intersection(buildings_list, new_building):
+
+        """
+        Method for finding intersection between new building and already existing buildings
+
+        :param buildings_list: list
+            List of Building-objects, which keeps all building, already placed on the map
+        :param new_building:
+            New Building-object to be placed on the map
+        :return:
+            True, if new building has an intersection with at least one building from list of placed buildings,
+            or False in other cases
+        """
+
         for building in buildings_list:
             if ResearchMap.intersection_check(building, new_building):
                 return True
