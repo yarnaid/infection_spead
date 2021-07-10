@@ -87,7 +87,7 @@ class ResearchMap:
                                           - width - 2 * borders_indent)
         base_unit = BaseUnit(id_counter, x, y)
         angle = 0  # for now we don't use this field in map generation
-        return Building(base_unit, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
+        return Building(base_unit, BuildingType.HOUSE, width, length, angle)
 
     def create_generation_list(self):
         """
