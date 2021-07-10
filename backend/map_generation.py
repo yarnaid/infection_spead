@@ -99,7 +99,7 @@ class ResearchMap:
             rand.seed(datetime.datetime.now().microsecond)
             human_x = rand.triangular(0, self.get_map_length())
             human_y = rand.triangular(0, self.get_map_width())
-            human_objects.append(Human(human_x, human_y))
+            human_objects.append(Human(BaseUnit(self.__id_counter, human_x, human_y)))
         return human_objects
 
     @staticmethod
@@ -170,13 +170,10 @@ class Human:
 
     Parameters:
     -----------
-        __x: float
-            x coordinate of human dote
-        __y: float
-            y coordinate of human dote
+        __base: BaseUnit
+            Class, which keeps x and y coordinate of human dote
         __human_type: HumanType
             type of person in infectious research
     """
-    __x: float
-    __y: float
+    __base: BaseUnit
     __human_type: HumanType = HumanType.NORMAL
