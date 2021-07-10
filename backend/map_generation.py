@@ -1,10 +1,11 @@
 from enum import Enum
 import random as rand
-import math
 from dataStructure.gRPC import HumanType
 from backend.config_parser import ConfigFileParser, ConfigParameters
 import datetime
 from dataclasses import dataclass
+from dataStructure.gRPC import Building, BaseUnit
+from pure_protobuf.types import int32
 
 
 class BuildingType(Enum):
@@ -29,6 +30,7 @@ class ResearchMap:
         self.config_data = ConfigFileParser(config_name).parse_config()
         self.__wall_len_limit = self.config_data[ConfigParameters.MAP_LENGTH.value]\
                                 // 5  # why 5-written in the comment above
+        self.__id_counter = 0
         self.__map_population = self.create_generation_list()  # for population keeping
         self.__map_buildings = self.create_buildings_list()  # for keeping buildings information
 
@@ -50,21 +52,25 @@ class ResearchMap:
         buildings_list = []
         buildings_quantity = self.config_data[ConfigParameters.BUILDINGS_QUANTITY.value]
         for i in range(buildings_quantity):
-            new_building = ResearchMap.create_building_parameters(self.__wall_len_limit, self.config_data)
+            new_building = ResearchMap.create_building_parameters(self.__wall_len_limit, self.config_data,
+                                                                  self.__id_counter)
             if not buildings_list:  # if there is no buildings on map
                 buildings_list.append(new_building)
+                self.__id_counter += 1
             else:
                 iterations = 0
                 while ResearchMap.has_intersection(buildings_list, new_building)\
                         and iterations < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
-                    new_building = ResearchMap.create_building_parameters(self.__wall_len_limit, self.config_data)
+                    new_building = ResearchMap.create_building_parameters(self.__wall_len_limit, self.config_data,
+                                                                          self.__id_counter)
                     iterations += 1
                 if iterations < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
                     buildings_list.append(new_building)
+                    self.__id_counter += 1
         return buildings_list
 
     @staticmethod
-    def create_building_parameters(wall_len_limit, config_data):
+    def create_building_parameters(wall_len_limit, config_data, id_counter):
 
         """
         Method for generating parameters of each building on map
@@ -79,8 +85,9 @@ class ResearchMap:
                                           - length - 2 * borders_indent)
         y = borders_indent + rand.randint(0, config_data[ConfigParameters.MAP_WIDTH.value]
                                           - width - 2 * borders_indent)
+        base_unit = BaseUnit(id_counter, x, y)
         angle = 0  # for now we don't use this field in map generation
-        return Building(x, y, width, length, angle)
+        return Building(base_unit, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
 
     def create_generation_list(self):
         """
@@ -111,15 +118,15 @@ class ResearchMap:
         assert isinstance(first_building, Building), "Invalid type of first input argument"
         assert isinstance(second_building, Building), "Invalid type of second input arguments"
 
-        x_first = [first_building.get_x() - first_building.get_length() / 2,
-                   first_building.get_x() + first_building.get_length() / 2]
-        y_first = [first_building.get_y() - first_building.get_width() / 2,
-                   first_building.get_y() + first_building.get_width() / 2]
+        x_first = [first_building.base.coord_x - first_building.length / 2,
+                   first_building.base.coord_x + first_building.length / 2]
+        y_first = [first_building.base.coord_y - first_building.width / 2,
+                   first_building.base.coord_y + first_building.width / 2]
 
-        x_second = [second_building.get_x() - second_building.get_length() / 2,
-                    second_building.get_x() + second_building.get_length() / 2]
-        y_second = [second_building.get_y() - second_building.get_width() / 2,
-                    second_building.get_y() + second_building.get_width() / 2]
+        x_second = [second_building.base.coord_x - second_building.length / 2,
+                    second_building.base.coord_x + second_building.length / 2]
+        y_second = [second_building.base.coord_y - second_building.width / 2,
+                    second_building.base.coord_y + second_building.width / 2]
 
         return max(x_first) < min(x_second) or max(y_first) < min(y_second) or min(y_first) > max(y_second)
 
@@ -154,56 +161,6 @@ class ResearchMap:
 
     def get_buildings(self):
         return self.__map_buildings
-
-
-@dataclass
-class Building:
-
-    """
-    City building class
-
-    Parameters:
-    -----------
-        __x: float
-            x coordinate of center of the building on map
-        __y: float
-            y coordinate of center of the building on map
-        __length: float
-            the size of the building along the x-axis
-        __width: float
-            the size of the building along the y-axis
-        __angle: float
-            the angle of deviation of the building from the horizontal position
-
-    Methods:
-    -------
-        get_length()
-            Returns the size of the building along the x-axis
-        get_width()
-            Returns the size of the building along the y-axis
-        get_x()
-            Returns x coordinate of center of the building
-        get_y()
-            Returns y coordinate of center of the building
-    """
-
-    __x: float
-    __y: float
-    __width: float
-    __length: float
-    __angle: float = 0
-
-    def get_length(self):
-        return self.__length
-
-    def get_width(self):
-        return self.__width
-
-    def get_x(self):
-        return self.__x
-
-    def get_y(self):
-        return self.__y
 
 
 @dataclass
