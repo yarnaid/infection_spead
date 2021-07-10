@@ -2,7 +2,7 @@ from enum import Enum
 import random as rand
 import math
 from dataStructure.gRPC import HumanType
-from config_parser import ConfigFileParser, ConfigParameters
+from backend.config_parser import ConfigFileParser, ConfigParameters
 import datetime
 from dataclasses import dataclass
 
@@ -23,14 +23,11 @@ class BuildingType(Enum):
 # depending on the length / width of the random card
 
 
-SECTION_NAME = "parameters_section"
-
-
 class ResearchMap:
 
     def __init__(self, config_name: str):  # map object constructor for research
-        self.config_data = ConfigFileParser(config_name, SECTION_NAME).parse_config()
-        self.__wall_len_limit = self.config_data[ConfigParameters.MIN_WALL_LEN.value]\
+        self.config_data = ConfigFileParser(config_name).parse_config()
+        self.__wall_len_limit = self.config_data[ConfigParameters.MAP_LENGTH.value]\
                                 // 5  # why 5-written in the comment above
         self.__map_population = self.create_generation_list()  # for population keeping
         self.__map_buildings = self.create_buildings_list()  # for keeping buildings information
@@ -114,19 +111,17 @@ class ResearchMap:
         assert isinstance(first_building, Building), "Invalid type of first input argument"
         assert isinstance(second_building, Building), "Invalid type of second input arguments"
 
-        cond_1 = first_building.get_y() - first_building.get_width() / 2 < \
-                 second_building.get_y() + second_building.get_width() / 2
+        x_first = [first_building.get_x() - first_building.get_length() / 2,
+                   first_building.get_x() + first_building.get_length() / 2]
+        y_first = [first_building.get_y() - first_building.get_width() / 2,
+                   first_building.get_y() + first_building.get_width() / 2]
 
-        cond_2 = first_building.get_y() + first_building.get_width() / 2 > \
-                 second_building.get_y() - second_building.get_width() / 2
+        x_second = [second_building.get_x() - second_building.get_length() / 2,
+                    second_building.get_x() + second_building.get_length() / 2]
+        y_second = [second_building.get_y() - second_building.get_width() / 2,
+                    second_building.get_y() + second_building.get_width() / 2]
 
-        cond_3 = first_building.get_x() + first_building.get_length() / 2 > \
-                 second_building.get_x() - second_building.get_length() / 2
-
-        cond_4 = first_building.get_x() - first_building.get_length() / 2 < \
-                 second_building.get_x() + second_building.get_length() / 2
-
-        return cond_1 or cond_2 or cond_3 or cond_4
+        return max(x_first) < min(x_second) or max(y_first) < min(y_second) or min(y_first) > max(y_second)
 
     @staticmethod
     def has_intersection(buildings_list, new_building):

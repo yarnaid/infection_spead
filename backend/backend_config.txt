@@ -1,4 +1,4 @@
-[parameters_section]
+[DEFAULT]
 map_length = 500
 map_width = 500
 buildings = 4

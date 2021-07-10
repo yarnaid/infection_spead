@@ -14,17 +14,18 @@ class ConfigParameters(Enum):  # a set of configuration options for creating a m
 
 class ConfigFileParser(ConfigParser):
     __config_name = ""
-    __section_name = ""
 
-    def __init__(self, config_name: str, section_name: str):
+    def __init__(self, config_name: str):
         super().__init__()
         ConfigFileParser.__config_name = config_name
-        ConfigFileParser.__section_name = section_name
 
     @staticmethod
     def parse_config():
         config = ConfigParser()
         config.read(ConfigFileParser.__config_name)
-        return config[ConfigFileParser.__section_name]
+        processed_config = dict()
+        for key in config.defaults().keys():
+            processed_config.update({key: int(config.defaults().get(key))})
+        return processed_config
 
 
