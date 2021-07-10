@@ -2,7 +2,7 @@ from enum import Enum
 import random as rand
 import math
 from dataStructure.gRPC import HumanType
-from config_parser import ConfigParser, ConfigParameters
+from config_parser import ConfigFileParser, ConfigParameters
 import datetime
 from dataclasses import dataclass
 
@@ -18,12 +18,15 @@ class BuildingType(Enum):  # a set of constants for the designation of building 
 # depending on the length / width of the random card
 
 
+SECTION_NAME = "parameters_section"
+
+
 class ResearchMap:
 
     def __init__(self, config_name: str):  # map object constructor for research
-        self.config_data = ConfigParser(config_name).parse_config()
-        self.__wall_len_limit = self.config_data.get(
-            ConfigParameters.MAP_WIDTH.value) // 5  # why 5-written in the comment above
+        self.config_data = ConfigFileParser(config_name, SECTION_NAME).parse_config()
+        self.__wall_len_limit = self.config_data[ConfigParameters.MIN_WALL_LEN.value]\
+                                // 5  # why 5-written in the comment above
         self.__map_population = self.create_generation_list()  # for population keeping
         self.__map_buildings = self.create_buildings_list()  # for keeping buildings information
 
@@ -43,7 +46,7 @@ class ResearchMap:
         """
 
         buildings_list = []
-        buildings_quantity = self.config_data.get(ConfigParameters.BUILDINGS_QUANTITY.value)
+        buildings_quantity = self.config_data[ConfigParameters.BUILDINGS_QUANTITY.value]
         for i in range(buildings_quantity):
             new_building = ResearchMap.create_building_parameters(self.__wall_len_limit, self.config_data)
             if not buildings_list:  # if there is no buildings on map
@@ -51,10 +54,10 @@ class ResearchMap:
             else:
                 iterations = 0
                 while ResearchMap.has_intersection(buildings_list, new_building)\
-                        and iterations < self.config_data.get(ConfigParameters.ITERATION_CONSTRAINT.value):
+                        and iterations < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
                     new_building = ResearchMap.create_building_parameters(self.__wall_len_limit, self.config_data)
                     iterations += 1
-                if iterations < self.config_data.get(ConfigParameters.ITERATION_CONSTRAINT.value):
+                if iterations < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
                     buildings_list.append(new_building)
         return buildings_list
 
@@ -67,12 +70,12 @@ class ResearchMap:
         """
 
         rand.seed(datetime.datetime.now().microsecond)
-        width = rand.randint(config_data.get(ConfigParameters.MIN_WALL_LEN.value), wall_len_limit)
-        length = rand.randint(config_data.get(ConfigParameters.MIN_WALL_LEN.value), wall_len_limit)
-        borders_indent = config_data.get(ConfigParameters.BORDERS_INDENT.value)
-        x = borders_indent + rand.randint(0, config_data.get(ConfigParameters.MAP_LENGTH.value)
+        width = rand.randint(config_data[ConfigParameters.MIN_WALL_LEN.value], wall_len_limit)
+        length = rand.randint(config_data[ConfigParameters.MIN_WALL_LEN.value], wall_len_limit)
+        borders_indent = config_data[ConfigParameters.BORDERS_INDENT.value]
+        x = borders_indent + rand.randint(0, config_data[ConfigParameters.MAP_LENGTH.value]
                                           - length - 2 * borders_indent)
-        y = borders_indent + rand.randint(0, config_data.get(ConfigParameters.MAP_WIDTH.value)
+        y = borders_indent + rand.randint(0, config_data[ConfigParameters.MAP_WIDTH.value]
                                           - width - 2 * borders_indent)
         angle = 0  # for now we don't use this field in map generation
         return Building(x, y, width, length, angle)
@@ -83,7 +86,7 @@ class ResearchMap:
         :return: List of Human-objects
         """
         human_objects = []
-        for i in range(self.config_data.get(ConfigParameters.POPULATION_QUANTITY.value)):
+        for i in range(self.config_data[ConfigParameters.POPULATION_QUANTITY.value]):
             rand.seed(datetime.datetime.now().microsecond)
             human_x = rand.triangular(0, self.get_map_length())
             human_y = rand.triangular(0, self.get_map_width())
@@ -141,10 +144,10 @@ class ResearchMap:
         return False
 
     def get_map_length(self):
-        return self.config_data.get(ConfigParameters.MAP_LENGTH.value)
+        return self.config_data[ConfigParameters.MAP_LENGTH.value]
 
     def get_map_width(self):
-        return self.config_data.get(ConfigParameters.MAP_WIDTH.value)
+        return self.config_data[ConfigParameters.MAP_WIDTH.value]
 
     def get_population(self):
         return self.__map_population
