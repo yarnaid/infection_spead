@@ -3,5 +3,7 @@ create-proto:
 test-coverage:
 	python -m pytest --cov=backend --cov=frontend tests/
 
-test-no-coverage:
+test:
 	python -m pytest tests/
+ui-create:
+	pyuic5 frontend/UI/infection-spread.ui -o frontend/UI/infection_spread_ui.py

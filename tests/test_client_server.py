@@ -1,6 +1,8 @@
 import pytest
 from backend import server
 from collections import namedtuple
+from backend.server import ModelingSerializer
+
 backend_building = namedtuple('Building', ['id', 'type', 'x', 'y', 'width', 'length', 'angle'])
 backend_human = namedtuple('Human', ['id', 'type', 'x', 'y'])
 Meta = namedtuple('meta', ['status', 'request_id'])
@@ -13,23 +15,39 @@ def create_null_request():  # creating request with meta(state = SUCCESS, reques
     return request
 
 
+class mock_map:
+    def __init__(self, *args):
+        self.obj = args
+        self.count = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.count == len(self.obj):
+            raise StopIteration
+        res = self.obj[self.count]
+        self.count += 1
+        return res
+
+    def size(self):
+        return 10, 20
+
+
 def test_getting_map():
     # setting up Servicer
     build_1 = backend_building(1, 1, 1, 1, 1, 1, 1)
     build_2 = backend_building(10, 0, 10, 10, 10, 10, 10)
-    map_items = [build_1, build_2]
-    servicer = server.ModelingServicer(map_items, None)
+    map_items = mock_map(build_1, build_2)
+    servicer = server.ModelingServicer(map_items, None, ModelingSerializer)
     # setting up request
     request = create_null_request()
 
     # work with server function
     resp = servicer.GetMap(request, context=None)
-    result = []
-    for elem in resp:
-        result.append(elem)
-    assert result[0].building.base.id == 1  # Wrong id while yielding map object
-    assert result[1].building.base.id == 10
-    assert result[1].meta.request_id == request.meta.request_id  # Wrong returned request id while yielding map object
+    assert resp.building[0].base.id == 1  # Wrong id while yielding map object
+    assert resp.building[1].base.id == 10
+    assert resp.meta.request_id == request.meta.request_id  # Wrong returned request id while yielding map object
 
 
 def test_update_request():
@@ -37,14 +55,11 @@ def test_update_request():
     human_1 = backend_human(1, 1, 1, 1)
     human_2 = backend_human(3, 3, 3, 3)
     humans = [human_2, human_1]
-    servicer = server.ModelingServicer(None, humans)
+    servicer = server.ModelingServicer(None, humans, ModelingSerializer)
     # send request
     request = create_null_request()
     resp = servicer.GetUpdate(request, context=None)
-    result = []
-    # study result
-    for elem in resp:
-        result.append(elem)
-    assert result[0].state.base.coord_x == 3  # Wrong id while yielding human object
-    assert result[1].state.base.id == 1
-    assert result[1].meta.request_id == request.meta.request_id  # Wrong returned request id while yielding human object"
+    assert resp.state[0].base.coord_x == 3  # Wrong id while yielding human object
+    assert resp.state[1].base.id == 1
+    assert resp.meta.request_id == request.meta.request_id  # Wrong returned request id while yielding human
+    # object"

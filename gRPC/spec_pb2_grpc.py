@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from gRPC import  spec_pb2 as spec__pb2
+from gRPC import spec_pb2 as spec__pb2
 
 
 class ModelingStub(object):
@@ -14,12 +14,12 @@ class ModelingStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.GetUpdate = channel.unary_stream(
+        self.GetUpdate = channel.unary_unary(
                 '/Modeling/GetUpdate',
                 request_serializer=spec__pb2.UpdateRequest.SerializeToString,
                 response_deserializer=spec__pb2.UpdateResponse.FromString,
                 )
-        self.GetMap = channel.unary_stream(
+        self.GetMap = channel.unary_unary(
                 '/Modeling/GetMap',
                 request_serializer=spec__pb2.Empty.SerializeToString,
                 response_deserializer=spec__pb2.Map.FromString,
@@ -44,12 +44,12 @@ class ModelingServicer(object):
 
 def add_ModelingServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'GetUpdate': grpc.unary_stream_rpc_method_handler(
+            'GetUpdate': grpc.unary_unary_rpc_method_handler(
                     servicer.GetUpdate,
                     request_deserializer=spec__pb2.UpdateRequest.FromString,
                     response_serializer=spec__pb2.UpdateResponse.SerializeToString,
             ),
-            'GetMap': grpc.unary_stream_rpc_method_handler(
+            'GetMap': grpc.unary_unary_rpc_method_handler(
                     servicer.GetMap,
                     request_deserializer=spec__pb2.Empty.FromString,
                     response_serializer=spec__pb2.Map.SerializeToString,
@@ -75,7 +75,7 @@ class Modeling(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/Modeling/GetUpdate',
+        return grpc.experimental.unary_unary(request, target, '/Modeling/GetUpdate',
             spec__pb2.UpdateRequest.SerializeToString,
             spec__pb2.UpdateResponse.FromString,
             options, channel_credentials,
@@ -92,7 +92,7 @@ class Modeling(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/Modeling/GetMap',
+        return grpc.experimental.unary_unary(request, target, '/Modeling/GetMap',
             spec__pb2.Empty.SerializeToString,
             spec__pb2.Map.FromString,
             options, channel_credentials,

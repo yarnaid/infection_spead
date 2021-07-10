@@ -2,8 +2,8 @@ syntax = "proto3";
 
 
 service Modeling {
-    rpc GetUpdate (UpdateRequest) returns (stream UpdateResponse) {}
-    rpc GetMap (Empty) returns (stream Map) {}
+    rpc GetUpdate (UpdateRequest) returns (UpdateResponse) {}
+    rpc GetMap (Empty) returns (Map) {}
 }
 
 message Metadata {
@@ -23,12 +23,14 @@ message UpdateRequest {
 
 message UpdateResponse {
     Metadata meta = 1;
-    State state = 2;
+    repeated HumanState state = 2;
 
 }
 
 message Map {
     Metadata meta = 1;
+    float map_size_w = 2;
+    float map_size_h  =3;
     // get buildings
     message Building{
         BaseUnit base =1;
@@ -41,10 +43,10 @@ message Map {
         int32 length = 4;
         int32 angle = 5; // angle from North going by hour hand
     }
-    Building building = 2;
+    repeated Building building = 4;
 }
 
-message State {
+message HumanState {
   // people statuses and coordinates
     BaseUnit base = 1;
     enum HumanType{
@@ -61,6 +63,6 @@ message Empty{
 
 message BaseUnit{
    int32 id =1; //unique key
-   int32 coord_x = 2; // location on plain
-   int32 coord_y = 3;
+   float coord_x = 2; // location on plain
+   float coord_y = 3;
 }

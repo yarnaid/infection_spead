@@ -2,20 +2,7 @@ from dataclasses import dataclass
 from pure_protobuf.dataclasses_ import field, message
 from pure_protobuf.types import int32
 from enum import IntEnum
-
-
-# gRPC_status_creator = {'UNDEFINED': 0, 'SUCCESS': 1, 'ERROR': 2}  # Dont know how to do it better
-# gRPC_human_types = {'NORMAL': 0, 'ILL': 1, 'RECOVERED': 2, 'DEAD': 3}
-# gRPC_building_types = {'HOUSE': 0, 'ROAD': 1}
-
-
-class RequestCounter:  # counter of unique request id
-    id = 0
-
-    @staticmethod
-    def give_id():
-        RequestCounter.id += 1
-        return RequestCounter.id
+from typing import List
 
 
 class statusCode(IntEnum):
@@ -36,8 +23,8 @@ class Metadata:
 @dataclass
 class BaseUnit:
     id: int32 = field(1, default=int32(0))
-    coord_x: int32 = field(2, default=int32(0))
-    coord_y: int32 = field(3, default=int32(0))
+    coord_x: float = field(2, default=float(0))
+    coord_y: float = field(3, default=float(0))
 
 
 class HumanType(IntEnum):
@@ -49,7 +36,7 @@ class HumanType(IntEnum):
 
 @message
 @dataclass
-class State:
+class HumanState:
     base: BaseUnit = field(1)
     type: HumanType = field(2)
 
@@ -73,11 +60,19 @@ class Building:
 @dataclass
 class Map:
     meta: Metadata = field(1)
-    building: Building = field(2)
+    map_size_w: float = field(2)
+    map_size_h: float = field(3)
+    building: List[Building] = field(4, default_factory=list)
 
 
 @message
 @dataclass
 class UpdateResponse:
     meta: Metadata = field(1)
-    state: State = field(2)
+    state: List[HumanState] = field(2, default_factory=list)
+
+
+@message
+@dataclass
+class UpdateRequest:
+    meta: Metadata = field(1)
