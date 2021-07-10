@@ -128,8 +128,8 @@ class Building:  # city building class
 
     __x: float
     __y: float
-    __width: float = 500
-    __length: float = 500
+    __width: float
+    __length: float
     __angle: float = 0
 
     def get_length(self):
