@@ -87,7 +87,7 @@ class ResearchMap:
                                           - width - 2 * borders_indent)
         base_unit = BaseUnit(id_counter, x, y)
         angle = 0  # for now we don't use this field in map generation
-        return Building(base_unit, BuildingType.HOUSE, width, length, angle)
+        return Building(base_unit, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
 
     def create_generation_list(self):
         """
@@ -127,8 +127,11 @@ class ResearchMap:
                     second_building.base.coord_x + second_building.length / 2]
         y_second = [second_building.base.coord_y - second_building.width / 2,
                     second_building.base.coord_y + second_building.width / 2]
+        if max(x_second) >= max(x_first) or max(y_second) >= max(y_first):
+            return max(x_first) >= min(x_second) and max(y_first) >= min(y_second)
+        else:
+            return max(x_second) >= min(x_first) and max(y_second) >= min(y_first)
 
-        return max(x_first) < min(x_second) or max(y_first) < min(y_second) or min(y_first) > max(y_second)
 
     @staticmethod
     def has_intersection(buildings_list, new_building):
