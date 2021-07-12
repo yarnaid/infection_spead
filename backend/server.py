@@ -1,8 +1,8 @@
 import os
 
 from gRPC import spec_pb2_grpc, spec_pb2
-from dataStructure.gRPC import Map, UpdateResponse, Metadata, statusCode, HumanState, BaseUnit, BuildingType, HumanType, \
-    Building
+from dataStructure.gRPC import Map, UpdateResponse, Metadata, statusCode, HumanState, BuildingType,\
+    HealthStatus, Building
 from concurrent import futures
 from pure_protobuf.types import int32
 import logging
@@ -33,14 +33,14 @@ class ModelingSerializer:
     @staticmethod
     def create_human(human):
         return HumanState(
-            base=BaseUnit(id=int32(human.id), coord_x=float(human.x), coord_y=float(human.y)),
-            type=HumanType(human.type),
+            id=int32(human.id), coord_x=float(human.x), coord_y=float(human.y),
+            health_status=HealthStatus(human.type),
         )
 
     @staticmethod
     def create_building(building):
         return Building(
-            base=BaseUnit(id=int32(building.id), coord_x=float(building.x), coord_y=float(building.y)),
+            id=int32(building.id), coord_x=float(building.x), coord_y=float(building.y),
             type=BuildingType(building.type),
             width=int32(building.width),
             length=int32(building.length),

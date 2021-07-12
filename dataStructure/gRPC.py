@@ -26,14 +26,6 @@ class BaseUnit:
     coord_x: float = field(2, default=float(0))
     coord_y: float = field(3, default=float(0))
 
-    # def __post_init__(self):
-    #     assert isinstance(self.id, int32), "Invalid input argument id: got {0} instead of {1}"\
-    #         .format(self.id.__class__.__name__, int32.__name__)
-    #     assert isinstance(self.coord_x, float), "Invalid input argument coord_x: got {0} instead of {1}"\
-    #         .format(self.coord_x.__class__.__name__, int32.__name__)
-    #     assert isinstance(self.coord_y, float), "Invalid input argument coord_y: got {0} instead of {1}"\
-    #         .format(self.coord_y.__class__.__name__, int32.__name__)
-
     def validation(self):
         msg = ""
         for field_name, field_def in self.__dataclass_fields__.items():

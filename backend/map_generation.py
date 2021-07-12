@@ -1,21 +1,8 @@
-from enum import Enum
 import random as rand
 from backend.config_parser import ConfigFileParser, ConfigParameters
 import datetime
-from dataStructure.gRPC import Building, BaseUnit, HumanState,HealthStatus
+from dataStructure.gRPC import Building, BaseUnit, HumanState,HealthStatus, BuildingType
 from pure_protobuf.types import int32
-
-
-class BuildingType(Enum):
-
-    """
-    Class with set of constants for the designation of building types on the map
-    """
-
-    HOSPITAL = 0
-    OFFICE = 1
-    HOUSE = 2
-    STREET = 3
 
 # conditionally, for now, we believe that a minimum should fit into the city along each coordinate axis
 # 5 houses, so we will store the limitation on the length of the wall as a field of the map instance,
@@ -32,11 +19,11 @@ class ResearchMap:
         self.__map_population = self.create_generation_list()  # for population keeping
         self.__map_buildings = self.create_buildings_list()  # for keeping buildings information
 
-    def iter_buildings(self):
+    def generator_buildings(self):
         for elem in self.get_buildings():
             yield elem
 
-    def iter_population(self):
+    def generator_population(self):
         for elem in self.get_population():
             yield elem
 
@@ -83,7 +70,6 @@ class ResearchMap:
                                           - length - 2 * borders_indent)
         y = borders_indent + rand.randint(0, config_data[ConfigParameters.MAP_WIDTH.value]
                                           - width - 2 * borders_indent)
-        base_unit = BaseUnit(id_counter, x, y)
         angle = 0  # for now we don't use this field in map generation
         return Building(id_counter, x, y, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
 
@@ -135,7 +121,7 @@ class ResearchMap:
         return dict({'x': x_bounds, 'y': y_bounds})
 
     @staticmethod
-    def get_assert_msg( arg_number, obj, expected_type):
+    def get_assert_msg(arg_number, obj, expected_type):
         "Invalid type of first input argument {0}: got {1} instead of {2}".format(arg_number, obj.__class__.__name__,
                                                                                   expected_type.__name__)
 
@@ -170,4 +156,3 @@ class ResearchMap:
 
     def get_buildings(self):
         return self.__map_buildings
-
