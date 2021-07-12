@@ -11,7 +11,6 @@ import uuid
 
 
 # TODO rework map size
-# TODO rework loggers name
 # TODO Type annotation
 class ModelingSerializer:
     @staticmethod
@@ -70,8 +69,9 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 
     def GetMap(self, request, context):  # Generator of map objects
         logger.info("Get map request")
-        map_w, map_h = self.map.size()  # method to get size of map
-        return self.serializer.create_get_map_response(request, map_w, map_h, self.map)
+        map_w = self.map.width()
+        map_l = self.map.length()
+        return self.serializer.create_get_map_response(request, map_w, map_l, self.map)
 
 
 def serve():  # Responsible for the operation of the server
