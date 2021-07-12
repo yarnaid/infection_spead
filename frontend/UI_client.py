@@ -80,9 +80,9 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
     def create_human(self, x, y, human_type):
         """
         Function to paint dote, representing human at modeling
-        :param x: float/int : x coordinate of human dote
-        :param y: float/int : y coordinate of human dote
-        :param human_type: str: Human type at modeling process
+        :param x: float/int:
+        :param y: float/int:
+        :param human_type:
         :return:
         """
         color = self.human_color[human_type]
@@ -114,8 +114,8 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
     def create_building(self, x, y, width, length):  # TODO ANGLE?
         """
         Function painting rectangle, representing building( only houses at this point)
-        :param x: int/float : x coordinate of building rectangle
-        :param y: int/float : y coordinate of building rectangle
+        :param x: int/float :
+        :param y: int/float :
         :param width: int/float:
         :param length: int/float:
         --------- width
@@ -137,7 +137,7 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
 
 
 logging.basicConfig(format='%(relativeCreated)5d %(name)-15s %(levelname)-8s %(message)s')
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 logger.setLevel(logging.DEBUG)
 if __name__ == '__main__':
     app = PyQt5.QtWidgets.QApplication(sys.argv)  # new instance QApplication
