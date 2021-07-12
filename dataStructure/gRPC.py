@@ -27,7 +27,7 @@ class BaseUnit:
     coord_y: float = field(3, default=float(0))
 
 
-class HumanType(IntEnum):
+class HealthStatus(IntEnum):
     NORMAL = 0
     ILL = 1
     RECOVERED = 2
@@ -38,7 +38,7 @@ class HumanType(IntEnum):
 @dataclass
 class HumanState:
     base: BaseUnit = field(1)
-    type: HumanType = field(2)
+    health_status: HealthStatus = field(2)
 
 
 class BuildingType(IntEnum):
