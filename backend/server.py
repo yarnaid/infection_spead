@@ -1,7 +1,7 @@
 import os
 
 from gRPC import spec_pb2_grpc, spec_pb2
-from dataStructure.gRPC import Map, UpdateResponse, Metadata, statusCode, HumanState, BuildingType,\
+from dataStructure.gRPC import Map, UpdateResponse, Metadata, StatusCode, HumanState, BuildingType,\
     HealthStatus, Building
 from concurrent import futures
 from pure_protobuf.types import int32
@@ -27,7 +27,7 @@ class ModelingSerializer:
 
     @staticmethod
     def create_success_meta_response(request):
-        return Metadata(status=statusCode.SUCCESS,
+        return Metadata(status=StatusCode.SUCCESS,
                         request_id=int32(request.meta.request_id), UUID=str(uuid.uuid1()))
 
     @staticmethod
