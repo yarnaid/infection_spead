@@ -8,39 +8,40 @@ from pure_protobuf.types import int32
 import logging
 import grpc
 import uuid
+import typing
 
 
-# TODO rework map size
-# TODO Type annotation
 class ModelingSerializer:
     @staticmethod
-    def create_update_response(request, humans):  # create pb2 object from backed human
+    def create_update_response(request, humans) -> UpdateResponse:  # create pb2 object
+        # from backed human
         status = ModelingSerializer.create_success_meta_response(request)
         return UpdateResponse(meta=status,
                               state=[ModelingSerializer.create_human(human) for human in humans]
                               )
 
     @staticmethod
-    def create_get_map_response(request, map_w, map_h, buildings):  # create pb2 object from backend building
+    def create_get_map_response(request, map_w: float, map_h: float,
+                                buildings) -> Map:  # create pb2 object from backend building
         status = ModelingSerializer.create_success_meta_response(request)
         return Map(meta=status, map_size_w=map_w, map_size_h=map_h,
                    building=[ModelingSerializer.create_building(building) for building in buildings]
                    )
 
     @staticmethod
-    def create_success_meta_response(request):
+    def create_success_meta_response(request) -> Metadata:
         return Metadata(status=statusCode.SUCCESS,
                         request_id=int32(request.meta.request_id), UUID=str(uuid.uuid1()))
 
     @staticmethod
-    def create_human(human):
+    def create_human(human) -> HumanState:
         return HumanState(
             base=BaseUnit(id=int32(human.id), coord_x=float(human.x), coord_y=float(human.y)),
             type=HumanType(human.type),
         )
 
     @staticmethod
-    def create_building(building):
+    def create_building(building) -> Building:
         return Building(
             base=BaseUnit(id=int32(building.id), coord_x=float(building.x), coord_y=float(building.y)),
             type=BuildingType(building.type),
@@ -52,24 +53,25 @@ class ModelingSerializer:
 
 class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 
-    def __init__(self, map_obj, human_objects, serializer):
+    def __init__(self, map_obj, human_objects,
+                 serializer) -> None:
         """
          Remember our Backend output exits
-        :param map_obj: iterable obj : obj from which we can read map objects
-        :param human_objects: iterable obj : obj from which we can read humans object
+        :param map_obj: generator obj : obj from which we can read map objects
+        :param human_objects: generator obj : obj from which we can read humans object
         :param serializer: class : serializer so that you can bring the modeling objects to the proto form
         """
         self.map = map_obj
         self.human_objects = human_objects
         self.serializer = serializer
 
-    def GetUpdate(self, request, context):  # Generator of people on modeling
+    def GetUpdate(self, request, context) -> UpdateResponse:  # Generator of people on modeling
         logger.info("Get update request")
         return self.serializer.create_update_response(request, self.human_objects)
 
-    def GetMap(self, request, context):  # Generator of map objects
+    def GetMap(self, request, context) -> Map:  # Generator of map objects
         logger.info("Get map request")
-        map_w = self.map.width()
+        map_w = self.map.width()  # TODO REWORK THEN DOING TASK 4
         map_l = self.map.length()
         return self.serializer.create_get_map_response(request, map_w, map_l, self.map)
 
