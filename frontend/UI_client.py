@@ -29,7 +29,7 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
     def draw_map(self, map_objects: List[Building]) -> None:
 
         for building in map_objects:
-            self.create_building(building.coord_x, building.coord_y, building.width, building.length)
+            self.draw_building(building.coord_x, building.coord_y, building.width, building.length)
 
     def create_canvas(self) -> None:
         """
@@ -49,14 +49,14 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
         self.create_canvas()
         buildings = randint(5, 15)
         for i in range(buildings):
-            self.draw_random_building()
+            self.create_random_building()
 
         humans = randint(10, 50)
         for i in range(humans):
-            self.draw_random_human()
+            self.create_random_human()
         logger.info("Draw dummy random map")
 
-    def draw_random_building(self) -> None:
+    def create_random_building(self) -> None:
         """
         Function random x,y coordinate and sizes, and call function to paint this random building
         :return:
@@ -67,9 +67,9 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
         rand_length = randint(30, 80)
         rand_x = uniform(0, max_x - rand_width)
         rand_y = uniform(0, max_y - rand_length)
-        self.create_building(rand_x, rand_y, rand_width, rand_length)
+        self.draw_building(rand_x, rand_y, rand_width, rand_length)
 
-    def draw_random_human(self) -> None:
+    def create_random_human(self) -> None:
         """
         Function random x,y coordinate and type and call function to paint this random human
         :return:
@@ -79,9 +79,9 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
         x = uniform(0, max_x)
         y = uniform(0, max_y)
         human_type = choice(list(self.human_color.keys()))
-        self.create_human(x, y, human_type)
+        self.draw_human(x, y, human_type)
 
-    def create_human(self, x: float, y: float, human_type: str) -> None:
+    def draw_human(self, x: float, y: float, human_type: str) -> None:
         """
         Function to paint dote, representing human at modeling
         :param x: float/int:
@@ -116,7 +116,7 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
                     "(" + str(round(x, 2)) + "," + str(round(y, 2)) + ")")
         qp.end()
 
-    def create_building(self, x: float, y: float, width: float, length: float) -> None:  # TODO ANGLE?
+    def draw_building(self, x: float, y: float, width: float, length: float) -> None:  # TODO ANGLE?
         """
         Function painting rectangle, representing building( only houses at this point)
         :param x: int/float :
