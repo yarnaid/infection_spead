@@ -1,7 +1,5 @@
 from frontend.UI.infection_spread_ui import Ui_MainWindow
-from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtGui import QPainter, QBrush, QPen
-from PyQt5.QtCore import Qt, QRectF, QPoint, QSizeF, QPointF
+import PyQt5
 import sys
 import logging
 from random import randint, choice, uniform
@@ -9,7 +7,7 @@ from random import randint, choice, uniform
 HUMAN_SIZE = 3.5  # radius of human dote
 
 
-class ModelingApp(QtWidgets.QMainWindow, Ui_MainWindow):
+class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, width, length):
         super().__init__()
         self.setupUi(self)
@@ -24,13 +22,18 @@ class ModelingApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def init_working_buttons(self):
         self.dummyButton.clicked.connect(self.debug_draw_dummy_random_map)
 
+    def draw_map(self, map_objects):
+
+        for building in map_objects:
+            self.create_building(building.coord_x, building.coord_y, building.width, building.length)
+
     def create_canvas(self):
         """
         Creating canvas to paint building and humans
         :return:
         """
-        canvas = QtGui.QPixmap(self.width(), self.height())
-        canvas.fill(QtGui.QColor('white'))
+        canvas = PyQt5.QtGui.QPixmap(self.width(), self.height())
+        canvas.fill(PyQt5.QtGui.QColor('white'))
         self.canvas.setPixmap(canvas)
         self.setCentralWidget(self.canvas)
 
@@ -84,12 +87,12 @@ class ModelingApp(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         color = self.human_color[human_type]
         size = HUMAN_SIZE
-        qp = QPainter(self.canvas.pixmap())
+        qp = PyQt5.QtGui.QPainter(self.canvas.pixmap())
         qp.begin(self)
-        br = QtGui.QBrush(QtGui.QColor(color))
+        br = PyQt5.QtGui.QBrush(PyQt5.QtGui.QColor(color))
         qp.setBrush(br)
-        qp.setPen(QtGui.QColor('black'))
-        qp.drawEllipse(QPointF(x, y), float(size), float(size))
+        qp.setPen(PyQt5.QtGui.QColor('black'))
+        qp.drawEllipse(PyQt5.QtCore.QPointF(x, y), float(size), float(size))
         qp.end()
         if self.coordinateBox.isChecked():
             self.draw_coordinate(x, y)
@@ -100,13 +103,15 @@ class ModelingApp(QtWidgets.QMainWindow, Ui_MainWindow):
         :param y: int/float: y coordinate of where we will write coordinates
         :return:
         """
-        qp = QPainter(self.canvas.pixmap())
+        qp = PyQt5.QtGui.QPainter(self.canvas.pixmap())
         qp.begin(self)
-        qp.drawText(QRectF(QPointF(x, y - 10), QSizeF(100, 50)), Qt.AlignCenter | Qt.AlignTop,
-                    "(" + str(round(x,2)) + "," + str(round(y,2)) + ")")
+        qp.drawText(PyQt5.QtCore.QRectF(PyQt5.QtCore.QPointF(x, y - 10), PyQt5.QtCore.QSizeF(100, 50)),
+                    PyQt5.QtCore.Qt.AlignCenter |
+                    PyQt5.QtCore.Qt.AlignTop,
+                    "(" + str(round(x, 2)) + "," + str(round(y, 2)) + ")")
         qp.end()
 
-    def create_building(self, x, y, width, length):
+    def create_building(self, x, y, width, length):  # TODO ANGLE?
         """
         Function painting rectangle, representing building( only houses at this point)
         :param x: int/float : x coordinate of building rectangle
@@ -120,12 +125,12 @@ class ModelingApp(QtWidgets.QMainWindow, Ui_MainWindow):
         length
         :return:
         """
-        qp = QPainter(self.canvas.pixmap())
+        qp = PyQt5.QtGui.QPainter(self.canvas.pixmap())
         qp.begin(self)
-        br = QtGui.QBrush(QtGui.QColor('grey'))
+        br = PyQt5.QtGui.QBrush(PyQt5.QtGui.QColor('grey'))
         qp.setBrush(br)
-        qp.setPen(QtGui.QColor('black'))
-        qp.drawRect(QRectF(QPointF(x, y), QSizeF(width, length)))
+        qp.setPen(PyQt5.QtGui.QColor('black'))
+        qp.drawRect(PyQt5.QtCore.QRectF(PyQt5.QtCore.QPointF(x, y), PyQt5.QtCore.QSizeF(width, length)))
         qp.end()
         if self.coordinateBox.isChecked():
             self.draw_coordinate(x, y)
@@ -135,7 +140,7 @@ logging.basicConfig(format='%(relativeCreated)5d %(name)-15s %(levelname)-8s %(m
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)  # new instance QApplication
+    app = PyQt5.QtWidgets.QApplication(sys.argv)  # new instance QApplication
     w_size, l_size = 800, 600
     window = ModelingApp(w_size, l_size)
     window.show()
