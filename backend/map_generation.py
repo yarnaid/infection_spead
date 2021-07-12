@@ -2,7 +2,6 @@ from enum import Enum
 import random as rand
 from backend.config_parser import ConfigFileParser, ConfigParameters
 import datetime
-from collections import namedtuple
 from dataStructure.gRPC import Building, BaseUnit, HumanState,HealthStatus
 from pure_protobuf.types import int32
 
@@ -86,7 +85,7 @@ class ResearchMap:
                                           - width - 2 * borders_indent)
         base_unit = BaseUnit(id_counter, x, y)
         angle = 0  # for now we don't use this field in map generation
-        return Building(base_unit, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
+        return Building(id_counter, x, y, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
 
     def create_generation_list(self):
         """
@@ -98,7 +97,7 @@ class ResearchMap:
             rand.seed(datetime.datetime.now().microsecond)
             human_x = rand.triangular(0, self.get_map_length())
             human_y = rand.triangular(0, self.get_map_width())
-            human_objects.append(HumanState(BaseUnit(int32(self.__id_counter), human_x, human_y), HealthStatus.NORMAL))
+            human_objects.append(HumanState(int32(self.__id_counter), human_x, human_y, HealthStatus.NORMAL))
         return human_objects
 
     @staticmethod
@@ -114,8 +113,8 @@ class ResearchMap:
         :return: True, if buildings have an intersection, or False in other cases
         """
 
-        assert isinstance(first_building, Building), "Invalid type of first input argument"
-        assert isinstance(second_building, Building), "Invalid type of second input arguments"
+        assert isinstance(first_building, Building), ResearchMap.get_assert_msg(1, first_building, Building)
+        assert isinstance(second_building, Building),  ResearchMap.get_assert_msg(2, second_building, Building)
 
         first_bounds = ResearchMap.get_building_bounds(first_building)
         second_bounds = ResearchMap.get_building_bounds(second_building)
@@ -129,11 +128,16 @@ class ResearchMap:
 
     @staticmethod
     def get_building_bounds(building):
-        x_bounds = [building.base.coord_x - building.length / 2,
-                    building.base.coord_x + building.length / 2]
-        y_bounds = [building.base.coord_y - building.width / 2,
-                    building.base.coord_y + building.width / 2]
+        x_bounds = [building.coord_x - building.length / 2,
+                    building.coord_x + building.length / 2]
+        y_bounds = [building.coord_y - building.width / 2,
+                    building.coord_y + building.width / 2]
         return dict({'x': x_bounds, 'y': y_bounds})
+
+    @staticmethod
+    def get_assert_msg( arg_number, obj, expected_type):
+        "Invalid type of first input argument {0}: got {1} instead of {2}".format(arg_number, obj.__class__.__name__,
+                                                                                  expected_type.__name__)
 
     @staticmethod
     def has_intersection(buildings_list, new_building):
