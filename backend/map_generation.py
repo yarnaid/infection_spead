@@ -1,7 +1,7 @@
 import random as rand
 from backend.config_parser import ConfigFileParser, ConfigParameters
 import datetime
-from dataStructure.gRPC import Building, BaseUnit, HumanState,HealthStatus, BuildingType
+from dataStructure.gRPC import Building, HumanState,HealthStatus, BuildingType
 from pure_protobuf.types import int32
 
 # conditionally, for now, we believe that a minimum should fit into the city along each coordinate axis
@@ -13,8 +13,8 @@ class ResearchMap:
 
     def __init__(self, config_name: str):  # map object constructor for research
         self.config_data = ConfigFileParser(config_name).parse_config()
-        self.__wall_len_limit = self.config_data[ConfigParameters.MAP_LENGTH.value]\
-                                // 5  # why 5-written in the comment above
+        self.__wall_len_limit = self.config_data[ConfigParameters.MAP_LENGTH.value] // 5
+        # why 5-written in the comment above
         self.__id_counter = 0
         self.__map_population = self.create_generation_list()  # for population keeping
         self.__map_buildings = self.create_buildings_list()  # for keeping buildings information
@@ -81,8 +81,8 @@ class ResearchMap:
         human_objects = []
         for i in range(self.config_data[ConfigParameters.POPULATION_QUANTITY.value]):
             rand.seed(datetime.datetime.now().microsecond)
-            human_x = rand.triangular(0, self.get_map_length())
-            human_y = rand.triangular(0, self.get_map_width())
+            human_x = rand.triangular(0, self.length())
+            human_y = rand.triangular(0, self.width())
             human_objects.append(HumanState(int32(self.__id_counter), human_x, human_y, HealthStatus.NORMAL))
         return human_objects
 
@@ -145,10 +145,10 @@ class ResearchMap:
                 return True
         return False
 
-    def get_map_length(self):
+    def length(self):
         return self.config_data[ConfigParameters.MAP_LENGTH.value]
 
-    def get_map_width(self):
+    def width(self):
         return self.config_data[ConfigParameters.MAP_WIDTH.value]
 
     def get_population(self):
