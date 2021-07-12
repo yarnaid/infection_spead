@@ -1,7 +1,7 @@
 import random as rand
 from backend.config_parser import ConfigFileParser, ConfigParameters
 import datetime
-from dataStructure.gRPC import Building, HumanState,HealthStatus, BuildingType
+from dataStructure.gRPC import Building, HumanState, HealthStatus, BuildingType
 from pure_protobuf.types import int32
 
 # conditionally, for now, we believe that a minimum should fit into the city along each coordinate axis
@@ -10,6 +10,11 @@ from pure_protobuf.types import int32
 
 
 class ResearchMap:
+
+    """
+    Main class for creating mathematical model
+
+    """
 
     def __init__(self, config_name: str):  # map object constructor for research
         self.config_data = ConfigFileParser(config_name).parse_config()
@@ -20,17 +25,30 @@ class ResearchMap:
         self.__map_buildings = self.create_buildings_list()  # for keeping buildings information
 
     def generator_buildings(self):
-        for elem in self.get_buildings():
-            yield elem
+
+        """
+        Method returning iterator of buildings, placed on map
+
+        :return: Iterator of list with Building-objects
+        """
+
+        return iter(self.get_buildings())
 
     def generator_population(self):
-        for elem in self.get_population():
-            yield elem
+
+        """
+        Method returning iterator of human population units on the map
+
+        :return: Iterator of list with HumanState-objects
+        """
+
+        return iter(self.get_population())
 
     def create_buildings_list(self):
 
         """
         Method of creating objects of buildings on the map
+
         :return: List of Building-objects
         """
 
@@ -59,6 +77,7 @@ class ResearchMap:
 
         """
         Method for generating parameters of each building on map
+
         :return: Building-object, storing the geometric data of the building on the map
         """
 
@@ -76,6 +95,7 @@ class ResearchMap:
     def create_generation_list(self):
         """
         Method for random generating population of the city
+
         :return: List of Human-objects
         """
         human_objects = []
@@ -114,6 +134,15 @@ class ResearchMap:
 
     @staticmethod
     def get_building_bounds(building):
+
+        """
+        Method for getting all 4 bounds of a building to further find intersections with other buildings
+
+        :param building: Building
+            Object of Building-class, whose boundaries we want to return to the program
+        :return: Dictionary
+        """
+
         x_bounds = [building.coord_x - building.length / 2,
                     building.coord_x + building.length / 2]
         y_bounds = [building.coord_y - building.width / 2,
