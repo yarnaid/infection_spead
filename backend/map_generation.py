@@ -2,20 +2,8 @@ from enum import Enum
 import random as rand
 from backend.config_parser import ConfigFileParser, ConfigParameters
 import datetime
-from dataStructure.gRPC import Building, BaseUnit, HumanState,HealthStatus
+from dataStructure.gRPC import Building, BaseUnit, HumanState,HealthStatus, BuildingType
 from pure_protobuf.types import int32
-
-
-class BuildingType(Enum):
-
-    """
-    Class with set of constants for the designation of building types on the map
-    """
-
-    HOSPITAL = 0
-    OFFICE = 1
-    HOUSE = 2
-    STREET = 3
 
 # conditionally, for now, we believe that a minimum should fit into the city along each coordinate axis
 # 5 houses, so we will store the limitation on the length of the wall as a field of the map instance,
