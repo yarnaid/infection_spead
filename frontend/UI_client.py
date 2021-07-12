@@ -2,13 +2,14 @@ from frontend.UI.infection_spread_ui import Ui_MainWindow
 import PyQt5
 import sys
 import logging
+import typing
 from random import randint, choice, uniform
 
 HUMAN_SIZE = 3.5  # radius of human dote
 
 
 class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
-    def __init__(self, width, length):
+    def __init__(self, width: float, length: float) -> None:
         super().__init__()
         self.setupUi(self)
         self.resize(width, length)  # resize to map size from backend
@@ -19,15 +20,15 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.show()
 
-    def init_working_buttons(self):
+    def init_working_buttons(self) -> None:
         self.dummyButton.clicked.connect(self.debug_draw_dummy_random_map)
 
-    def draw_map(self, map_objects):
+    def draw_map(self, map_objects: list) -> None:
 
         for building in map_objects:
             self.create_building(building.coord_x, building.coord_y, building.width, building.length)
 
-    def create_canvas(self):
+    def create_canvas(self) -> None:
         """
         Creating canvas to paint building and humans
         :return:
@@ -37,7 +38,7 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
         self.canvas.setPixmap(canvas)
         self.setCentralWidget(self.canvas)
 
-    def debug_draw_dummy_random_map(self):
+    def debug_draw_dummy_random_map(self) -> None:
         """
         Debug function to create random number of random people and buildings
         :return:
@@ -52,7 +53,7 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
             self.draw_random_human()
         logger.info("Draw dummy random map")
 
-    def draw_random_building(self):
+    def draw_random_building(self) -> None:
         """
         Function random x,y coordinate and sizes, and call function to paint this random building
         :return:
@@ -65,7 +66,7 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
         rand_y = uniform(0, max_y - rand_length)
         self.create_building(rand_x, rand_y, rand_width, rand_length)
 
-    def draw_random_human(self):
+    def draw_random_human(self) -> None:
         """
         Function random x,y coordinate and type and call function to paint this random human
         :return:
@@ -77,7 +78,7 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
         human_type = choice(list(self.human_color.keys()))
         self.create_human(x, y, human_type)
 
-    def create_human(self, x, y, human_type):
+    def create_human(self, x: float, y: float, human_type: str) -> None:
         """
         Function to paint dote, representing human at modeling
         :param x: float/int:
@@ -97,7 +98,7 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
         if self.coordinateBox.isChecked():
             self.draw_coordinate(x, y)
 
-    def draw_coordinate(self, x, y):
+    def draw_coordinate(self, x: float, y: float) -> None:
         """
         function to write coordinate at position
         :param x: int/float:
@@ -112,7 +113,7 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
                     "(" + str(round(x, 2)) + "," + str(round(y, 2)) + ")")
         qp.end()
 
-    def create_building(self, x, y, width, length):  # TODO ANGLE?
+    def create_building(self, x: float, y: float, width: float, length: float) -> None:  # TODO ANGLE?
         """
         Function painting rectangle, representing building( only houses at this point)
         :param x: int/float :
