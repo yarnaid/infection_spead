@@ -4,10 +4,6 @@ import datetime
 from dataStructure.gRPC import Building, HumanState, HealthStatus, BuildingType
 from pure_protobuf.types import int32
 
-# conditionally, for now, we believe that a minimum should fit into the city along each coordinate axis
-# 5 houses, so we will store the limitation on the length of the wall as a field of the map instance,
-# depending on the length / width of the random card
-
 
 class ResearchMap:
 
@@ -17,22 +13,27 @@ class ResearchMap:
     Parameters:
     ----------
 
-    :param: config_data:
-    :param: wall_len_limit:
-    :param: id_counter:
-    :param: map_population:
-    :param: map_buildings:
-
-    Methods:
-    -------
-
+     config_data: dict
+        Attribute, that stores the map settings for building a model
+     wall_len_limit: int
+        Limit of walls of buildings, placed on current map (conditionally, for now, we believe that a minimum should fit
+        into the city along each coordinate axis 5 houses,
+        so we will store the limitation on the length of the wall as a field of the map instance,
+        depending on the length / width of the random card)
+     id_counter: int
+        Counter of objects (Buildings or HumanStates) on the map
+     map_population: list
+        List of HumanState-objects, placed on the map
+     map_buildings: list
+        List of Building-objects, placed on the map
 
     """
 
+    __wall_length_divider = 5
+
     def __init__(self, config_name: str):  # map object constructor for research
         self.config_data = ConfigFileParser(config_name).parse_config()
-        self.__wall_len_limit = self.config_data[ConfigParameters.MAP_LENGTH.value] // 5
-        # why 5-written in the comment above
+        self.__wall_len_limit = self.config_data[ConfigParameters.MAP_LENGTH.value] // ResearchMap.__wall_length_divider
         self.__id_counter = 0
         self.__map_population = self.create_generation_list()  # for population keeping
         self.__map_buildings = self.create_buildings_list()  # for keeping buildings information
@@ -147,6 +148,22 @@ class ResearchMap:
 
     @staticmethod
     def get_assert_msg(arg_number, obj, expected_type):
+
+        """
+
+        Helper method for generating error message to signal the user in the rest of the program
+
+        :param arg_number: int
+            Number of attribute passed to the method from which this function is called
+        :param obj:
+            Object, whose type you want to check
+        :param expected_type:
+            Required type of passed object obj
+
+        :return:
+            A message string containing the attribute numbers, the type of the passed object, and the desired type
+        """
+
         "Invalid type of first input argument {0}: got {1} instead of {2}".format(arg_number, obj.__class__.__name__,
                                                                                   expected_type.__name__)
 
