@@ -1,10 +1,9 @@
 from enum import Enum
 import random as rand
-from dataStructure.gRPC import HumanType
 from backend.config_parser import ConfigFileParser, ConfigParameters
 import datetime
 from dataclasses import dataclass
-from dataStructure.gRPC import Building, BaseUnit
+from dataStructure.gRPC import Building, BaseUnit, HumanState,HealthStatus
 from pure_protobuf.types import int32
 
 
@@ -99,7 +98,7 @@ class ResearchMap:
             rand.seed(datetime.datetime.now().microsecond)
             human_x = rand.triangular(0, self.get_map_length())
             human_y = rand.triangular(0, self.get_map_width())
-            human_objects.append(Human(BaseUnit(self.__id_counter, human_x, human_y)))
+            human_objects.append(HumanState(BaseUnit(int32(self.__id_counter), human_x, human_y), HealthStatus.NORMAL))
         return human_objects
 
     @staticmethod
@@ -165,18 +164,3 @@ class ResearchMap:
     def get_buildings(self):
         return self.__map_buildings
 
-
-@dataclass
-class Human:
-    """
-    Population unit class
-
-    Parameters:
-    -----------
-        __base: BaseUnit
-            Class, which keeps x and y coordinate of human dote
-        __human_type: HumanType
-            type of person in infectious research
-    """
-    __base: BaseUnit
-    __human_type: HumanType = HumanType.NORMAL
