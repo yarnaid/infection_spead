@@ -2,7 +2,7 @@ from enum import Enum
 import random as rand
 from backend.config_parser import ConfigFileParser, ConfigParameters
 import datetime
-from dataclasses import dataclass
+from collections import namedtuple
 from dataStructure.gRPC import Building, BaseUnit, HumanState,HealthStatus
 from pure_protobuf.types import int32
 
@@ -117,20 +117,23 @@ class ResearchMap:
         assert isinstance(first_building, Building), "Invalid type of first input argument"
         assert isinstance(second_building, Building), "Invalid type of second input arguments"
 
-        x_first = [first_building.base.coord_x - first_building.length / 2,
-                   first_building.base.coord_x + first_building.length / 2]
-        y_first = [first_building.base.coord_y - first_building.width / 2,
-                   first_building.base.coord_y + first_building.width / 2]
+        first_bounds = ResearchMap.get_building_bounds(first_building)
+        second_bounds = ResearchMap.get_building_bounds(second_building)
 
-        x_second = [second_building.base.coord_x - second_building.length / 2,
-                    second_building.base.coord_x + second_building.length / 2]
-        y_second = [second_building.base.coord_y - second_building.width / 2,
-                    second_building.base.coord_y + second_building.width / 2]
-        if max(x_second) >= max(x_first) or max(y_second) >= max(y_first):
-            return max(x_first) >= min(x_second) and max(y_first) >= min(y_second)
+        if max(second_bounds['x']) >= max(first_bounds['x']) or max(second_bounds['y']) >= max(first_bounds['y']):
+            return max(first_bounds['x']) >= min(second_bounds['x'])\
+                   and max(first_bounds['y']) >= min(second_bounds['y'])
         else:
-            return max(x_second) >= min(x_first) and max(y_second) >= min(y_first)
+            return max(second_bounds['x']) >= min(first_bounds['x'])\
+                   and max(second_bounds['y']) >= min(first_bounds['y'])
 
+    @staticmethod
+    def get_building_bounds(building):
+        x_bounds = [building.base.coord_x - building.length / 2,
+                    building.base.coord_x + building.length / 2]
+        y_bounds = [building.base.coord_y - building.width / 2,
+                    building.base.coord_y + building.width / 2]
+        return dict({'x': x_bounds, 'y': y_bounds})
 
     @staticmethod
     def has_intersection(buildings_list, new_building):
