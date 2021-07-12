@@ -68,17 +68,17 @@ class ResearchMap:
         buildings_list = []
         buildings_quantity = self.config_data[ConfigParameters.BUILDINGS_QUANTITY.value]
         for i in range(buildings_quantity):
-            new_building = ResearchMap.create_building_parameters(self.__wall_len_limit, self.config_data,
-                                                                  self.__id_counter)
+            new_building = ResearchMap.building_from_parameters(self.__wall_len_limit, self.config_data,
+                                                                self.__id_counter)
             if not buildings_list:  # if there is no buildings on map
                 buildings_list.append(new_building)
                 self.__id_counter += 1
             else:
                 iterations = 0
-                while ResearchMap.has_intersection(buildings_list, new_building)\
+                while new_building.has_intersection(buildings_list)\
                         and iterations < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
-                    new_building = ResearchMap.create_building_parameters(self.__wall_len_limit, self.config_data,
-                                                                          self.__id_counter)
+                    new_building = ResearchMap.building_from_parameters(self.__wall_len_limit, self.config_data,
+                                                                        self.__id_counter)
                     iterations += 1
                 if iterations < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
                     buildings_list.append(new_building)
@@ -86,7 +86,7 @@ class ResearchMap:
         return buildings_list
 
     @staticmethod
-    def create_building_parameters(wall_len_limit, config_data, id_counter):
+    def building_from_parameters(wall_len_limit, config_data, id_counter):
 
         """
         Method for generating parameters of each building on map
@@ -119,23 +119,20 @@ class ResearchMap:
             human_objects.append(HumanState(int32(self.__id_counter), human_x, human_y, HealthStatus.NORMAL))
         return human_objects
 
-    @staticmethod
-    def has_intersection(buildings_list, new_building):
+    def has_intersection(self, buildings_list):
 
         """
-        Method for finding intersection between new building and already existing buildings
+        Method for finding intersection between current building and already existing buildings (from list)
 
         :param buildings_list: list
             List of Building-objects, which keeps all building, already placed on the map
-        :param new_building:
-            New Building-object to be placed on the map
         :return:
             True, if new building has an intersection with at least one building from list of placed buildings,
             or False in other cases
         """
 
         for building in buildings_list:
-            if Building.intersection_check(building, new_building):
+            if Building.intersection_check(building, self):
                 return True
         return False
 
