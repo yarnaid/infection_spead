@@ -26,6 +26,28 @@ class BaseUnit:
     coord_x: float = field(2, default=float(0))
     coord_y: float = field(3, default=float(0))
 
+    # def __post_init__(self):
+    #     assert isinstance(self.id, int32), "Invalid input argument id: got {0} instead of {1}"\
+    #         .format(self.id.__class__.__name__, int32.__name__)
+    #     assert isinstance(self.coord_x, float), "Invalid input argument coord_x: got {0} instead of {1}"\
+    #         .format(self.coord_x.__class__.__name__, int32.__name__)
+    #     assert isinstance(self.coord_y, float), "Invalid input argument coord_y: got {0} instead of {1}"\
+    #         .format(self.coord_y.__class__.__name__, int32.__name__)
+
+    def validation(self):
+        msg = ""
+        for field_name, field_def in self.__dataclass_fields__.items():
+            actual_type = type(getattr(self, field_name))
+            if actual_type != field_def.type:
+                msg = "Invalid type of input field {0} : got {1} instead of {2}"\
+                    .format("\'" + field_name + "\'", "\'" + actual_type.__name__ + "\'",
+                            "\'" + field_def.type.__name__ + "\'")
+        return msg
+
+    def __post_init__(self):
+        msg = self.validation()
+        assert not bool(msg), msg
+
 
 class HealthStatus(IntEnum):
     NORMAL = 0
@@ -36,9 +58,8 @@ class HealthStatus(IntEnum):
 
 @message
 @dataclass
-class HumanState:
-    base: BaseUnit = field(1)
-    health_status: HealthStatus = field(2)
+class HumanState(BaseUnit):
+    health_status: HealthStatus = field(1, default=HealthStatus.NORMAL)
 
 
 class BuildingType(IntEnum):
@@ -48,12 +69,11 @@ class BuildingType(IntEnum):
 
 @message
 @dataclass
-class Building:
-    base: BaseUnit = field(1)
-    type: BuildingType = field(2)
-    width: int32 = field(3)
-    length: int32 = field(4)
-    angle: int32 = field(5)
+class Building(BaseUnit):
+    type: BuildingType = field(1, default=BuildingType.HOUSE)
+    width: int32 = field(2, default=0)
+    length: int32 = field(3, default=0)
+    angle: int32 = field(4, default=0)
 
 
 @message
