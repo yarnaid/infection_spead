@@ -38,10 +38,14 @@ class BaseUnit:
         msg = ""
         for field_name, field_def in self.__dataclass_fields__.items():
             actual_type = type(getattr(self, field_name))
+            # so far this is a stub, looking for a solution how to make getattr return the correct int32 instead of int
+            if actual_type.__name__ == 'int':
+                actual_type = int32
             if actual_type != field_def.type:
                 msg = "Invalid type of input field {0} : got {1} instead of {2}"\
                     .format("\'" + field_name + "\'", "\'" + actual_type.__name__ + "\'",
                             "\'" + field_def.type.__name__ + "\'")
+                break
         return msg
 
     def __post_init__(self):
@@ -71,9 +75,9 @@ class BuildingType(IntEnum):
 @dataclass
 class Building(BaseUnit):
     type: BuildingType = field(1, default=BuildingType.HOUSE)
-    width: int32 = field(2, default=0)
-    length: int32 = field(3, default=0)
-    angle: int32 = field(4, default=0)
+    width: int32 = field(2, default=int32(0))
+    length: int32 = field(3, default=int32(0))
+    angle: int32 = field(4, default=int32(0))
 
 
 @message
