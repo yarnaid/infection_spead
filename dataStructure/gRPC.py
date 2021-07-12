@@ -205,7 +205,6 @@ class Building(BaseUnit):
                                                                                   expected_type.__name__)
 
 
-
 @message
 @dataclass
 class Map:
