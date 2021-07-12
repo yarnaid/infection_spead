@@ -157,6 +157,54 @@ class Building(BaseUnit):
     def get_y_bounds(self):
         return self.__y_bounds
 
+    @staticmethod
+    def intersection_check(first_building, second_building):
+
+        """
+        Method for checking buildings intersections
+
+        :param first_building: Building
+        :param second_building: Building
+            Two objects of class Building for to check for intersection
+
+        :return: True, if buildings have an intersection, or False in other cases
+        """
+
+        assert isinstance(first_building, Building), Building.get_assert_msg(1, first_building, Building)
+        assert isinstance(second_building, Building), Building.get_assert_msg(2, second_building, Building)
+
+        first_bounds = [first_building.get_x_bounds(), first_building.get_y_bounds()]
+        second_bounds = [second_building.get_x_bounds(), second_building.get_y_bounds()]
+
+        if max(second_bounds[0]) >= max(first_bounds[0]) or max(second_bounds[1]) >= max(first_bounds[1]):
+            return max(first_bounds[0]) >= min(second_bounds[0]) \
+                   and max(first_bounds[1]) >= min(second_bounds[1])
+        else:
+            return max(second_bounds[0]) >= min(first_bounds[0]) \
+                   and max(second_bounds[1]) >= min(first_bounds[1])
+
+    @staticmethod
+    def get_assert_msg(arg_number, obj, expected_type):
+
+        """
+
+        Helper method for generating error message to signal the user in the rest of the program
+
+        :param arg_number: int
+            Number of attribute passed to the method from which this function is called
+        :param obj:
+            Object, whose type you want to check
+        :param expected_type:
+            Required type of passed object obj
+
+        :return:
+            A message string containing the attribute numbers, the type of the passed object, and the desired type
+        """
+
+        "Invalid type of first input argument {0}: got {1} instead of {2}".format(arg_number, obj.__class__.__name__,
+                                                                                  expected_type.__name__)
+
+
 
 @message
 @dataclass
