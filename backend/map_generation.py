@@ -1,4 +1,3 @@
-from enum import Enum
 import random as rand
 from backend.config_parser import ConfigFileParser, ConfigParameters
 import datetime
@@ -71,7 +70,6 @@ class ResearchMap:
                                           - length - 2 * borders_indent)
         y = borders_indent + rand.randint(0, config_data[ConfigParameters.MAP_WIDTH.value]
                                           - width - 2 * borders_indent)
-        base_unit = BaseUnit(id_counter, x, y)
         angle = 0  # for now we don't use this field in map generation
         return Building(id_counter, x, y, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
 
@@ -123,7 +121,7 @@ class ResearchMap:
         return dict({'x': x_bounds, 'y': y_bounds})
 
     @staticmethod
-    def get_assert_msg( arg_number, obj, expected_type):
+    def get_assert_msg(arg_number, obj, expected_type):
         "Invalid type of first input argument {0}: got {1} instead of {2}".format(arg_number, obj.__class__.__name__,
                                                                                   expected_type.__name__)
 
@@ -158,4 +156,3 @@ class ResearchMap:
 
     def get_buildings(self):
         return self.__map_buildings
-
