@@ -1,8 +1,15 @@
 from enum import Enum
 from configparser import ConfigParser
+from dataclasses import dataclass
 
 
-class ConfigParameters(Enum):  # a set of configuration options for creating a map for the model
+@dataclass
+class ConfigParameters(Enum):
+
+    """
+    A set of configuration options for creating a map for the model
+    """
+
     POPULATION_QUANTITY = "population"
     BUILDINGS_QUANTITY = "buildings"
     MAP_LENGTH = "map_length"
