@@ -3,7 +3,8 @@ from pure_protobuf.dataclasses_ import field, message
 from pure_protobuf.types import int32
 from enum import IntEnum
 from typing import List
-
+import random as rand
+import datetime
 
 class StatusCode(IntEnum):
     UNDEFINED = 0
@@ -102,6 +103,27 @@ class HumanState(BaseUnit):
     """
 
     health_status: HealthStatus = field(1, default=HealthStatus.NORMAL)
+
+    @staticmethod
+    def generate_random_human(map_length, map_width, id_counter):
+
+        """
+        Method for random generating human with given parameters
+
+        :param map_length: int32
+            Length of map along the x-axis
+        :param map_width: int32
+            Length of map along the y-axis
+        :param id_counter: int32
+            Unique identifier of each object on model map
+        :return:
+            Randomly generated object of Human-class
+        """
+
+        rand.seed(datetime.datetime.now().microsecond)
+        human_x = rand.triangular(0, map_length)
+        human_y = rand.triangular(0, map_width)
+        return HumanState(int32(id_counter), human_x, human_y, HealthStatus.NORMAL)
 
 
 class BuildingType(IntEnum):

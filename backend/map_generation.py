@@ -34,6 +34,8 @@ class ResearchMap:
         self.__wall_len_limit = self.config_data[ConfigParameters.MAP_LENGTH.value]\
                                 // self.config_data[ConfigParameters.WALL_LENGTH_DIVIDER.value]
         self.__id_counter = 0
+        self.map_length = self.config_data[ConfigParameters.MAP_LENGTH.value]
+        self.map_width = self.config_data[ConfigParameters.MAP_WIDTH.value]
         self.__map_population = self.create_generation_list()
         self.__map_buildings = self.create_buildings_list()
 
@@ -113,10 +115,7 @@ class ResearchMap:
         """
         human_objects = []
         for i in range(self.config_data[ConfigParameters.POPULATION_QUANTITY.value]):
-            rand.seed(datetime.datetime.now().microsecond)
-            human_x = rand.triangular(0, self.length())
-            human_y = rand.triangular(0, self.width())
-            human_objects.append(HumanState(int32(self.__id_counter), human_x, human_y, HealthStatus.NORMAL))
+            human_objects.append(HumanState.generate_random_human(self.length(), self.width(), self.__id_counter))
         return human_objects
 
     def has_intersection(self, buildings_list):
@@ -137,10 +136,10 @@ class ResearchMap:
         return False
 
     def length(self):
-        return self.config_data[ConfigParameters.MAP_LENGTH.value]
+        return self.map_length
 
     def width(self):
-        return self.config_data[ConfigParameters.MAP_WIDTH.value]
+        return self.map_width
 
     def get_population(self):
         return self.__map_population
