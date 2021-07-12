@@ -99,8 +99,9 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
 
     def draw_coordinate(self, x, y):
         """
-        :param x: int/float: x coordinate of where we will write coordinates
-        :param y: int/float: y coordinate of where we will write coordinates
+        function to write coordinate at position
+        :param x: int/float:
+        :param y: int/float:
         :return:
         """
         qp = PyQt5.QtGui.QPainter(self.canvas.pixmap())
