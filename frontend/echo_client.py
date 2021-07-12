@@ -53,9 +53,10 @@ def run_get_map():
 
 
 logging.basicConfig(format='%(relativeCreated)5d %(name)-15s %(levelname)-8s %(message)s')
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 logger.setLevel(logging.DEBUG)
+counter = count(1)     # set counter for requests
 if __name__ == '__main__':
-    counter = count(1)  # set counter for requests
+    pass
     # run_get_map()
     # run_update()

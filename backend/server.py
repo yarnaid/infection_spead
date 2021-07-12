@@ -10,6 +10,9 @@ import grpc
 import uuid
 
 
+# TODO rework map size
+# TODO rework loggers name
+# TODO Type annotation
 class ModelingSerializer:
     @staticmethod
     def create_update_response(request, humans):  # create pb2 object from backed human
@@ -74,7 +77,7 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 def serve():  # Responsible for the operation of the server
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=os.cpu_count()))
     spec_pb2_grpc.add_ModelingServicer_to_server(
-        ModelingServicer(None, None, ModelingSerializer), server)  # NEED BACKEND OUTPUT INSTEAD OF NONE
+        ModelingServicer(None, None, ModelingSerializer), server)
     logger.info("Set Modeling Servicer")
     server.add_insecure_port('[::]:50051')
     server.start()
@@ -83,7 +86,7 @@ def serve():  # Responsible for the operation of the server
 
 
 logging.basicConfig(format='%(relativeCreated)5d %(name)-15s %(levelname)-8s %(message)s')
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 logger.setLevel(logging.DEBUG)
 if __name__ == '__main__':
     serve()
