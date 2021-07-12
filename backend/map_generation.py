@@ -136,15 +136,15 @@ class ResearchMap:
         assert isinstance(first_building, Building), ResearchMap.get_assert_msg(1, first_building, Building)
         assert isinstance(second_building, Building),  ResearchMap.get_assert_msg(2, second_building, Building)
 
-        first_bounds = first_building.get_building_bounds()
-        second_bounds = second_building.get_building_bounds()
+        first_bounds = [first_building.get_x_bounds(), first_building.get_y_bounds()]
+        second_bounds = [second_building.get_x_bounds(), second_building.get_y_bounds()]
 
-        if max(second_bounds['x']) >= max(first_bounds['x']) or max(second_bounds['y']) >= max(first_bounds['y']):
-            return max(first_bounds['x']) >= min(second_bounds['x'])\
-                   and max(first_bounds['y']) >= min(second_bounds['y'])
+        if max(second_bounds[0]) >= max(first_bounds[0]) or max(second_bounds[1]) >= max(first_bounds[1]):
+            return max(first_bounds[0]) >= min(second_bounds[0])\
+                   and max(first_bounds[1]) >= min(second_bounds[1])
         else:
-            return max(second_bounds['x']) >= min(first_bounds['x'])\
-                   and max(second_bounds['y']) >= min(first_bounds['y'])
+            return max(second_bounds[0]) >= min(first_bounds[0])\
+                   and max(second_bounds[1]) >= min(first_bounds[1])
 
     @staticmethod
     def get_assert_msg(arg_number, obj, expected_type):

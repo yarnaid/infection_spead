@@ -139,19 +139,23 @@ class Building(BaseUnit):
     length: int32 = field(3, default=int32(0))
     angle: int32 = field(4, default=int32(0))
 
-    def get_building_bounds(self):
-
+    def __post_init__(self):
         """
         Method for getting all 4 bounds of a building to further find intersections with other buildings
+        (attributes 'x_bounds' and 'y_bounds' are private so that it is not possible
+        to change them after creating the Building-object)
 
-        :return: Dictionary, which keeps left and right bounds of building along the x and y axes
         """
+        self.__x_bounds = [self.coord_x - self.length / 2,
+                           self.coord_x + self.length / 2]
+        self.__y_bounds = [self.coord_y - self.width / 2,
+                           self.coord_y + self.width / 2]
 
-        x_bounds = [self.coord_x - self.length / 2,
-                    self.coord_x + self.length / 2]
-        y_bounds = [self.coord_y - self.width / 2,
-                    self.coord_y + self.width / 2]
-        return dict({'x': x_bounds, 'y': y_bounds})
+    def get_x_bounds(self):
+        return self.__x_bounds
+
+    def get_y_bounds(self):
+        return self.__y_bounds
 
 
 @message
