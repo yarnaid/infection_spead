@@ -10,6 +10,7 @@ class ConfigParameters(Enum):  # a set of configuration options for creating a m
     MIN_WALL_LEN = "minimal_wall_length"
     ITERATION_CONSTRAINT = "iteration_constraint"
     BORDERS_INDENT = "indent_from_borders"
+    WALL_LENGTH_DIVIDER = "wall_length_divider"
 
 
 class ConfigFileParser(ConfigParser):

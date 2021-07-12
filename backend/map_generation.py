@@ -29,11 +29,10 @@ class ResearchMap:
 
     """
 
-    __wall_length_divider = 5
-
     def __init__(self, config_name: str):
         self.config_data = ConfigFileParser(config_name).parse_config()
-        self.__wall_len_limit = self.config_data[ConfigParameters.MAP_LENGTH.value] // ResearchMap.__wall_length_divider
+        self.__wall_len_limit = self.config_data[ConfigParameters.MAP_LENGTH.value]\
+                                // self.config_data[ConfigParameters.WALL_LENGTH_DIVIDER.value]
         self.__id_counter = 0
         self.__map_population = self.create_generation_list()
         self.__map_buildings = self.create_buildings_list()

@@ -6,3 +6,4 @@ population = 6
 minimal_wall_length = 10
 iteration_constraint = 1000
 indent_from_borders = 3
+wall_length_divider = 5
