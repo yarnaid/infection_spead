@@ -1,9 +1,12 @@
+from typing import List
+
 from frontend.UI.infection_spread_ui import Ui_MainWindow
 import PyQt5
 import sys
 import logging
 import typing
 from random import randint, choice, uniform
+from dataStructure.gRPC import Building
 
 HUMAN_SIZE = 3.5  # radius of human dote
 
@@ -23,7 +26,7 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
     def init_working_buttons(self) -> None:
         self.dummyButton.clicked.connect(self.debug_draw_dummy_random_map)
 
-    def draw_map(self, map_objects: list) -> None:
+    def draw_map(self, map_objects: List[Building]) -> None:
 
         for building in map_objects:
             self.create_building(building.coord_x, building.coord_y, building.width, building.length)
