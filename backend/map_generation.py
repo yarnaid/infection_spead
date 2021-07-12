@@ -12,7 +12,20 @@ from pure_protobuf.types import int32
 class ResearchMap:
 
     """
-    Main class for creating mathematical model
+    Main class for map on which the mathematical model of the spread of infection is built
+
+    Parameters:
+    ----------
+
+    :param: config_data:
+    :param: wall_len_limit:
+    :param: id_counter:
+    :param: map_population:
+    :param: map_buildings:
+
+    Methods:
+    -------
+
 
     """
 
@@ -85,11 +98,11 @@ class ResearchMap:
         width = rand.randint(config_data[ConfigParameters.MIN_WALL_LEN.value], wall_len_limit)
         length = rand.randint(config_data[ConfigParameters.MIN_WALL_LEN.value], wall_len_limit)
         borders_indent = config_data[ConfigParameters.BORDERS_INDENT.value]
-        x = borders_indent + rand.randint(0, config_data[ConfigParameters.MAP_LENGTH.value]
-                                          - length - 2 * borders_indent)
-        y = borders_indent + rand.randint(0, config_data[ConfigParameters.MAP_WIDTH.value]
-                                          - width - 2 * borders_indent)
-        angle = 0  # for now we don't use this field in map generation
+        x = borders_indent + rand.triangular(0, config_data[ConfigParameters.MAP_LENGTH.value]
+                                             - length - 2 * borders_indent)
+        y = borders_indent + rand.triangular(0, config_data[ConfigParameters.MAP_WIDTH.value]
+                                             - width - 2 * borders_indent)
+        angle = int32(0)  # for now we don't use this field in map generation
         return Building(id_counter, x, y, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
 
     def create_generation_list(self):
@@ -122,8 +135,8 @@ class ResearchMap:
         assert isinstance(first_building, Building), ResearchMap.get_assert_msg(1, first_building, Building)
         assert isinstance(second_building, Building),  ResearchMap.get_assert_msg(2, second_building, Building)
 
-        first_bounds = ResearchMap.get_building_bounds(first_building)
-        second_bounds = ResearchMap.get_building_bounds(second_building)
+        first_bounds = first_building.get_building_bounds()
+        second_bounds = second_building.get_building_bounds()
 
         if max(second_bounds['x']) >= max(first_bounds['x']) or max(second_bounds['y']) >= max(first_bounds['y']):
             return max(first_bounds['x']) >= min(second_bounds['x'])\
@@ -131,23 +144,6 @@ class ResearchMap:
         else:
             return max(second_bounds['x']) >= min(first_bounds['x'])\
                    and max(second_bounds['y']) >= min(first_bounds['y'])
-
-    @staticmethod
-    def get_building_bounds(building):
-
-        """
-        Method for getting all 4 bounds of a building to further find intersections with other buildings
-
-        :param building: Building
-            Object of Building-class, whose boundaries we want to return to the program
-        :return: Dictionary
-        """
-
-        x_bounds = [building.coord_x - building.length / 2,
-                    building.coord_x + building.length / 2]
-        y_bounds = [building.coord_y - building.width / 2,
-                    building.coord_y + building.width / 2]
-        return dict({'x': x_bounds, 'y': y_bounds})
 
     @staticmethod
     def get_assert_msg(arg_number, obj, expected_type):
