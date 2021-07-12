@@ -19,11 +19,11 @@ class ResearchMap:
         self.__map_population = self.create_generation_list()  # for population keeping
         self.__map_buildings = self.create_buildings_list()  # for keeping buildings information
 
-    def iter_buildings(self):
+    def generator_buildings(self):
         for elem in self.get_buildings():
             yield elem
 
-    def iter_population(self):
+    def generator_population(self):
         for elem in self.get_population():
             yield elem
 
