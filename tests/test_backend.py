@@ -18,7 +18,5 @@ test_examples = [has_intersection_test, no_intersection_test]
 
 @pytest.mark.parametrize('test_data', test_examples, ids=str)
 def test_intersection_check(test_data: Building) -> None:
-    first_building = test_data[0]
-    second_building = test_data[1]
-    answer = test_data[2]
+    first_building, second_building, answer, *_ = test_data
     assert ResearchMap.intersection_check(first_building, second_building) == answer
