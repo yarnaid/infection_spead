@@ -1,8 +1,9 @@
 import random as rand
 from backend.config_parser import ConfigFileParser, ConfigParameters
 import datetime
-from dataStructure.gRPC import Building, HumanState, HealthStatus, BuildingType
+from dataStructure.gRPC import Building, HumanState, BuildingType
 from pure_protobuf.types import int32
+from itertools import count
 
 
 class ResearchMap:
@@ -70,42 +71,29 @@ class ResearchMap:
         buildings_list = []
         buildings_quantity = self.config_data[ConfigParameters.BUILDINGS_QUANTITY.value]
         for i in range(buildings_quantity):
-            new_building = ResearchMap.building_from_parameters(self.__wall_len_limit, self.config_data,
-                                                                self.__id_counter)
+            new_building = Building.from_parameters(self.__id_counter,
+                                                    self.config_data[ConfigParameters.MIN_WALL_LEN.value],
+                                                    self.__wall_len_limit,
+                                                    self.config_data[ConfigParameters.BORDERS_INDENT.value],
+                                                    self.map_length,
+                                                    self.map_width)
             if not buildings_list:  # if there is no buildings on map
                 buildings_list.append(new_building)
                 self.__id_counter += 1
             else:
-                iterations = 0
+                iterations = count()
                 while new_building.has_intersection(buildings_list)\
-                        and iterations < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
-                    new_building = ResearchMap.building_from_parameters(self.__wall_len_limit, self.config_data,
-                                                                        self.__id_counter)
-                    iterations += 1
+                        and next(iterations) < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
+                    new_building = Building.from_parameters(self.__id_counter,
+                                                            self.config_data[ConfigParameters.MIN_WALL_LEN.value],
+                                                            self.__wall_len_limit,
+                                                            self.config_data[ConfigParameters.BORDERS_INDENT.value],
+                                                            self.map_length,
+                                                            self.map_width)
                 if iterations < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
                     buildings_list.append(new_building)
                     self.__id_counter += 1
         return buildings_list
-
-    @staticmethod
-    def building_from_parameters(wall_len_limit, config_data, id_counter):
-
-        """
-        Method for generating parameters of each building on map
-
-        :return: Building-object, storing the geometric data of the building on the map
-        """
-
-        rand.seed(datetime.datetime.now().microsecond)
-        width = rand.randint(config_data[ConfigParameters.MIN_WALL_LEN.value], wall_len_limit)
-        length = rand.randint(config_data[ConfigParameters.MIN_WALL_LEN.value], wall_len_limit)
-        borders_indent = config_data[ConfigParameters.BORDERS_INDENT.value]
-        x = borders_indent + rand.triangular(0, config_data[ConfigParameters.MAP_LENGTH.value]
-                                             - length - 2 * borders_indent)
-        y = borders_indent + rand.triangular(0, config_data[ConfigParameters.MAP_WIDTH.value]
-                                             - width - 2 * borders_indent)
-        angle = int32(0)  # for now we don't use this field in map generation
-        return Building(id_counter, x, y, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
 
     def create_generation_list(self):
         """

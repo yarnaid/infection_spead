@@ -6,6 +6,7 @@ from typing import List
 import random as rand
 import datetime
 
+
 class StatusCode(IntEnum):
     UNDEFINED = 0
     SUCCESS = 1
@@ -225,6 +226,36 @@ class Building(BaseUnit):
 
         "Invalid type of first input argument {0}: got {1} instead of {2}".format(arg_number, obj.__class__.__name__,
                                                                                   expected_type.__name__)
+
+    @staticmethod
+    def from_parameters(id_counter, min_wall_len, wall_len_limit, borders_indent, map_length, map_width):
+
+        """
+        Method for generating random building for ap with passed parameters
+
+        :param: id_counter: int32
+            Unique identifier for new building on the map
+        :param: min_wall_len: int32
+            Left limit of wall length on current map
+        :param: wall_len_limit: int32
+            Right limit of wall length on current map
+        :param: borders_indent: int32
+            Indent of buildings from borders on map
+        :param: map_length: int32
+        :param: map_width: int32
+
+        :return: Building-object, storing the geometric data of the building on the map
+        """
+
+        rand.seed(datetime.datetime.now().microsecond)
+        width = rand.randint(min_wall_len, wall_len_limit)
+        length = rand.randint(min_wall_len, wall_len_limit)
+        x = borders_indent + rand.triangular(0, map_length
+                                             - length - 2 * borders_indent)
+        y = borders_indent + rand.triangular(0, map_width
+                                             - width - 2 * borders_indent)
+        angle = int32(0)  # for now we don't use this field in map generation
+        return Building(id_counter, x, y, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
 
 
 @message
