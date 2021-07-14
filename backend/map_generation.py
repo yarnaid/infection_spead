@@ -30,8 +30,8 @@ class ResearchMap:
         self.config_data = ConfigFileParser(config_name).parse_config()
         self.__wall_len_limit = self.config_data[ConfigParameters.MAP_LENGTH.value]\
                                 // self.config_data[ConfigParameters.WALL_LENGTH_DIVIDER.value]
-        self.map_length = self.config_data[ConfigParameters.MAP_LENGTH.value]
-        self.map_width = self.config_data[ConfigParameters.MAP_WIDTH.value]
+        self.__map_length = self.config_data[ConfigParameters.MAP_LENGTH.value]
+        self.__map_width = self.config_data[ConfigParameters.MAP_WIDTH.value]
         self.__map_population = []
         self.__map_buildings = []
         self.create_generation_list()
@@ -72,8 +72,8 @@ class ResearchMap:
                                                     self.config_data[ConfigParameters.MIN_WALL_LEN.value],
                                                     self.__wall_len_limit,
                                                     self.config_data[ConfigParameters.BORDERS_INDENT.value],
-                                                    self.map_length,
-                                                    self.map_width)
+                                                    self.__map_length,
+                                                    self.__map_width)
             if not buildings_list:  # if there is no buildings on map
                 buildings_list.append(new_building)
             else:
@@ -84,8 +84,8 @@ class ResearchMap:
                                                             self.config_data[ConfigParameters.MIN_WALL_LEN.value],
                                                             self.__wall_len_limit,
                                                             self.config_data[ConfigParameters.BORDERS_INDENT.value],
-                                                            self.map_length,
-                                                            self.map_width)
+                                                            self.__map_length,
+                                                            self.__map_width)
                 if next(iterations) < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
                     buildings_list.append(new_building)
         return buildings_list
@@ -121,10 +121,10 @@ class ResearchMap:
         return False
 
     def length(self):
-        return self.map_length
+        return self.__map_length
 
     def width(self):
-        return self.map_width
+        return self.__map_width
 
     def get_population(self):
         return self.__map_population
