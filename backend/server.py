@@ -1,6 +1,6 @@
 import os
 
-from gRPC import spec_pb2_grpc, spec_pb2
+from gRPC import spec_pb2_grpc
 from dataStructure.gRPC import Map, UpdateResponse, Metadata, StatusCode, HumanState, BuildingType,\
     HealthStatus, Building
 from concurrent import futures
