@@ -121,7 +121,6 @@ class HumanState(BaseUnit):
             Randomly generated object of Human-class
         """
 
-        rand.seed(datetime.datetime.now().microsecond)
         human_x = rand.triangular(0, map_length)
         human_y = rand.triangular(0, map_width)
         return HumanState(int32(id_counter), human_x, human_y, HealthStatus.NORMAL)
@@ -239,7 +238,6 @@ class Building(BaseUnit):
         :return: Building-object, storing the geometric data of the building on the map
         """
 
-        rand.seed(datetime.datetime.now().microsecond)
         width = rand.randint(min_wall_len, wall_len_limit)
         length = rand.randint(min_wall_len, wall_len_limit)
         x = borders_indent + rand.triangular(0, map_length
