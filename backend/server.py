@@ -70,9 +70,7 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 
     def GetMap(self, request, context) -> Map:  # Generator of map objects
         logger.info("Get map request")
-        map_w = self.map.width()  # TODO REWORK THEN DOING TASK 4
-        map_l = self.map.length()
-        return self.serializer.create_get_map_response(request,self.map)
+        return self.serializer.create_get_map_response(request, self.map)
 
 
 def serve():  # Responsible for the operation of the server
