@@ -52,16 +52,15 @@ class ModelingSerializer:
 
 class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 
-    def __init__(self, map_obj, human_objects,
-                 serializer) -> None:
+    def __init__(self, map_generator, human_generator, serializer) -> None:
         """
          Remember our Backend output exits
-        :param map_obj: generator obj : obj from which we can read map objects
-        :param human_objects: generator obj : obj from which we can read humans object
+        :param map_generator: generator: generator from which we can read map objects
+        :param human_generator: generator : generator from which we can read humans object
         :param serializer: class : serializer so that you can bring the modeling objects to the proto form
         """
-        self.map = map_obj
-        self.human_objects = human_objects
+        self.map = map_generator
+        self.human_objects = human_generator
         self.serializer = serializer
 
     def GetUpdate(self, request, context) -> UpdateResponse:  # Generator of people on modeling
