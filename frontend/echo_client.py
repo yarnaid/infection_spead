@@ -56,7 +56,3 @@ logging.basicConfig(format='%(relativeCreated)5d %(name)-15s %(levelname)-8s %(m
 logger = logging.getLogger(__file__)
 logger.setLevel(logging.DEBUG)
 counter = count(1)     # set counter for requests
-if __name__ == '__main__':
-    pass
-    # run_get_map()
-    # run_update()
