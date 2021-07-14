@@ -133,7 +133,8 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
             logger.info("Dummy: Create and draw humans")
             logger.info("Draw dummy random map")
         except Exception as ex:
-            print(ex)
+            logger.error(ex)
+            raise Exception
 
     def create_random_building(self) -> BuildingRectangle:
         """
