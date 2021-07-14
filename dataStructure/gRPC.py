@@ -106,7 +106,7 @@ class HumanState(BaseUnit):
     health_status: HealthStatus = field(1, default=HealthStatus.NORMAL)
 
     @staticmethod
-    def generate_random_human(map_length, map_width, id_counter):
+    def human_from_parameters(map_length: int, map_width: int, id_counter: int):
 
         """
         Method for random generating human with given parameters
@@ -169,35 +169,26 @@ class Building(BaseUnit):
         to change them after creating the Building-object)
 
         """
-        self.__x_bounds = [self.coord_x - self.length / 2,
-                           self.coord_x + self.length / 2]
-        self.__y_bounds = [self.coord_y - self.width / 2,
-                           self.coord_y + self.width / 2]
+        self.x_bounds = [self.coord_x - self.length / 2,
+                         self.coord_x + self.length / 2]
+        self.y_bounds = [self.coord_y - self.width / 2,
+                         self.coord_y + self.width / 2]
 
-    def get_x_bounds(self):
-        return self.__x_bounds
-
-    def get_y_bounds(self):
-        return self.__y_bounds
-
-    @staticmethod
-    def intersection_check(first_building, second_building):
+    def intersection_check(self, second_building):
 
         """
         Method for checking buildings intersections
 
-        :param first_building: Building
         :param second_building: Building
-            Two objects of class Building for to check for intersection
+            Object with which you want to check the intersection
 
         :return: True, if buildings have an intersection, or False in other cases
         """
 
-        assert isinstance(first_building, Building), Building.get_assert_msg(1, first_building, Building)
         assert isinstance(second_building, Building), Building.get_assert_msg(2, second_building, Building)
 
-        first_bounds = [first_building.get_x_bounds(), first_building.get_y_bounds()]
-        second_bounds = [second_building.get_x_bounds(), second_building.get_y_bounds()]
+        first_bounds = [self.x_bounds, self.y_bounds]
+        second_bounds = [second_building.x_bounds, second_building.y_bounds]
 
         if max(second_bounds[0]) >= max(first_bounds[0]) or max(second_bounds[1]) >= max(first_bounds[1]):
             return max(first_bounds[0]) >= min(second_bounds[0]) \
@@ -228,7 +219,8 @@ class Building(BaseUnit):
                                                                                   expected_type.__name__)
 
     @staticmethod
-    def from_parameters(id_counter, min_wall_len, wall_len_limit, borders_indent, map_length, map_width):
+    def from_parameters(id_counter: int32, min_wall_len: int, wall_len_limit: int,
+                        borders_indent: int, map_length: int, map_width: int):
 
         """
         Method for generating random building for ap with passed parameters
