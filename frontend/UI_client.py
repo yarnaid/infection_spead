@@ -25,7 +25,7 @@ class BaseUnit:
     """
 
     def draw(self, MainWindow: PyQt5.QtWidgets.QMainWindow) -> None:
-        pass
+        raise NotImplementedError
 
 
 class HumanDote(BaseUnit):
