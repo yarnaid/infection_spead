@@ -91,8 +91,8 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.init_working_buttons()
 
-        self.humans = list()
-        self.buildings = list()
+        self.humans = []
+        self.buildings = []
         self.show()
 
     def init_working_buttons(self) -> None:
