@@ -4,7 +4,6 @@ from pure_protobuf.types import int32
 from enum import IntEnum
 from typing import List
 import random as rand
-import datetime
 
 
 class StatusCode(IntEnum):
@@ -214,11 +213,12 @@ class Building(BaseUnit):
             A message string containing the attribute numbers, the type of the passed object, and the desired type
         """
 
-        "Invalid type of first input argument {0}: got {1} instead of {2}".format(arg_number, obj.__class__.__name__,
-                                                                                  expected_type.__name__)
+        return "Invalid type of input argument {0}: got {1} instead of {2}".format(arg_number,
+                                                                                   obj.__class__.__name__,
+                                                                                   expected_type.__name__)
 
     @staticmethod
-    def from_parameters(id_counter: int32, min_wall_len: int, wall_len_limit: int,
+    def from_parameters(id_counter: int, min_wall_len: int, wall_len_limit: int,
                         borders_indent: int, map_length: int, map_width: int):
 
         """
@@ -245,7 +245,7 @@ class Building(BaseUnit):
         y = borders_indent + rand.triangular(0, map_width
                                              - width - 2 * borders_indent)
         angle = int32(0)  # for now we don't use this field in map generation
-        return Building(id_counter, x, y, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
+        return Building(int32(id_counter), x, y, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
 
 
 @message
