@@ -7,3 +7,4 @@ mypy
 # pyqt5
 
 pytest
+pylama
