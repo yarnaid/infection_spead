@@ -29,10 +29,8 @@ class ModelingSerializer:
 
     @staticmethod
     def create_success_meta_response(request) -> Metadata:
-        request_id = request.meta.request_id if type(request) != spec_pb2.Empty else -1  # asked what id return if
-        # where is no id
         return Metadata(status=statusCode.SUCCESS,
-                        request_id=int32(request_id), UUID=str(uuid.uuid4()))
+                        request_id=int32(request.meta.request_id), UUID=str(uuid.uuid4()))
 
     @staticmethod
     def create_human(human) -> HumanState:

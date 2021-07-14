@@ -81,4 +81,4 @@ class UpdateRequest:
 @message
 @dataclass
 class Empty:
-    pass
+    meta: Metadata = field(1)
