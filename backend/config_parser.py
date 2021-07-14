@@ -1,39 +1,26 @@
-from enum import Enum
 from configparser import ConfigParser
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
-class ConfigParameters(Enum):
-
+class Config:
     """
-    A set of configuration options for creating a map for the model
+    A class of configuration options for creating a map for the model
     """
 
-    POPULATION_QUANTITY = "population"
-    BUILDINGS_QUANTITY = "buildings"
-    MAP_LENGTH = "map_length"
-    MAP_WIDTH = "map_width"
-    MIN_WALL_LEN = "minimal_wall_length"
-    ITERATION_CONSTRAINT = "iteration_constraint"
-    BORDERS_INDENT = "indent_from_borders"
-    WALL_LENGTH_DIVIDER = "wall_length_divider"
-
-
-class ConfigFileParser(ConfigParser):
-    __config_name = ""
+    population: int = field(default=0)
+    buildings: int = field(default=0)
+    map_length: int = field(default=0)
+    map_width: int = field(default=0)
+    min_wall_len: int = field(default=0)
+    iteration_constraint: int = field(default=0)
+    borders_indent: int = field(default=0)
+    wall_length_divider: int = field(default=0)
 
     def __init__(self, config_name: str):
-        super().__init__()
-        ConfigFileParser.__config_name = config_name
-
-    @staticmethod
-    def parse_config():
-        config = ConfigParser()
-        config.read(ConfigFileParser.__config_name)
-        processed_config = dict()
-        for key in config.defaults().keys():
-            processed_config.update({key: int(config.defaults().get(key))})
-        return processed_config
-
-
+        parser = ConfigParser()
+        parser.read(config_name)
+        for key, value in parser.defaults().items():
+            if hasattr(self, key):
+                attr_type = self.__annotations__.get(key)
+                setattr(self, key, attr_type(value))

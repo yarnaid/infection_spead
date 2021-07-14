@@ -1,7 +1,6 @@
-from backend.config_parser import ConfigFileParser, ConfigParameters
+from backend.config_parser import Config
 from dataStructure.gRPC import Building, HumanState
 from itertools import count
-import typing
 
 
 class ResearchMap:
@@ -27,11 +26,10 @@ class ResearchMap:
     """
 
     def __init__(self, config_name: str):
-        self.config_data = ConfigFileParser(config_name).parse_config()
-        self.__wall_len_limit = self.config_data[ConfigParameters.MAP_LENGTH.value]\
-                                // self.config_data[ConfigParameters.WALL_LENGTH_DIVIDER.value]
-        self.map_length = self.config_data[ConfigParameters.MAP_LENGTH.value]
-        self.map_width = self.config_data[ConfigParameters.MAP_WIDTH.value]
+        self.config_data = Config(config_name)
+        self.__wall_len_limit = self.config_data.map_length // self.config_data.wall_length_divider
+        self.map_length = self.config_data.map_length
+        self.map_width = self.config_data.map_width
         self.__map_population = []
         self.__map_buildings = []
         self.create_generation_list()
@@ -66,27 +64,22 @@ class ResearchMap:
         """
 
         buildings_list = []
-        buildings_quantity = self.config_data[ConfigParameters.BUILDINGS_QUANTITY.value]
+        buildings_quantity = self.config_data.buildings
         for i in range(buildings_quantity):
             new_building = Building.from_parameters(len(self.__map_buildings) + len(self.__map_population),
-                                                    self.config_data[ConfigParameters.MIN_WALL_LEN.value],
-                                                    self.__wall_len_limit,
-                                                    self.config_data[ConfigParameters.BORDERS_INDENT.value],
-                                                    self.map_length,
-                                                    self.map_width)
+                                                    self.config_data.min_wall_len, self.__wall_len_limit,
+                                                    self.config_data.borders_indent, self.map_length, self.map_width)
             if not buildings_list:  # if there is no buildings on map
                 buildings_list.append(new_building)
             else:
                 iterations = count()
                 while self.has_intersection(new_building)\
-                        and next(iterations) < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
+                        and next(iterations) < self.config_data.iteration_constraint:
                     new_building = Building.from_parameters(len(self.__map_buildings) + len(self.__map_population),
-                                                            self.config_data[ConfigParameters.MIN_WALL_LEN.value],
-                                                            self.__wall_len_limit,
-                                                            self.config_data[ConfigParameters.BORDERS_INDENT.value],
-                                                            self.map_length,
-                                                            self.map_width)
-                if next(iterations) < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
+                                                            self.config_data.min_wall_len, self.__wall_len_limit,
+                                                            self.config_data.borders_indent,
+                                                            self.map_length, self.map_width)
+                if next(iterations) < self.config_data.iteration_constraint:
                     buildings_list.append(new_building)
         return buildings_list
 
@@ -97,8 +90,9 @@ class ResearchMap:
         :return: List of Human-objects
         """
         human_objects = []
-        for i in range(self.config_data[ConfigParameters.POPULATION_QUANTITY.value]):
-            human_objects.append(HumanState.human_from_parameters(self.map_length, self.map_width, len(self.__map_buildings)
+        for i in range(self.config_data.population):
+            human_objects.append(HumanState.human_from_parameters(self.map_length, self.map_width,
+                                                                  len(self.__map_buildings)
                                                                   + len(self.__map_population)))
         return human_objects
 

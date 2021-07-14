@@ -33,7 +33,7 @@ class BaseUnit:
     ----------
 
         id: int32
-            Unique identificator of each object on the map
+            Unique identifier of each object on the map
         coord_x: float
             Field with coordinate along the x-axis
         coord_y: float
