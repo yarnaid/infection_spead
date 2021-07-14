@@ -30,7 +30,7 @@ class ModelingSerializer:
     @staticmethod
     def create_success_meta_response(request) -> Metadata:
         return Metadata(status=statusCode.SUCCESS,
-                        request_id=int32(request.meta.request_id), UUID=str(uuid.uuid1()))
+                        request_id=int32(request.meta.request_id), UUID=str(uuid.uuid4()))
 
     @staticmethod
     def create_human(human) -> HumanState:

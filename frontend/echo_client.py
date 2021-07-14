@@ -16,7 +16,7 @@ def update_request(stub):
     """
     req = UpdateRequest(meta=Metadata(status=statusCode.SUCCESS,
                                       request_id=int32(next(counter)),
-                                      UUID=str(uuid.uuid1()))
+                                      UUID=str(uuid.uuid4()))
                         )
     human_list = stub.GetUpdate(req)  # We get a list of people in the simulation from the server
     logger.info("Receive update response")
