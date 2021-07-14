@@ -1,6 +1,7 @@
 from backend.config_parser import ConfigFileParser, ConfigParameters
 from dataStructure.gRPC import Building, HumanState
 from itertools import count
+import typing
 
 
 class ResearchMap:
@@ -86,7 +87,7 @@ class ResearchMap:
                                                             self.config_data[ConfigParameters.BORDERS_INDENT.value],
                                                             self.map_length,
                                                             self.map_width)
-                if iterations < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
+                if next(iterations) < self.config_data[ConfigParameters.ITERATION_CONSTRAINT.value]:
                     buildings_list.append(new_building)
         return buildings_list
 
@@ -98,10 +99,10 @@ class ResearchMap:
         """
         human_objects = []
         for i in range(self.config_data[ConfigParameters.POPULATION_QUANTITY.value]):
-            human_objects.append(HumanState.generate_random_human(self.length(), self.width(), self.__id_counter))
+            human_objects.append(HumanState.generate_random_human(self.length(), self.width(), next(self.__id_counter)))
         return human_objects
 
-    def has_intersection(self, buildings_list):
+    def has_intersection(self, buildings_list: typing.List[Building]):
 
         """
         Method for finding intersection between current building and already existing buildings (from list)
