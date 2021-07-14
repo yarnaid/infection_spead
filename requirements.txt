@@ -5,6 +5,7 @@ grpcio
 mypy
 # numpy
 # pyqt5
-
 pytest
+pytest-cov
+
 pylama
