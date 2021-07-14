@@ -2,7 +2,7 @@ import os
 
 from gRPC import spec_pb2_grpc, spec_pb2
 from dataStructure.gRPC import Map, UpdateResponse, Metadata, statusCode, HumanState, BaseUnit, BuildingType, HumanType, \
-    Building
+    Building, Empty, UpdateRequest
 from concurrent import futures
 from pure_protobuf.types import int32
 import logging
@@ -13,7 +13,7 @@ import typing
 
 class ModelingSerializer:
     @staticmethod
-    def create_update_response(request, humans) -> UpdateResponse:  # create pb2 object
+    def create_update_response(request: UpdateRequest, humans) -> UpdateResponse:  # create pb2 object
         # from backed human
         status = ModelingSerializer.create_success_meta_response(request)
         return UpdateResponse(meta=status,
@@ -21,7 +21,7 @@ class ModelingSerializer:
                               )
 
     @staticmethod
-    def create_get_map_response(request, buildings) -> Map:  # create pb2 object from backend building
+    def create_get_map_response(request: Empty, buildings) -> Map:  # create pb2 object from backend building
         status = ModelingSerializer.create_success_meta_response(request)
         return Map(meta=status, map_size_w=buildings.width, map_size_h=buildings.length,
                    building=[ModelingSerializer.create_building(building) for building in buildings]
@@ -29,8 +29,10 @@ class ModelingSerializer:
 
     @staticmethod
     def create_success_meta_response(request) -> Metadata:
+        request_id = request.meta.request_id if type(request) != spec_pb2.Empty else -1  # asked what id return if
+        # where is no id
         return Metadata(status=statusCode.SUCCESS,
-                        request_id=int32(request.meta.request_id), UUID=str(uuid.uuid4()))
+                        request_id=int32(request_id), UUID=str(uuid.uuid4()))
 
     @staticmethod
     def create_human(human) -> HumanState:
@@ -69,6 +71,7 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 
     def GetMap(self, request, context) -> Map:  # Generator of map objects
         logger.info("Get map request")
+        print(type(request))
         return self.serializer.create_get_map_response(request, self.map)
 
 
