@@ -8,7 +8,8 @@ class ConfigParameters(Enum):
     """
     A set of configuration options for creating qt application for the model
     """
-
+    WINDOW_SIZE_W = "window_size_width"
+    WINDOW_SIZE_L = "window_size_length"
     HUMAN_SIZE = "human_dote_size"  # radius of human dote
     RAND_MIN_BUILDING = "random_minimum_buildings"
     RAND_MAX_BUILDING = "random_maximum_buildings"

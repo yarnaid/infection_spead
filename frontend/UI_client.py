@@ -82,9 +82,11 @@ class BuildingRectangle(BaseUnit):
 
 
 class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
-    def __init__(self, width: float, length: float) -> None:
+    def __init__(self) -> None:
         super().__init__()
         self.setupUi(self)
+        width = config_data[ConfigParameters.WINDOW_SIZE_W.value]
+        length = config_data[ConfigParameters.WINDOW_SIZE_L.value]
         self.resize(width, length)  # resize to map size from backend
 
         self.human_colors = HUMAN_COLORS  # rework when connecting with backend
@@ -188,7 +190,6 @@ logger.setLevel(logging.DEBUG)
 config_data = ConfigFileParser(config_name=CONFIG_NAME).parse_config()
 if __name__ == '__main__':
     app = PyQt5.QtWidgets.QApplication(sys.argv)  # new instance QApplication
-    w_size, l_size = 800, 600  # ONLY FOR DEBUG
-    window = ModelingApp(w_size, l_size)
+    window = ModelingApp()
     window.show()
     sys.exit(app.exec_())
