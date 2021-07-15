@@ -35,7 +35,7 @@ class ResearchMap:
         self.create_generation_list()
         self.create_buildings_list()
 
-    def generator_buildings(self):
+    def iter_buildings(self):
 
         """
         Method returning iterator of buildings, placed on map
@@ -45,7 +45,7 @@ class ResearchMap:
 
         return iter(self.get_buildings())
 
-    def generator_population(self):
+    def iter_population(self):
 
         """
         Method returning iterator of human population units on the map
