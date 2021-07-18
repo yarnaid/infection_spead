@@ -1,10 +1,8 @@
-from typing import List
 from frontend.UI_config_parser import ConfigParameters, ConfigFileParser
 from frontend.UI.infection_spread_ui import Ui_MainWindow
 import PyQt5
 import sys
 import logging
-import typing
 from random import randint, choice, uniform
 
 # These parameters not in config because they are more vital for  UI.
