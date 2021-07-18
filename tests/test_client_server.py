@@ -1,4 +1,3 @@
-import pytest
 from backend import server
 from collections import namedtuple
 from backend.server import ModelingSerializer

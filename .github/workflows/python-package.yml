@@ -5,14 +5,13 @@ name: Python application
 
 on:
   push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
@@ -26,7 +25,9 @@ jobs:
         pip install -r requirements.txt
     - name: Lint with pylama
       run: |
-        - pylama
+         python -m pylama frontend
+         python -m pylama backend
+         python -m pylama dataStructure
     - name: Test with pytest
       run: |
         make test-coverage
