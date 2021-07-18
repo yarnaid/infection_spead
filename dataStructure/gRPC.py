@@ -76,3 +76,9 @@ class UpdateResponse:
 @dataclass
 class UpdateRequest:
     meta: Metadata = field(1)
+
+
+@message
+@dataclass
+class Empty:
+    meta: Metadata = field(1)
