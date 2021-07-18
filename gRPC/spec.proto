@@ -59,6 +59,7 @@ message HumanState {
 }
 
 message Empty{
+    Metadata meta = 1;
 }
 
 message BaseUnit{

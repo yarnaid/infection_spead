@@ -30,8 +30,11 @@ class mock_map:
         self.count += 1
         return res
 
-    def size(self):
-        return 10, 20
+    def width(self):
+        return 20
+
+    def length(self):
+        return 20
 
 
 def test_getting_map():

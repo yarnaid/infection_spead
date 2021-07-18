@@ -16,7 +16,7 @@ def update_request(stub):
     """
     req = UpdateRequest(meta=Metadata(status=statusCode.SUCCESS,
                                       request_id=int32(next(counter)),
-                                      UUID=str(uuid.uuid1()))
+                                      UUID=str(uuid.uuid4()))
                         )
     human_list = stub.GetUpdate(req)  # We get a list of people in the simulation from the server
     logger.info("Receive update response")
@@ -53,9 +53,6 @@ def run_get_map():
 
 
 logging.basicConfig(format='%(relativeCreated)5d %(name)-15s %(levelname)-8s %(message)s')
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 logger.setLevel(logging.DEBUG)
-if __name__ == '__main__':
-    counter = count(1)  # set counter for requests
-    # run_get_map()
-    # run_update()
+counter = count(1)     # set counter for requests

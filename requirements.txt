@@ -6,5 +6,5 @@ mypy
 # numpy
 # pyqt5
 
-pytest
-pylama
+pytest~=6.2.4
+PyQt5
