@@ -9,3 +9,4 @@ pytest
 pytest-cov
 pure_protobuf
 pylama
+PyQt5
