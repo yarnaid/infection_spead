@@ -1,5 +1,5 @@
 from backend.config_parser import Config
-from dataStructure.gRPC import Building, HumanState
+from dataStructure.gRPC import Building, HumanState, BaseUnit
 from itertools import count
 
 
@@ -13,11 +13,6 @@ class ResearchMap:
 
      config_data: dict
         Attribute, that stores the map settings for building a model
-     wall_len_limit: int
-        Limit of walls of buildings, placed on current map (conditionally, for now, we believe that a minimum should fit
-        into the city along each coordinate axis 5 houses,
-        so we will store the limitation on the length of the wall as a field of the map instance,
-        depending on the length / width of the random card)
      map_population: list
         List of HumanState-objects, placed on the map
      map_buildings: list
@@ -27,9 +22,13 @@ class ResearchMap:
 
     def __init__(self, config_name: str):
         self.config_data = Config(config_name)
-        self.__wall_len_limit = self.config_data.map_length // self.config_data.wall_length_divider
         self.map_length = self.config_data.map_length
         self.map_width = self.config_data.map_width
+
+        BaseUnit.borders_indent = self.config_data.borders_indent
+        BaseUnit.min_wall_len = self.config_data.min_wall_len
+        BaseUnit.max_wall_len = self.config_data.map_length // self.config_data.wall_length_divider
+
         self.__map_population = []
         self.__map_buildings = []
         self.create_generation_list()
@@ -67,8 +66,7 @@ class ResearchMap:
         buildings_quantity = self.config_data.buildings
         for i in range(buildings_quantity):
             new_building = Building.from_parameters(len(self.__map_buildings) + len(self.__map_population),
-                                                    self.config_data.min_wall_len, self.__wall_len_limit,
-                                                    self.config_data.borders_indent, self.map_length, self.map_width)
+                                                    self.map_length, self.map_width)
             if not buildings_list:  # if there is no buildings on map
                 buildings_list.append(new_building)
             else:
@@ -76,12 +74,10 @@ class ResearchMap:
                 while self.has_intersection(new_building)\
                         and next(iterations) < self.config_data.iteration_constraint:
                     new_building = Building.from_parameters(len(self.__map_buildings) + len(self.__map_population),
-                                                            self.config_data.min_wall_len, self.__wall_len_limit,
-                                                            self.config_data.borders_indent,
                                                             self.map_length, self.map_width)
                 if next(iterations) < self.config_data.iteration_constraint:
                     buildings_list.append(new_building)
-        return buildings_list
+        self.__map_buildings = buildings_list
 
     def create_generation_list(self):
         """
@@ -91,10 +87,9 @@ class ResearchMap:
         """
         human_objects = []
         for i in range(self.config_data.population):
-            human_objects.append(HumanState.human_from_parameters(self.map_length, self.map_width,
-                                                                  len(self.__map_buildings)
-                                                                  + len(self.__map_population)))
-        return human_objects
+            human_objects.append(HumanState.human_from_parameters(len(self.__map_buildings) + len(self.__map_population)
+                                                                  , self.map_length, self.map_width))
+        self.__map_population = human_objects
 
     def has_intersection(self, new_building: Building):
 

@@ -4,6 +4,11 @@ from pure_protobuf.types import int32
 from enum import IntEnum
 from typing import List
 import random as rand
+import itertools
+
+INDENT_DEFAULT = 0
+MIN_WALL_LEN_DEFAULT = 0
+MAX_WALL_LEN_DEFAULT = 0
 
 
 class StatusCode(IntEnum):
@@ -39,7 +44,28 @@ class BaseUnit:
         coord_y: float
             Field with coordinate along the y-axis
 
+    Static parameters:
+    -----------------
+        id_counter: Iterator
+            Iterator for numbering all instances of a class
+        min_wall_len: int
+            Minimum permissible length of walls of buildings on the map (conditionally, for now,
+             we believe that a minimum should fit
+            into the city along each coordinate axis 5 houses,
+            so we will store the limitation on the length of the wall as a field of the map instance,
+            depending on the length / width of the random card)
+        max_wall_len: int
+            Maximum permissible length of walls of buildings on the map
+        borders_indent: int
+            Indent of each building from map borders
+
     """
+
+    id_counter = itertools.count()
+
+    min_wall_len = MIN_WALL_LEN_DEFAULT
+    max_wall_len = MAX_WALL_LEN_DEFAULT
+    borders_indent = INDENT_DEFAULT
 
     id: int32 = field(1, default=int32(0))
     coord_x: float = field(2, default=float(0))
@@ -105,7 +131,7 @@ class HumanState(BaseUnit):
     health_status: HealthStatus = field(1, default=HealthStatus.NORMAL)
 
     @staticmethod
-    def human_from_parameters(map_length: int, map_width: int, id_counter: int):
+    def human_from_parameters(id_counter: int, map_length: int, map_width: int):
 
         """
         Method for random generating human with given parameters
@@ -218,8 +244,7 @@ class Building(BaseUnit):
                                                                                    expected_type.__name__)
 
     @staticmethod
-    def from_parameters(id_counter: int, min_wall_len: int, wall_len_limit: int,
-                        borders_indent: int, map_length: int, map_width: int):
+    def from_parameters(id_counter: int, map_length: int, map_width: int):
 
         """
         Method for generating random building for ap with passed parameters
@@ -238,12 +263,10 @@ class Building(BaseUnit):
         :return: Building-object, storing the geometric data of the building on the map
         """
 
-        width = rand.randint(min_wall_len, wall_len_limit)
-        length = rand.randint(min_wall_len, wall_len_limit)
-        x = borders_indent + rand.triangular(0, map_length
-                                             - length - 2 * borders_indent)
-        y = borders_indent + rand.triangular(0, map_width
-                                             - width - 2 * borders_indent)
+        width = rand.randint(BaseUnit.min_wall_len, BaseUnit.max_wall_len)
+        length = rand.randint(BaseUnit.min_wall_len, BaseUnit.max_wall_len)
+        x = BaseUnit.borders_indent + rand.triangular(0, map_length - length - 2 * BaseUnit.borders_indent)
+        y = BaseUnit.borders_indent + rand.triangular(0, map_width - width - 2 * BaseUnit.borders_indent)
         angle = int32(0)  # for now we don't use this field in map generation
         return Building(int32(id_counter), x, y, BuildingType.HOUSE, int32(width), int32(length), int32(angle))
 
