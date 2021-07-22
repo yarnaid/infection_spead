@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\nspec.proto\"\x87\x01\n\x08Metadata\x12$\n\x06status\x18\x01 \x01(\x0e\x32\x14.Metadata.statusCode\x12\x12\n\nrequest_id\x18\x02 \x01(\x05\x12\x0c\n\x04UUID\x18\x03 \x01(\t\"3\n\nstatusCode\x12\r\n\tUNDEFINED\x10\x00\x12\x0b\n\x07SUCCESS\x10\x01\x12\t\n\x05\x45RROR\x10\x02\"(\n\rUpdateRequest\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\"E\n\x0eUpdateResponse\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\x12\x1a\n\x05state\x18\x02 \x03(\x0b\x32\x0b.HumanState\"\x8a\x02\n\x03Map\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\x12\x12\n\nmap_size_w\x18\x02 \x01(\x02\x12\x12\n\nmap_size_h\x18\x03 \x01(\x02\x12\x1f\n\x08\x62uilding\x18\x04 \x03(\x0b\x32\r.Map.Building\x1a\xa0\x01\n\x08\x42uilding\x12\x17\n\x04\x62\x61se\x18\x01 \x01(\x0b\x32\t.BaseUnit\x12(\n\x04type\x18\x02 \x01(\x0e\x32\x1a.Map.Building.BuildingType\x12\r\n\x05width\x18\x03 \x01(\x05\x12\x0e\n\x06length\x18\x04 \x01(\x05\x12\r\n\x05\x61ngle\x18\x05 \x01(\x05\"#\n\x0c\x42uildingType\x12\t\n\x05HOUSE\x10\x00\x12\x08\n\x04ROAD\x10\x01\"\x85\x01\n\nHumanState\x12\x17\n\x04\x62\x61se\x18\x01 \x01(\x0b\x32\t.BaseUnit\x12#\n\x04type\x18\x02 \x01(\x0e\x32\x15.HumanState.HumanType\"9\n\tHumanType\x12\n\n\x06NORMAL\x10\x00\x12\x07\n\x03ILL\x10\x01\x12\r\n\tRECOVERED\x10\x02\x12\x08\n\x04\x44\x45\x41\x44\x10\x03\"\x07\n\x05\x45mpty\"8\n\x08\x42\x61seUnit\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0f\n\x07\x63oord_x\x18\x02 \x01(\x02\x12\x0f\n\x07\x63oord_y\x18\x03 \x01(\x02\x32T\n\x08Modeling\x12.\n\tGetUpdate\x12\x0e.UpdateRequest\x1a\x0f.UpdateResponse\"\x00\x12\x18\n\x06GetMap\x12\x06.Empty\x1a\x04.Map\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\nspec.proto\"\x87\x01\n\x08Metadata\x12$\n\x06status\x18\x01 \x01(\x0e\x32\x14.Metadata.statusCode\x12\x12\n\nrequest_id\x18\x02 \x01(\x05\x12\x0c\n\x04UUID\x18\x03 \x01(\t\"3\n\nstatusCode\x12\r\n\tUNDEFINED\x10\x00\x12\x0b\n\x07SUCCESS\x10\x01\x12\t\n\x05\x45RROR\x10\x02\"(\n\rUpdateRequest\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\"E\n\x0eUpdateResponse\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\x12\x1a\n\x05state\x18\x02 \x03(\x0b\x32\x0b.HumanState\"\x8a\x02\n\x03Map\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\x12\x12\n\nmap_size_w\x18\x02 \x01(\x02\x12\x12\n\nmap_size_h\x18\x03 \x01(\x02\x12\x1f\n\x08\x62uilding\x18\x04 \x03(\x0b\x32\r.Map.Building\x1a\xa0\x01\n\x08\x42uilding\x12\x17\n\x04\x62\x61se\x18\x01 \x01(\x0b\x32\t.BaseUnit\x12(\n\x04type\x18\x02 \x01(\x0e\x32\x1a.Map.Building.BuildingType\x12\r\n\x05width\x18\x03 \x01(\x05\x12\x0e\n\x06length\x18\x04 \x01(\x05\x12\r\n\x05\x61ngle\x18\x05 \x01(\x05\"#\n\x0c\x42uildingType\x12\t\n\x05HOUSE\x10\x00\x12\x08\n\x04ROAD\x10\x01\"\x85\x01\n\nHumanState\x12\x17\n\x04\x62\x61se\x18\x01 \x01(\x0b\x32\t.BaseUnit\x12#\n\x04type\x18\x02 \x01(\x0e\x32\x15.HumanState.HumanType\"9\n\tHumanType\x12\n\n\x06NORMAL\x10\x00\x12\x07\n\x03ILL\x10\x01\x12\r\n\tRECOVERED\x10\x02\x12\x08\n\x04\x44\x45\x41\x44\x10\x03\" \n\x05\x45mpty\x12\x17\n\x04meta\x18\x01 \x01(\x0b\x32\t.Metadata\"8\n\x08\x42\x61seUnit\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0f\n\x07\x63oord_x\x18\x02 \x01(\x02\x12\x0f\n\x07\x63oord_y\x18\x03 \x01(\x02\x32T\n\x08Modeling\x12.\n\tGetUpdate\x12\x0e.UpdateRequest\x1a\x0f.UpdateResponse\"\x00\x12\x18\n\x06GetMap\x12\x06.Empty\x1a\x04.Map\"\x00\x62\x06proto3'
 )
 
 
@@ -394,6 +394,13 @@ _EMPTY = _descriptor.Descriptor(
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='meta', full_name='Empty.meta', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -407,7 +414,7 @@ _EMPTY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=670,
-  serialized_end=677,
+  serialized_end=702,
 )
 
 
@@ -452,8 +459,8 @@ _BASEUNIT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=679,
-  serialized_end=735,
+  serialized_start=704,
+  serialized_end=760,
 )
 
 _METADATA.fields_by_name['status'].enum_type = _METADATA_STATUSCODE
@@ -470,6 +477,7 @@ _MAP.fields_by_name['building'].message_type = _MAP_BUILDING
 _HUMANSTATE.fields_by_name['base'].message_type = _BASEUNIT
 _HUMANSTATE.fields_by_name['type'].enum_type = _HUMANSTATE_HUMANTYPE
 _HUMANSTATE_HUMANTYPE.containing_type = _HUMANSTATE
+_EMPTY.fields_by_name['meta'].message_type = _METADATA
 DESCRIPTOR.message_types_by_name['Metadata'] = _METADATA
 DESCRIPTOR.message_types_by_name['UpdateRequest'] = _UPDATEREQUEST
 DESCRIPTOR.message_types_by_name['UpdateResponse'] = _UPDATERESPONSE
@@ -545,8 +553,8 @@ _MODELING = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=737,
-  serialized_end=821,
+  serialized_start=762,
+  serialized_end=846,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetUpdate',
