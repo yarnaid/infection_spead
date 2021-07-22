@@ -1,6 +1,6 @@
 import os
 from gRPC import spec_pb2_grpc
-from dataStructure.gRPC import Map, UpdateResponse, Metadata, StatusCode, HumanState, BaseUnit, \
+from dataStructure.gRPC import Map, UpdateResponse, Metadata, StatusCode, HumanState, \
     BuildingType, HealthStatus, Building, Empty, UpdateRequest
 from concurrent import futures
 from pure_protobuf.types import int32
