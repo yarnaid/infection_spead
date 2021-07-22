@@ -47,8 +47,8 @@ def test_getting_map():
 
     # work with server function
     resp = servicer.GetMap(request, context=None)
-    assert resp.building[0].id == 1  # Wrong id while yielding map object
-    assert resp.building[1].id == 10
+    assert resp.building[0].base.id == 1  # Wrong id while yielding map object
+    assert resp.building[1].base.id == 10
     assert resp.meta.request_id == request.meta.request_id  # Wrong returned request id while yielding map object
 
 
@@ -61,7 +61,7 @@ def test_update_request():
     # send request
     request = create_null_request()
     resp = servicer.GetUpdate(request, context=None)
-    assert resp.state[0].coord_x == 3  # Wrong id while yielding human object
-    assert resp.state[1].id == 1
+    assert resp.state[0].base.coord_x == 3  # Wrong id while yielding human object
+    assert resp.state[1].base.id == 1
     assert resp.meta.request_id == request.meta.request_id  # Wrong returned request id while yielding human
     # object"

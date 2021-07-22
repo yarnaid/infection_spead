@@ -1,6 +1,6 @@
 from __future__ import print_function
 from gRPC import spec_pb2_grpc, spec_pb2
-from dataStructure.gRPC import StatusCode, UpdateRequest, Metadata
+from dataStructure.gRPC import statusCode, UpdateRequest, Metadata
 from pure_protobuf.types import int32
 from itertools import count
 import logging
@@ -14,7 +14,7 @@ def update_request(stub):
     :param stub: a stub that we can use to use the functions described in spec. proto
     :return: spec.proto Request Response obj : containing list of all Human and their par in modeling
     """
-    req = UpdateRequest(meta=Metadata(status=StatusCode.SUCCESS,
+    req = UpdateRequest(meta=Metadata(status=statusCode.SUCCESS,
                                       request_id=int32(next(counter)),
                                       UUID=str(uuid.uuid4()))
                         )
