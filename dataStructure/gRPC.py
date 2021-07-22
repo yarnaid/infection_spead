@@ -92,15 +92,6 @@ class BaseUnit:
                 break
         return msg
 
-    def __new__(cls, coord_x, coord_y, *args, **kwargs):
-        idx = next(cls.id_counter)
-        args = (idx,) + args
-        instance = super(BaseUnit, cls).__new__(cls, *args, **kwargs)
-        return instance
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def __post_init__(self):
 
         """
