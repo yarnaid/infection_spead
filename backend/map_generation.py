@@ -87,8 +87,9 @@ class ResearchMap:
         """
         human_objects = []
         for i in range(self.config_data.population):
-            human_objects.append(HumanState.human_from_parameters(len(self.__map_buildings) + len(self.__map_population)
-                                                                  , self.map_length, self.map_width))
+            human_objects.append(HumanState.
+                                 human_from_parameters(len(self.__map_buildings) + len(self.__map_population),
+                                                       self.map_length, self.map_width))
         self.__map_population = human_objects
 
     def has_intersection(self, new_building: Building):
