@@ -12,9 +12,9 @@ class Config:
     buildings: int = field(default=0)
     map_length: int = field(default=0)
     map_width: int = field(default=0)
-    min_wall_len: int = field(default=0)
+    minimal_wall_length: int = field(default=0)
     iteration_constraint: int = field(default=0)
-    borders_indent: int = field(default=0)
+    indent_from_borders: int = field(default=0)
     wall_length_divider: int = field(default=0)
 
     def __init__(self, config_name: str):

@@ -25,14 +25,12 @@ class ResearchMap:
         self.map_length = self.config_data.map_length
         self.map_width = self.config_data.map_width
 
-        BaseUnit.borders_indent = self.config_data.borders_indent
-        BaseUnit.min_wall_len = self.config_data.min_wall_len
+        BaseUnit.borders_indent = self.config_data.indent_from_borders
+        BaseUnit.min_wall_len = self.config_data.minimal_wall_length
         BaseUnit.max_wall_len = self.config_data.map_length // self.config_data.wall_length_divider
 
-        self.__map_population = []
-        self.__map_buildings = []
-        self.create_generation_list()
-        self.create_buildings_list()
+        self.__map_population = self.create_generation_list()
+        self.__map_buildings = self.create_buildings_list()
 
     def iter_buildings(self):
 
@@ -54,7 +52,7 @@ class ResearchMap:
 
         return iter(self.get_population())
 
-    def create_buildings_list(self):
+    def create_buildings_list(self) -> list["Building"]:
 
         """
         Method of creating objects of buildings on the map
@@ -77,9 +75,9 @@ class ResearchMap:
                                                             self.map_length, self.map_width)
                 if next(iterations) < self.config_data.iteration_constraint:
                     buildings_list.append(new_building)
-        self.__map_buildings = buildings_list
+        return buildings_list
 
-    def create_generation_list(self):
+    def create_generation_list(self) -> list["HumanState"]:
         """
         Method for random generating population of the city
 
@@ -90,9 +88,9 @@ class ResearchMap:
             human_objects.append(HumanState.
                                  human_from_parameters(len(self.__map_buildings) + len(self.__map_population),
                                                        self.map_length, self.map_width))
-        self.__map_population = human_objects
+        return human_objects
 
-    def has_intersection(self, new_building: Building):
+    def has_intersection(self, new_building: Building) -> bool:
 
         """
         Method for finding intersection between current building and already existing buildings (from list)
