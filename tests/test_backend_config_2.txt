@@ -1,0 +1,9 @@
+[DEFAULT]
+map_length = 400
+map_width = 300
+buildings = 6
+population = 20
+minimal_wall_length = 20
+iteration_constraint = 500
+indent_from_borders = 5
+wall_length_divider = 2
