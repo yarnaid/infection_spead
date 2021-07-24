@@ -5,8 +5,7 @@ test-coverage:
 	coverage report --fail-under=50
 
 test-coverage-ci:
-	QT_QPA_PLATFORM=offscreen
-	make test-coverage
+	QT_QPA_PLATFORM=offscreen make test-coverage
 
 test:
 	python -m pytest tests/
