@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class Config:
+
     """
     A class of configuration options for creating a map for the model
     """
