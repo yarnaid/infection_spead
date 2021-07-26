@@ -1,5 +1,6 @@
 from backend.config_parser import Config
-from dataStructure.gRPC import Building, HumanState, BaseUnit
+from dataStructure.gRPC import Building, HumanState, BaseUnit,BuildingType
+from pure_protobuf.types import int32
 from itertools import count
 
 DUMMY_MAP_CONFIG_NAME = "backend/dummy_test_config.txt"
@@ -126,11 +127,16 @@ def create_dummy_map() -> "ResearchMap":
 
     """
     Method for creating dummy map for simple way of testing model
+    Dummy map is 500px long and 500px wide (fixed config options), other parameters
+    from config are not used in tests
 
     :return: ResearchMap-object with all data about model map
     """
 
     research_map = ResearchMap(DUMMY_MAP_CONFIG_NAME)
-    hardcoded_buildings =[]
-    research_map
+    hardcoded_buildings = [Building(int32(1), 108, 228, BuildingType.HOUSE, int32(72), int32(114)),
+                           Building(int32(2), 76, 288, BuildingType.HOUSE, int32(72), int32(76)),
+                           Building(int32(3), 396, 228, BuildingType.HOUSE, int32(108), int32(114)),
+                           Building(int32(4), 288, 418, BuildingType.HOUSE, int32(72), int32(76))]
+    research_map.map_buildings = hardcoded_buildings
     return research_map
