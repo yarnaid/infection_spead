@@ -1,125 +1,154 @@
 from configparser import ConfigParser
-from array import *
+import numpy as np
 from scipy import integrate
 import matplotlib.pyplot as plt
 
 
+class Coefficient:
+    def __init__(self, beta, gamma, N, h, S0, I0, R0, day):
+        self.day = day
+        self.beta = beta
+        self.gamma = gamma
+        self.N = N
+        self.h = h
+        self.S0 = S0
+        self.I0 = I0
+        self.R0 = R0
 
-def ReadConfig(Name ):
+
+class Solution:
+    def __init__(self, S, I, R, T):
+        self.S = S
+        self.I = I
+        self.R = R
+        self.T = T
+
+
+class NextrungeKutta:
+    def __init__(self, S, I, R):
+        self.S = S
+        self.I = I
+        self.R = R
+
+
+def ReadConfig(Name):
     config = ConfigParser()
 
     print(config.sections())
     config.read(Name)
 
-    beta = (float)(config['coefficient']['beta'])
-    gamma = (float)(config['coefficient']['gamma'])
-    N = (float)(config['coefficient']['N'])
-    h = (float)(config['coefficient']['h'])
+    beta = float(
+        config["coefficient"][
+            "coefficient of intensity of contacts of individuals with subsequent infection"
+        ]
+    )
+    gamma = float(config["coefficient"]["recovery rate of infected individuals"])
+    N = float(config["coefficient"]["base normalization number"])
+    h = float(config["coefficient"]["fixed step (days)"])
+
+    S0 = float(
+        config["initialcondition"][
+            "the number of susceptible individuals at the initial moment of time"
+        ]
+    )
+    I0 = float(
+        config["initialcondition"][
+            "the number of infected individuals at the initial moment of time"
+        ]
+    )
+    R0 = float(
+        config["initialcondition"][
+            "the number of ill individuals at the initial moment of time"
+        ]
+    )
+
+    day = int(config["Days"]["day"])
+
+    coeff = Coefficient(beta, gamma, N, h, S0, I0, R0, day)
+
+    return coeff
 
 
-    S0 = (float)(config['initialcondition']['S0'])
-    I0 = (float)(config['initialcondition']['I0'])
-    R0 = (float)(config['initialcondition']['R0'])
+# funtion S'
+def F1(S, I):
+    total = -(beta * I * S) / N
 
-
-    day = (int)(config['Days']['day'])
-
-    return [beta , gamma , N , h , S0 , I0 , R0 , day]
-
-
-
-
-def F1(S , I ):
-    total = -(beta * I * S)/N
-    
     return total
 
-def F2(I , S):
+
+# funtion I'
+def F2(I, S):
     total = beta * I * S / N - gamma * I
     return total
 
+
+# funtion R'
 def F3(I):
     total = gamma * I
     return total
 
-def rungeKutta(S , I , R ):
-    k1S = h * F1(S , I)
-    k1I = h * F2(I , S)
+
+def rungeKutta(S, I, R):
+    k1S = h * F1(S, I)
+    k1I = h * F2(I, S)
     k1R = h * F3(I)
 
-    k2S = h * F1(S + k1S/2 , I + k1I/2)
-    k2I = h * F2(I + k1I/2 , S + k1S/2)
-    k2R = h * F3(I + k1I/2)
+    k2S = h * F1(S + k1S / 2, I + k1I / 2)
+    k2I = h * F2(I + k1I / 2, S + k1S / 2)
+    k2R = h * F3(I + k1I / 2)
 
-    k3S = h * F1(S + k2S/2 , I + k2I/2)
-    k3I = h * F2(I + k2I/2 , S + k2S/2)
-    k3R = h * F3(I + k2I/2)
+    k3S = h * F1(S + k2S / 2, I + k2I / 2)
+    k3I = h * F2(I + k2I / 2, S + k2S / 2)
+    k3R = h * F3(I + k2I / 2)
 
-    k4S = h * F1(S + k3S/2 , I + k3I/2)
-    k4I = h * F2(I + k3I/2 , S + k3S/2)
-    k4R = h * F3(I + k3I/2)
+    k4S = h * F1(S + k3S / 2, I + k3I / 2)
+    k4I = h * F2(I + k3I / 2, S + k3S / 2)
+    k4R = h * F3(I + k3I / 2)
 
     S1 = S + (k1S + k2S * 2 + k3S * 2 + k4S) / 6
     I1 = I + (k1I + k2I * 2 + k3I * 2 + k4I) / 6
     R1 = R + (k1R + k2R * 2 + k3R * 2 + k4R) / 6
 
+    Next = NextrungeKutta(S1, I1, R1)
 
-    return [S1 , I1 , R1]
+    return Next
 
 
-
-   
-
-def solution(day , h , S0 , R0 , I0):
+# Funtion solution
+def solution(day, S0, R0, I0):
     count = 0
     S = [S0]
     I = [I0]
     R = [R0]
     T = [0]
-    while (count < day):
-        [S1 , I1 , R1] = rungeKutta(S0 , I0 , R0)
+    while count < day:
+        Next = rungeKutta(S0, I0, R0)
 
-        S.append(S1)
-        I.append(I1)
-        R.append(R1)
+        S.append(Next.S)
+        I.append(Next.I)
+        R.append(Next.R)
 
-        S0 , I0 , R0 = S1 , I1 , R1
-        count  = count + h
+        S0, I0, R0 = Next.S, Next.I, Next.R
+        count = count + h
         T.append(count)
 
+    sol = Solution(S, I, R, T)
 
-    return [S ,I , R ,T]
-
-
-[beta , gamma , N , h , S0 , I0 , R0 , day] = ReadConfig('config.ini')
+    return sol
 
 
-[S ,I,R ,T] = solution (day , h , S0 , R0 , I0)
+coeff = ReadConfig("config.ini")
+[beta, gamma, N, h] = [coeff.beta, coeff.gamma, coeff.N, coeff.h]
+
+sol = solution(coeff.day, coeff.S0, coeff.R0, coeff.I0)
 
 
+def main():
+    plt.plot(sol.T, sol.S, label="the number of susceptible individuals at time t")
+    plt.plot(sol.T, sol.I, label="the number of infected individuals at time t")
+    plt.plot(sol.T, sol.R, label="the number of ill individuals at time t")
+    plt.show()
 
 
-
-plt.plot(T , S ,  label = 'the number of susceptible individuals at time t')
-plt.plot(T , I ,  label = 'the number of infected individuals at time t')
-plt.plot(T , R ,  label = 'the number of ill individuals at time t')
-plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+if __name__ == "__main__":
+    main()
