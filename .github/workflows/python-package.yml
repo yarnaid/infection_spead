@@ -30,4 +30,4 @@ jobs:
          python -m pylama dataStructure
     - name: Test with pytest
       run: |
-        make test-coverage
+        make test-coverage-ci
