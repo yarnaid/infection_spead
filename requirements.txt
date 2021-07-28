@@ -7,6 +7,7 @@ mypy
 # pyqt5
 pytest
 pytest-cov
+pytest-qt
 pure_protobuf
 pylama
 PyQt5
