@@ -4,34 +4,7 @@ from scipy import integrate
 import matplotlib.pyplot as plt
 
 
-class Coefficient:
-    def __init__(self, beta, gamma, N, h, S0, I0, R0, day):
-        self.day = day
-        self.beta = beta
-        self.gamma = gamma
-        self.N = N
-        self.h = h
-        self.S0 = S0
-        self.I0 = I0
-        self.R0 = R0
-
-
-class Solution:
-    def __init__(self, S, I, R, T):
-        self.S = S
-        self.I = I
-        self.R = R
-        self.T = T
-
-
-class NextrungeKutta:
-    def __init__(self, S, I, R):
-        self.S = S
-        self.I = I
-        self.R = R
-
-
-def ReadConfig(Name):
+def ReadConfig(Name) -> "numpy.ndarray":
     config = ConfigParser()
 
     print(config.sections())
@@ -64,31 +37,34 @@ def ReadConfig(Name):
 
     day = int(config["Days"]["day"])
 
-    coeff = Coefficient(beta, gamma, N, h, S0, I0, R0, day)
+    coeff = np.array([beta, gamma, N, h, S0, I0, R0, day])
 
     return coeff
 
 
 # funtion S'
-def F1(S, I):
+def F1(S: float, I: float) -> float:
     total = -(beta * I * S) / N
 
     return total
 
 
 # funtion I'
-def F2(I, S):
+def F2(I: float, S: float) -> float:
     total = beta * I * S / N - gamma * I
     return total
 
 
 # funtion R'
-def F3(I):
+def F3(I: float) -> float:
     total = gamma * I
     return total
 
 
-def rungeKutta(S, I, R):
+# RK:S , I ,R
+def rungeKutta(RK: "numpy.ndarray") -> "numpy.ndarray":
+
+    [S, I, R] = RK[0:3]
     k1S = h * F1(S, I)
     k1I = h * F2(I, S)
     k1R = h * F3(I)
@@ -109,44 +85,46 @@ def rungeKutta(S, I, R):
     I1 = I + (k1I + k2I * 2 + k3I * 2 + k4I) / 6
     R1 = R + (k1R + k2R * 2 + k3R * 2 + k4R) / 6
 
-    Next = NextrungeKutta(S1, I1, R1)
+    Next = np.array([S1, I1, R1])
 
     return Next
 
 
+# RK= S0 , I0 ,R0
 # Funtion solution
-def solution(day, S0, R0, I0):
+def solution(RK: "numpy.ndarray", day: float) -> "numpy.ndarray":
     count = 0
-    S = [S0]
-    I = [I0]
-    R = [R0]
-    T = [0]
+
+    S = np.array([RK[0]])
+    I = np.array([RK[1]])
+    R = np.array([RK[2]])
+    T = np.array(0)
     while count < day:
-        Next = rungeKutta(S0, I0, R0)
+        Next = rungeKutta(RK)
 
-        S.append(Next.S)
-        I.append(Next.I)
-        R.append(Next.R)
+        S = np.append(S, Next[0])
+        I = np.append(I, Next[1])
+        R = np.append(R, Next[2])
 
-        S0, I0, R0 = Next.S, Next.I, Next.R
+        RK = Next
+
         count = count + h
-        T.append(count)
+        T = np.append(T, count)
 
-    sol = Solution(S, I, R, T)
+    sol = np.array([S, I, R, T])
 
     return sol
 
 
-coeff = ReadConfig("config.ini")
-[beta, gamma, N, h] = [coeff.beta, coeff.gamma, coeff.N, coeff.h]
-
-sol = solution(coeff.day, coeff.S0, coeff.R0, coeff.I0)
+coeff: "numpy.ndarray" = ReadConfig("config.ini")
+[beta, gamma, N, h] = coeff[0:4]
+sol = solution(coeff[4:7], coeff[7])
 
 
 def main():
-    plt.plot(sol.T, sol.S, label="the number of susceptible individuals at time t")
-    plt.plot(sol.T, sol.I, label="the number of infected individuals at time t")
-    plt.plot(sol.T, sol.R, label="the number of ill individuals at time t")
+    plt.plot(sol[3], sol[0], label="the number of susceptible individuals at time t")
+    plt.plot(sol[3], sol[1], label="the number of infected individuals at time t")
+    plt.plot(sol[3], sol[2], label="the number of ill individuals at time t")
     plt.show()
 
 
