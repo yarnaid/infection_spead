@@ -1,0 +1,10 @@
+[DEFAULT]
+human_dote_size = 3.5
+random_minimum_buildings = 5
+random_maximum_buildings = 15
+random_minimum_humans = 10
+random_maximum_humans = 50
+random_building_size_minimum = 30
+random_building_size_maximum = 80
+window_size_width = 800
+window_size_length = 600

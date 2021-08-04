@@ -1,6 +1,6 @@
 from __future__ import print_function
 from gRPC import spec_pb2_grpc, spec_pb2
-from dataStructure.gRPC import statusCode, UpdateRequest, Metadata
+from dataStructure.gRPC import StatusCode, UpdateRequest, Metadata
 from pure_protobuf.types import int32
 from itertools import count
 import logging
@@ -14,9 +14,9 @@ def update_request(stub):
     :param stub: a stub that we can use to use the functions described in spec. proto
     :return: spec.proto Request Response obj : containing list of all Human and their par in modeling
     """
-    req = UpdateRequest(meta=Metadata(status=statusCode.SUCCESS,
+    req = UpdateRequest(meta=Metadata(status=StatusCode.SUCCESS,
                                       request_id=int32(next(counter)),
-                                      UUID=str(uuid.uuid1()))
+                                      UUID=str(uuid.uuid4()))
                         )
     human_list = stub.GetUpdate(req)  # We get a list of people in the simulation from the server
     logger.info("Receive update response")
@@ -53,9 +53,6 @@ def run_get_map():
 
 
 logging.basicConfig(format='%(relativeCreated)5d %(name)-15s %(levelname)-8s %(message)s')
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 logger.setLevel(logging.DEBUG)
-if __name__ == '__main__':
-    counter = count(1)  # set counter for requests
-    # run_get_map()
-    # run_update()
+counter = count(1)     # set counter for requests

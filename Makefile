@@ -1,7 +1,11 @@
 create-proto:
 	python -m grpc_tools.protoc -IgRPC --python_out=gRPC --grpc_python_out=gRPC gRPC/spec.proto
 test-coverage:
-	python -m pytest --cov=backend --cov=frontend tests/
+	python -m pytest  --cov=backend --cov=frontend  tests/
+	coverage report --fail-under=50
+
+test-coverage-ci:
+	QT_QPA_PLATFORM=offscreen make test-coverage
 
 test:
 	python -m pytest tests/

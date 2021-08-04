@@ -5,6 +5,9 @@ grpcio
 mypy
 # numpy
 # pyqt5
-
-pytest~=6.2.4
+pytest
+pytest-cov
+pytest-qt
+pure_protobuf
+pylama
 PyQt5
