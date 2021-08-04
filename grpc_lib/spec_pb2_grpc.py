@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from gRPC import spec_pb2 as spec__pb2
+from grpc_lib import spec_pb2 as grpc__lib_dot_spec__pb2
 
 
 class ModelingStub(object):
@@ -16,13 +16,13 @@ class ModelingStub(object):
         """
         self.GetUpdate = channel.unary_unary(
                 '/Modeling/GetUpdate',
-                request_serializer=spec__pb2.UpdateRequest.SerializeToString,
-                response_deserializer=spec__pb2.UpdateResponse.FromString,
+                request_serializer=grpc__lib_dot_spec__pb2.UpdateRequest.SerializeToString,
+                response_deserializer=grpc__lib_dot_spec__pb2.UpdateResponse.FromString,
                 )
         self.GetMap = channel.unary_unary(
                 '/Modeling/GetMap',
-                request_serializer=spec__pb2.Empty.SerializeToString,
-                response_deserializer=spec__pb2.Map.FromString,
+                request_serializer=grpc__lib_dot_spec__pb2.Empty.SerializeToString,
+                response_deserializer=grpc__lib_dot_spec__pb2.Map.FromString,
                 )
 
 
@@ -46,13 +46,13 @@ def add_ModelingServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetUpdate': grpc.unary_unary_rpc_method_handler(
                     servicer.GetUpdate,
-                    request_deserializer=spec__pb2.UpdateRequest.FromString,
-                    response_serializer=spec__pb2.UpdateResponse.SerializeToString,
+                    request_deserializer=grpc__lib_dot_spec__pb2.UpdateRequest.FromString,
+                    response_serializer=grpc__lib_dot_spec__pb2.UpdateResponse.SerializeToString,
             ),
             'GetMap': grpc.unary_unary_rpc_method_handler(
                     servicer.GetMap,
-                    request_deserializer=spec__pb2.Empty.FromString,
-                    response_serializer=spec__pb2.Map.SerializeToString,
+                    request_deserializer=grpc__lib_dot_spec__pb2.Empty.FromString,
+                    response_serializer=grpc__lib_dot_spec__pb2.Map.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -76,8 +76,8 @@ class Modeling(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Modeling/GetUpdate',
-            spec__pb2.UpdateRequest.SerializeToString,
-            spec__pb2.UpdateResponse.FromString,
+            grpc__lib_dot_spec__pb2.UpdateRequest.SerializeToString,
+            grpc__lib_dot_spec__pb2.UpdateResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -93,7 +93,7 @@ class Modeling(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Modeling/GetMap',
-            spec__pb2.Empty.SerializeToString,
-            spec__pb2.Map.FromString,
+            grpc__lib_dot_spec__pb2.Empty.SerializeToString,
+            grpc__lib_dot_spec__pb2.Map.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

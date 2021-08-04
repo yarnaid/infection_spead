@@ -1,7 +1,10 @@
+GRPC_OUT_FOLDER=proto
+
 create-proto:
-	python -m grpc_tools.protoc -IgRPC --python_out=gRPC --grpc_python_out=gRPC gRPC/spec.proto
+	python -m grpc_tools.protoc -I$(GRPC_OUT_FOLDER) --python_out=. --grpc_python_out=. $(GRPC_OUT_FOLDER)/grpc_lib/spec.proto
+
 test-coverage:
-	python -m pytest  --cov=backend --cov=frontend  tests/
+	python -m pytest --cov=backend --cov=frontend tests/
 	coverage report --fail-under=50
 
 test-coverage-ci:

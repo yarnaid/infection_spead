@@ -1,5 +1,4 @@
-from frontend.echo_client import run_get_map, run_update
-from PyQt5 import QtWidgets, QtGui
+from frontend.echo_client import run_get_map
 from frontend.UI_client import ModelingApp
 import sys
 
