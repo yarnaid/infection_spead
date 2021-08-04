@@ -30,9 +30,9 @@ def get_map(stub):
     :return: spec.proto Map obj : containing Map data and list of all building and their par in modeling
     """
     req = spec_pb2.Empty()
-    map_objects = stub.GetMap(req)  # We received a generator of objects on the map from the server
+    src_map = stub.GetMap(req)  # We received a generator of objects on the map from the server
     logger.info("Receive map from server ")
-    return map_objects
+    return src_map
 
 
 def run_update():
@@ -49,7 +49,8 @@ def run_get_map():
     with grpc.insecure_channel('localhost:50051') as channel:
         logger.info("Set channel to server")
         stub = spec_pb2_grpc.ModelingStub(channel)
-        get_map(stub)
+        src_map = get_map(stub)
+    return src_map
 
 
 logging.basicConfig(format='%(relativeCreated)5d %(name)-15s %(levelname)-8s %(message)s')
