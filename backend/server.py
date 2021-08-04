@@ -1,13 +1,14 @@
 import os
 from gRPC import spec_pb2_grpc
 from dataStructure.gRPC import Map, UpdateResponse, Metadata, StatusCode, HumanState, \
-    BuildingType, HealthStatus, Building, Empty, UpdateRequest
+    BuildingType, HealthStatus, Building, Empty, UpdateRequest, BaseUnit
 from concurrent import futures
 from pure_protobuf.types import int32
 import logging
 import grpc
 import uuid
 import typing  # noqa
+from backend.map_generation import ResearchMap
 
 
 class ModelingSerializer:
@@ -20,10 +21,10 @@ class ModelingSerializer:
                               )
 
     @staticmethod
-    def create_get_map_response(request: Empty, buildings) -> Map:  # create pb2 object from backend building
+    def create_get_map_response(request: Empty, src_map) -> Map:  # create pb2 object from backend building
         status = ModelingSerializer.create_success_meta_response(request)
-        return Map(meta=status, map_size_w=buildings.width, map_size_h=buildings.length,
-                   building=[ModelingSerializer.create_building(building) for building in buildings]
+        return Map(meta=status, map_size_w=float(src_map.map_width), map_size_h=float(src_map.map_length),
+                   building=[ModelingSerializer.create_building(building) for building in src_map.iter_buildings()]
                    )
 
     @staticmethod
@@ -41,7 +42,7 @@ class ModelingSerializer:
     @staticmethod
     def create_building(building) -> Building:
         return Building(
-            id=int32(building.id), coord_x=float(building.x), coord_y=float(building.y),
+            id=int32(building.id), coord_x=float(building.coord_x), coord_y=float(building.coord_y),
             type=BuildingType(building.type),
             width=int32(building.width),
             length=int32(building.length),
@@ -49,16 +50,17 @@ class ModelingSerializer:
         )
 
 
+
 class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 
-    def __init__(self, map_generator, human_generator, serializer) -> None:
+    def __init__(self, src_map, human_generator, serializer) -> None:
         """
          Remember our Backend output exits
         :param map_generator: generator: generator from which we can read map objects
         :param human_generator: generator : generator from which we can read humans object
         :param serializer: class : serializer so that you can bring the modeling objects to the proto form
         """
-        self.map = map_generator
+        self.map = src_map
         self.human_objects = human_generator
         self.serializer = serializer
 
@@ -68,14 +70,16 @@ class ModelingServicer(spec_pb2_grpc.ModelingServicer):
 
     def GetMap(self, request, context) -> Map:  # Generator of map objects
         logger.info("Get map request")
-        print(type(request))
-        return self.serializer.create_get_map_response(request, self.map)
+        resp = self.serializer.create_get_map_response(request, self.map)
+        print("HERE")
+        return resp
 
 
 def serve():  # Responsible for the operation of the server
+    res_map = ResearchMap(r"backend\backend_config.txt")
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=os.cpu_count()))
     spec_pb2_grpc.add_ModelingServicer_to_server(
-        ModelingServicer(None, None, ModelingSerializer), server)
+        ModelingServicer(res_map, None, ModelingSerializer), server)
     logger.info("Set Modeling Servicer")
     server.add_insecure_port('[::]:50051')
     server.start()

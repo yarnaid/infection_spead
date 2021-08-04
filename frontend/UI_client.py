@@ -108,6 +108,28 @@ class ModelingApp(PyQt5.QtWidgets.QMainWindow, Ui_MainWindow):
         self.canvas.setPixmap(canvas)
         self.setCentralWidget(self.canvas)
 
+    def collect_map(self, src_map) -> None:
+        for map_object in src_map.building:
+            building = BuildingRectangle(
+                x=map_object.coord_x,
+                y=map_object.coord_y,
+                width=map_object.width,
+                length=map_object.length,
+                angle=map_object.angle
+            )
+            self.buildings.append(building)
+        self.paint_map()
+
+    def paint_map(self) -> None:
+        for building in self.buildings:
+            building.draw(self)
+
+    def collect_update(self):
+        pass
+
+    def paint_update(self):
+        pass
+
     def debug_draw_dummy_random_map(self) -> None:
         """
         Debug function to create random number of random people and buildings

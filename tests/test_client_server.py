@@ -18,6 +18,11 @@ class mock_map:
     def __init__(self, *args):
         self.obj = args
         self.count = 0
+        self.map_width = 20
+        self.map_length = 20
+
+    def iter_buildings(self):
+        return self.__iter__()
 
     def __iter__(self):
         return self
@@ -28,12 +33,6 @@ class mock_map:
         res = self.obj[self.count]
         self.count += 1
         return res
-
-    def width(self):
-        return 20
-
-    def length(self):
-        return 20
 
 
 def test_getting_map():
