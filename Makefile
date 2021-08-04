@@ -11,5 +11,8 @@ test-coverage: ## run pytest with coverage
 test:  ## run pytest
 	python -m pytest tests/
 
+test-coverage-ci:
+	QT_QPA_PLATFORM=offscreen make test-coverage
+
 ui-create:  ## regenerate python UI files
 	pyuic5 frontend/UI/infection-spread.ui -o frontend/UI/infection_spread_ui.py
