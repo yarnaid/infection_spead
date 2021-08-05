@@ -1,6 +1,7 @@
 from frontend.echo_client import run_get_map
 from frontend.UI_client import ModelingApp
 import sys
+from PyQt5 import QtWidgets
 
 
 class ModelingShower:

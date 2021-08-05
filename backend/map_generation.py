@@ -1,3 +1,4 @@
+from __future__ import annotations
 from backend.config_parser import Config
 from dataStructure.gRPC import Building, HumanState, BaseUnit
 from itertools import count
@@ -23,12 +24,10 @@ class ResearchMap:
 
     def __init__(self, config_name: str):
         self.config_data = Config(config_name)
-        self.map_length = self.config_data.map_length
-        self.map_width = self.config_data.map_width
 
-        BaseUnit.borders_indent = self.config_data.indent_from_borders
-        BaseUnit.min_wall_len = self.config_data.minimal_wall_length
-        BaseUnit.max_wall_len = self.config_data.map_length // self.config_data.wall_length_divider
+        # BaseUnit.borders_indent = self.config_data.indent_from_borders
+        # BaseUnit.min_wall_len = self.config_data.minimal_wall_length
+        # BaseUnit.max_wall_len = self.config_data.map_length // self.config_data.wall_length_divider
 
         self.map_population = []
         self.map_buildings = []
@@ -55,7 +54,7 @@ class ResearchMap:
 
         return iter(self.get_population())
 
-    def create_buildings_list(self) -> typing.List["Building"]:
+    def create_buildings_list(self) -> typing.List[Building]:
 
         """
         Method of creating objects of buildings on the map
@@ -63,34 +62,43 @@ class ResearchMap:
         :return: List of Building-objects
         """
 
-        buildings_list = []
+        buildings_list: typing.List[Building] = []
         buildings_quantity = self.config_data.buildings
         for i in range(buildings_quantity):
-            new_building = Building.from_parameters(len(self.map_buildings) + len(self.map_population),
-                                                    self.map_length, self.map_width)
+            new_building = Building.from_parameters(
+                len(self.map_buildings) + len(self.map_population),
+                self.config_data.map_length,
+                self.config_data.map_width,
+            )
             if not buildings_list:  # if there is no buildings on map
                 buildings_list.append(new_building)
             else:
                 iterations = count()
-                while self.has_intersection(new_building)\
-                        and next(iterations) < self.config_data.iteration_constraint:
-                    new_building = Building.from_parameters(len(self.map_buildings) + len(self.map_population),
-                                                            self.map_length, self.map_width)
+                while self.has_intersection(new_building) and next(iterations) < self.config_data.iteration_constraint:
+                    new_building = Building.from_parameters(
+                        len(self.map_buildings) + len(self.map_population),
+                        self.config_data.map_length,
+                        self.config_data.map_width,
+                    )
                 if next(iterations) < self.config_data.iteration_constraint:
                     buildings_list.append(new_building)
         return buildings_list
 
-    def create_generation_list(self) -> typing.List["HumanState"]:
+    def create_generation_list(self) -> typing.List[HumanState]:
         """
         Method for random generating population of the city
 
         :return: List of Human-objects
         """
-        human_objects = []
-        for i in range(self.config_data.population):
-            human_objects.append(HumanState.
-                                 human_from_parameters(len(self.map_buildings) + len(self.map_population),
-                                                       self.map_length, self.map_width))
+        human_objects: typing.List[HumanState] = []
+        for _ in range(self.config_data.population):
+            human_objects.append(
+                HumanState.human_from_parameters(
+                    len(self.map_buildings) + len(self.map_population),
+                    self.config_data.map_length,
+                    self.config_data.map_width,
+                )
+            )
         return human_objects
 
     def has_intersection(self, new_building: Building) -> bool:

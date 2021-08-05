@@ -83,12 +83,12 @@ class BaseUnit:
         for field_name, field_def in self.__dataclass_fields__.items():
             actual_type = type(getattr(self, field_name))
             # so far this is a stub, looking for a solution how to make getattr return the correct int32 instead of int
-            if actual_type.__name__ == 'int':
+            if actual_type.__name__ == "int":
                 actual_type = int32
             if actual_type != field_def.type:
-                msg = "Invalid type of input field {0} : got {1} instead of {2}"\
-                    .format("\'" + field_name + "\'", "\'" + actual_type.__name__ + "\'",
-                            "\'" + field_def.type.__name__ + "\'")
+                msg = "Invalid type of input field {0} : got {1} instead of {2}".format(
+                    "'" + field_name + "'", "'" + actual_type.__name__ + "'", "'" + field_def.type.__name__ + "'"
+                )
                 break
         return msg
 
@@ -193,12 +193,10 @@ class Building(BaseUnit):
         to change them after creating the Building-object)
 
         """
-        self.x_bounds = [self.coord_x - self.length / 2,
-                         self.coord_x + self.length / 2]
-        self.y_bounds = [self.coord_y - self.width / 2,
-                         self.coord_y + self.width / 2]
+        self.x_bounds = [self.coord_x - self.length / 2, self.coord_x + self.length / 2]
+        self.y_bounds = [self.coord_y - self.width / 2, self.coord_y + self.width / 2]
 
-    def intersection_check(self, second_building) -> bool:
+    def intersection_check(self, second_building: "Building") -> bool:
 
         """
         Method for checking buildings intersections
@@ -215,11 +213,9 @@ class Building(BaseUnit):
         second_bounds = [second_building.x_bounds, second_building.y_bounds]
 
         if max(second_bounds[0]) >= max(first_bounds[0]) or max(second_bounds[1]) >= max(first_bounds[1]):
-            return max(first_bounds[0]) >= min(second_bounds[0]) \
-                   and max(first_bounds[1]) >= min(second_bounds[1])
+            return max(first_bounds[0]) >= min(second_bounds[0]) and max(first_bounds[1]) >= min(second_bounds[1])
         else:
-            return max(second_bounds[0]) >= min(first_bounds[0]) \
-                   and max(second_bounds[1]) >= min(first_bounds[1])
+            return max(second_bounds[0]) >= min(first_bounds[0]) and max(second_bounds[1]) >= min(first_bounds[1])
 
     @staticmethod
     def get_assert_msg(arg_number, obj, expected_type) -> str:
@@ -239,9 +235,9 @@ class Building(BaseUnit):
             A message string containing the attribute numbers, the type of the passed object, and the desired type
         """
 
-        return "Invalid type of input argument {0}: got {1} instead of {2}".format(arg_number,
-                                                                                   obj.__class__.__name__,
-                                                                                   expected_type.__name__)
+        return "Invalid type of input argument {0}: got {1} instead of {2}".format(
+            arg_number, obj.__class__.__name__, expected_type.__name__
+        )
 
     @staticmethod
     def from_parameters(id_counter: int, map_length: int, map_width: int) -> "Building":
@@ -273,7 +269,7 @@ class Building(BaseUnit):
 
 @message
 @dataclass
-class Map:
+class MapMessage:
     meta: Metadata = field(1)
     map_size_w: float = field(2)
     map_size_h: float = field(3)
