@@ -1,85 +1,75 @@
-from configparser import ConfigParser
 import numpy as np
 from scipy import integrate
 import matplotlib.pyplot as plt
+import logging
+import json
+from typing import List, Optional
+from pydantic import BaseModel, ValidationError, Field
 
 
-def ReadConfig(Name) -> "numpy.ndarray":
-    config = ConfigParser()
+class Coeff(BaseModel):
+    beta: float = Field(alias="intensity_of_contacts")
+    gamma: float = Field(alias="recovery_rate")
+    N: float = Field(alias="base_normalization")
+    h: float = Field(alias="step_in_days")
+    S0: float = Field(alias="susceptible_individuals_initial")
+    I0: float = Field(alias="infected_individuals_initial")
+    R0: float = Field(alias="ill_individuals_initial")
+    day: float
 
-    print(config.sections())
-    config.read(Name)
 
-    beta = float(
-        config["coefficient"][
-            "coefficient of intensity of contacts of individuals with subsequent infection"
-        ]
-    )
-    gamma = float(config["coefficient"]["recovery rate of infected individuals"])
-    N = float(config["coefficient"]["base normalization number"])
-    h = float(config["coefficient"]["fixed step (days)"])
+logging.basicConfig(filename="app.log", level=logging.INFO)
 
-    S0 = float(
-        config["initialcondition"][
-            "the number of susceptible individuals at the initial moment of time"
-        ]
-    )
-    I0 = float(
-        config["initialcondition"][
-            "the number of infected individuals at the initial moment of time"
-        ]
-    )
-    R0 = float(
-        config["initialcondition"][
-            "the number of ill individuals at the initial moment of time"
-        ]
-    )
 
-    day = int(config["Days"]["day"])
-
-    coeff = np.array([beta, gamma, N, h, S0, I0, R0, day])
-
+def ReadConfig(Name) -> np.ndarray:
+    logging.info("Trying to open the file")
+    file = open(Name, "r")
+    data = file.read()
+    try:
+        C = Coeff.parse_raw(data)
+    except ValidationError as e:
+        print("Exception", e.json())
+    coeff = np.array([C.beta, C.gamma, C.N, C.h, C.S0, C.I0, C.R0, C.day])
     return coeff
 
 
 # funtion S'
-def F1(S: float, I: float) -> float:
+def dS_dt(S: float, I: float) -> float:
     total = -(beta * I * S) / N
-
     return total
 
 
 # funtion I'
-def F2(I: float, S: float) -> float:
+def dI_dt(I: float, S: float) -> float:
     total = beta * I * S / N - gamma * I
     return total
 
 
 # funtion R'
-def F3(I: float) -> float:
+def dR_dt(I: float) -> float:
     total = gamma * I
     return total
 
 
 # RK:S , I ,R
-def rungeKutta(RK: "numpy.ndarray") -> "numpy.ndarray":
+def rungeKutta(RK: np.ndarray) -> np.ndarray:
 
-    [S, I, R] = RK[0:3]
-    k1S = h * F1(S, I)
-    k1I = h * F2(I, S)
-    k1R = h * F3(I)
+    S, I, R = RK[0], RK[1], RK[2]
+    k1S = h * dS_dt(S, I)
+    k1I = h * dI_dt(I, S)
+    k1R = h * dR_dt(I)
 
-    k2S = h * F1(S + k1S / 2, I + k1I / 2)
-    k2I = h * F2(I + k1I / 2, S + k1S / 2)
-    k2R = h * F3(I + k1I / 2)
+    k2S = h * dS_dt(S + k1S / 2, I + k1I / 2)
+    k2I = h * dI_dt(I + k1I / 2, S + k1S / 2)
+    k2R = h * dR_dt(I + k1I / 2)
 
-    k3S = h * F1(S + k2S / 2, I + k2I / 2)
-    k3I = h * F2(I + k2I / 2, S + k2S / 2)
-    k3R = h * F3(I + k2I / 2)
+    k3S = h * dS_dt(S + k2S / 2, I + k2I / 2)
+    k3I = h * dI_dt(I + k2I / 2, S + k2S / 2)
+    k3R = h * dR_dt(I + k2I / 2)
 
-    k4S = h * F1(S + k3S / 2, I + k3I / 2)
-    k4I = h * F2(I + k3I / 2, S + k3S / 2)
-    k4R = h * F3(I + k3I / 2)
+    k4S = h * dS_dt(S + k3S / 2, I + k3I / 2)
+    k4I = h * dI_dt(I + k3I / 2, S + k3S / 2)
+    k4R = h * dR_dt(I + k3I / 2)
 
     S1 = S + (k1S + k2S * 2 + k3S * 2 + k4S) / 6
     I1 = I + (k1I + k2I * 2 + k3I * 2 + k4I) / 6
@@ -92,7 +82,7 @@ def rungeKutta(RK: "numpy.ndarray") -> "numpy.ndarray":
 
 # RK= S0 , I0 ,R0
 # Funtion solution
-def solution(RK: "numpy.ndarray", day: float) -> "numpy.ndarray":
+def solution(RK: np.ndarray, day: float) -> np.ndarray:
     count = 0
 
     S = np.array([RK[0]])
@@ -116,7 +106,7 @@ def solution(RK: "numpy.ndarray", day: float) -> "numpy.ndarray":
     return sol
 
 
-coeff: "numpy.ndarray" = ReadConfig("config.ini")
+coeff: np.ndarray = ReadConfig("Config.json")
 [beta, gamma, N, h] = coeff[0:4]
 sol = solution(coeff[4:7], coeff[7])
 
