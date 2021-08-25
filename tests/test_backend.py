@@ -1,7 +1,7 @@
 import pytest
-from backend.map_generation import ResearchMap
-from dataStructure.gRPC import Building, BaseUnit, BuildingType
+from dataStructure.gRPC import Building, BuildingType
 from pure_protobuf.types import int32
+from backend.config_parser import Config
 from backend.map_generation import DUMMY_MAP_CONFIG_NAME, create_dummy_map
 
 # tests for basic research map functions
@@ -33,14 +33,7 @@ def test_dummy_map():
                  Building(int32(3), 396, 228, BuildingType.HOUSE, int32(108), int32(114)),
                  Building(int32(4), 288, 418, BuildingType.HOUSE, int32(72), int32(76))]
 
-    dummy_map_parameters = {'map_length': 500,
-                            'map_width': 500,
-                            'buildings': 4,
-                            'population': 2,
-                            'minimal_wall_length': 10,
-                            'iteration_constraint': 1000,
-                            'indent_from_borders': 3,
-                            'wall_length_divider': 5}
+    dummy_map_parameters = Config(DUMMY_MAP_CONFIG_NAME).__dict__
 
     test_map = create_dummy_map()
 

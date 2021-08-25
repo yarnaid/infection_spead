@@ -28,8 +28,8 @@ class ResearchMap:
         self.map_length = self.config_data.map_length
         self.map_width = self.config_data.map_width
 
-        BaseUnit.borders_indent = self.config_data.borders_indent
-        BaseUnit.min_wall_len = self.config_data.min_wall_len
+        BaseUnit.borders_indent = self.config_data.indent_from_borders
+        BaseUnit.min_wall_len = self.config_data.minimal_wall_length
         BaseUnit.max_wall_len = self.config_data.map_length // self.config_data.wall_length_divider
 
         self.map_population = []
