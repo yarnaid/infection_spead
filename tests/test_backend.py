@@ -24,9 +24,6 @@ def test_intersection_check(test_data: Building) -> None:
     assert Building.intersection_check(first_building, second_building) == answer
 
 
-# test data for dummy map
-
-
 def test_dummy_map():
     buildings = [Building(int32(1), 108, 228, BuildingType.HOUSE, int32(72), int32(114)),
                  Building(int32(2), 76, 288, BuildingType.HOUSE, int32(72), int32(76)),
