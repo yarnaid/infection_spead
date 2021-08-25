@@ -1,12 +1,9 @@
-# scipy==1.2.3
+-r backend/requirements.txt
+-r frontend/requirements.txt
+-r tests/requirements.txt
+
+
+# dev
+pylama~=7.7
 black==21.6b0
-grpcio-tools
-grpcio
-mypy
-# numpy
-# pyqt5
-pytest
-pytest-cov
-pure_protobuf
-pylama
-PyQt5
+mypy~=0.880

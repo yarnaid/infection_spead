@@ -1,0 +1,2 @@
+[run]
+omit = frontend\UI\infection_spread_ui.py

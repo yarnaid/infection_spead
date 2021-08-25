@@ -131,7 +131,7 @@ class HumanState(BaseUnit):
     health_status: HealthStatus = field(1, default=HealthStatus.NORMAL)
 
     @staticmethod
-    def human_from_parameters(id_counter: int, map_length: int, map_width: int):
+    def human_from_parameters(id_counter: int, map_length: int, map_width: int) -> "HumanState":
 
         """
         Method for random generating human with given parameters
@@ -198,7 +198,7 @@ class Building(BaseUnit):
         self.y_bounds = [self.coord_y - self.width / 2,
                          self.coord_y + self.width / 2]
 
-    def intersection_check(self, second_building):
+    def intersection_check(self, second_building) -> bool:
 
         """
         Method for checking buildings intersections
@@ -222,7 +222,7 @@ class Building(BaseUnit):
                    and max(second_bounds[1]) >= min(first_bounds[1])
 
     @staticmethod
-    def get_assert_msg(arg_number, obj, expected_type):
+    def get_assert_msg(arg_number, obj, expected_type) -> str:
 
         """
 
@@ -244,7 +244,7 @@ class Building(BaseUnit):
                                                                                    expected_type.__name__)
 
     @staticmethod
-    def from_parameters(id_counter: int, map_length: int, map_width: int):
+    def from_parameters(id_counter: int, map_length: int, map_width: int) -> "Building":
 
         """
         Method for generating random building for ap with passed parameters
