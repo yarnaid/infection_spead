@@ -24,22 +24,3 @@ def test_intersection_check(test_data: Building) -> None:
     assert Building.intersection_check(first_building, second_building) == answer
 
 
-def test_dummy_map():
-    buildings = [Building(int32(1), 108, 228, BuildingType.HOUSE, int32(72), int32(114)),
-                 Building(int32(2), 76, 288, BuildingType.HOUSE, int32(72), int32(76)),
-                 Building(int32(3), 396, 228, BuildingType.HOUSE, int32(108), int32(114)),
-                 Building(int32(4), 288, 418, BuildingType.HOUSE, int32(72), int32(76))]
-
-    dummy_map_parameters = Config(DUMMY_MAP_CONFIG_NAME).__dict__
-
-    test_map = create_dummy_map()
-
-    for building_required, building_created in zip(buildings, test_map.map_buildings):
-        assert building_required.coord_x == building_created.coord_x
-        assert building_required.coord_y == building_created.coord_y
-        assert building_required.type == building_created.type
-        assert building_required.length == building_created.length
-        assert building_required.width == building_created.width
-
-    for key in test_map.config_data.__dict__.keys():
-        assert dummy_map_parameters[key] == test_map.config_data.__getattribute__(key)
