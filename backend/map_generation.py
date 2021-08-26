@@ -3,7 +3,7 @@ from dataStructure.gRPC import Building, HumanState, BaseUnit, BuildingType
 from pure_protobuf.types import int32
 from itertools import count
 
-DUMMY_MAP_CONFIG_NAME = "backend/dummy_test_config.txt"
+DUMMY_MAP_CONFIG_NAME = "tests/dummy_test_config.txt"
 
 
 class ResearchMap:
