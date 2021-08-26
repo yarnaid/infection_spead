@@ -95,7 +95,7 @@ class ResearchMap:
                                                        self.map_length, self.map_width))
         self.map_population = human_objects
 
-    def has_intersection(self, new_building: Building):
+    def has_intersection(self, new_building: Building) -> bool:
 
         """
         Method for finding intersection between current building and already existing buildings (from list)
@@ -120,7 +120,7 @@ class ResearchMap:
         return self.map_buildings
 
 
-def create_dummy_map() -> "ResearchMap":
+def create_dummy_map() -> ResearchMap:
 
     """
     Method for creating dummy map for simple way of testing model
