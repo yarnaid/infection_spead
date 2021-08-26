@@ -119,9 +119,6 @@ class ResearchMap:
     def get_buildings(self):
         return self.map_buildings
 
-    def update_map(self):
-        pass
-
 
 def create_dummy_map() -> "ResearchMap":
 
