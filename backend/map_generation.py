@@ -1,7 +1,9 @@
 from backend.config_parser import Config
-from dataStructure.gRPC import Building, HumanState, BaseUnit
+from dataStructure.gRPC import Building, HumanState, BaseUnit, BuildingType
+from pure_protobuf.types import int32
 from itertools import count
-import typing
+
+DUMMY_MAP_CONFIG_NAME = "tests/dummy_test_config.txt"
 
 
 class ResearchMap:
@@ -32,8 +34,8 @@ class ResearchMap:
 
         self.map_population = []
         self.map_buildings = []
-        self.map_population = self.create_generation_list()
-        self.map_buildings = self.create_buildings_list()
+        self.create_generation_list()
+        self.create_buildings_list()
 
     def iter_buildings(self):
 
@@ -55,7 +57,7 @@ class ResearchMap:
 
         return iter(self.get_population())
 
-    def create_buildings_list(self) -> typing.List["Building"]:
+    def create_buildings_list(self):
 
         """
         Method of creating objects of buildings on the map
@@ -78,9 +80,9 @@ class ResearchMap:
                                                             self.map_length, self.map_width)
                 if next(iterations) < self.config_data.iteration_constraint:
                     buildings_list.append(new_building)
-        return buildings_list
+        self.map_buildings = buildings_list
 
-    def create_generation_list(self) -> typing.List["HumanState"]:
+    def create_generation_list(self):
         """
         Method for random generating population of the city
 
@@ -91,7 +93,7 @@ class ResearchMap:
             human_objects.append(HumanState.
                                  human_from_parameters(len(self.map_buildings) + len(self.map_population),
                                                        self.map_length, self.map_width))
-        return human_objects
+        self.map_population = human_objects
 
     def has_intersection(self, new_building: Building) -> bool:
 
@@ -116,3 +118,22 @@ class ResearchMap:
 
     def get_buildings(self):
         return self.map_buildings
+
+
+def create_dummy_map() -> ResearchMap:
+
+    """
+    Method for creating dummy map for simple way of testing model
+    Dummy map is 500px long and 500px wide (fixed config options), other parameters
+    from config are not used in tests
+
+    :return: ResearchMap-object with all data about model map
+    """
+
+    research_map = ResearchMap(DUMMY_MAP_CONFIG_NAME)
+    hardcoded_buildings = [Building(int32(1), 108, 228, BuildingType.HOUSE, int32(72), int32(114)),
+                           Building(int32(2), 76, 288, BuildingType.HOUSE, int32(72), int32(76)),
+                           Building(int32(3), 396, 228, BuildingType.HOUSE, int32(108), int32(114)),
+                           Building(int32(4), 288, 418, BuildingType.HOUSE, int32(72), int32(76))]
+    research_map.map_buildings = hardcoded_buildings
+    return research_map
