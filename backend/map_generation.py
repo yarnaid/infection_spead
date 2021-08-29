@@ -158,6 +158,3 @@ def create_dummy_map() -> ResearchMap:
                            Building(int32(4), 288, 418, BuildingType.HOUSE, int32(72), int32(76))]
     research_map.map_buildings = hardcoded_buildings
     return research_map
-
-
-
