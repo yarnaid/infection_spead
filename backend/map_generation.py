@@ -140,52 +140,6 @@ class ResearchMap:
     def get_buildings(self):
         return self.map_buildings
 
-    # def dumps(self) -> dict:
-    #
-    #     """
-    #     Method for serialization ResearchMap-object to byte sequence
-    #
-    #     :return:
-    #         Sequence of bytes obtained by serializing the card
-    #     """
-    #
-    #     serialized_buildings = []
-    #     for building in self.map_buildings:
-    #         building_serialized = building.dumps()
-    #         serialized_buildings.append(building_serialized)
-    #
-    #     serialized_humans = []
-    #     for human in self.map_population:
-    #         human_serialized = human.dumps()
-    #         serialized_humans.append(human_serialized)
-    #
-    #     return {"serialized_humans": serialized_humans,
-    #             "serialized_buildings": serialized_buildings}
-    #
-    # def dump(self, filename: str) -> None:
-    #
-    #     """
-    #     Method for serialization ResearchMap-object to file
-    #
-    #     Parameters:
-    #     ----------
-    #
-    #     filename: str
-    #         Serialization stream name without format
-    #     """
-    #
-    #     with open(filename, "w") as file:
-    #
-    #         for human in self.map_population:
-    #             human.dump(io.BytesIO(human.dumps()))
-    #
-    #         for building in self.map_buildings:
-    #             building.dump(io.BytesIO(file))
-
-    # @staticmethod
-    # def load(filename: str) -> "ResearchMap":
-    #     bytes_data = yaml.load()
-
 
 def create_dummy_map() -> ResearchMap:
 
