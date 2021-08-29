@@ -1,7 +1,9 @@
 from configparser import ConfigParser
 from dataclasses import dataclass, field
+from pure_protobuf.dataclasses_ import field, message
 
 
+@message
 @dataclass
 class Config:
 
@@ -29,14 +31,14 @@ class Config:
         Wall length divider to keep building dimensions to map scale
     """
 
-    population: int = field(default=0)
-    buildings: int = field(default=0)
-    map_length: int = field(default=0)
-    map_width: int = field(default=0)
-    minimal_wall_length: int = field(default=0)
-    iteration_constraint: int = field(default=0)
-    indent_from_borders: int = field(default=0)
-    wall_length_divider: int = field(default=0)
+    population: int = field(1, default=0)
+    buildings: int = field(2, default=0)
+    map_length: int = field(3, default=0)
+    map_width: int = field(4, default=0)
+    minimal_wall_length: int = field(5, default=0)
+    iteration_constraint: int = field(6, default=0)
+    indent_from_borders: int = field(7, default=0)
+    wall_length_divider: int = field(8, default=0)
 
     def __init__(self, config_name: str):
         parser = ConfigParser()
