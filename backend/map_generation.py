@@ -206,8 +206,4 @@ def create_dummy_map() -> ResearchMap:
     return research_map
 
 
-test_map = ResearchMap("C:/Users/tyryk/PycharmProjects/infection_spread/tests/test_backend_config_1.txt")
-data = test_map.dumps()
-print(data)
-decoded_data = ResearchMap.loads(data)
-print(decoded_data)
+
