@@ -2,10 +2,18 @@ from backend.config_parser import Config
 from dataStructure.gRPC import Building, HumanState, BaseUnit, BuildingType
 from pure_protobuf.types import int32
 from itertools import count
+from pure_protobuf.dataclasses_ import message, field
+from dataclasses import dataclass
+from typing import List
 
 DUMMY_MAP_CONFIG_NAME = "tests/dummy_test_config.txt"
+SERIALIZATION_FILE = "C:/Users/tyryk/PycharmProjects/infection_spread/tests/test_serialization.txt"
+HUMANS_KEY = "serialized_humans"
+BUILDINGS_KEY = "serialized_buildings"
 
 
+@message
+@dataclass
 class ResearchMap:
 
     """
@@ -14,17 +22,30 @@ class ResearchMap:
     Parameters:
     ----------
 
+     config_name: str:
+        Filename for reading map settings
      config_data: dict
         Attribute, that stores the map settings for building a model
      map_population: list
         List of HumanState-objects, placed on the map
      map_buildings: list
         List of Building-objects, placed on the map
+     map_length: int
+        Length of model Map-object
+     map_width: int
+        Width of model Map-object
 
     """
 
-    def __init__(self, config_name: str):
-        self.config_data = Config(config_name)
+    config_name: str = field(1, default="")
+    config_data: Config = field(2, default=None)
+    map_length: int = field(3, default=0)
+    map_width: int = field(4, default=0)
+    map_population: List[HumanState] = field(5, default_factory=list)
+    map_buildings: List[Building] = field(6, default_factory=list)
+
+    def __post_init__(self):
+        self.config_data = Config(self.config_name)
         self.map_length = self.config_data.map_length
         self.map_width = self.config_data.map_width
 
@@ -119,6 +140,52 @@ class ResearchMap:
     def get_buildings(self):
         return self.map_buildings
 
+    # def dumps(self) -> dict:
+    #
+    #     """
+    #     Method for serialization ResearchMap-object to byte sequence
+    #
+    #     :return:
+    #         Sequence of bytes obtained by serializing the card
+    #     """
+    #
+    #     serialized_buildings = []
+    #     for building in self.map_buildings:
+    #         building_serialized = building.dumps()
+    #         serialized_buildings.append(building_serialized)
+    #
+    #     serialized_humans = []
+    #     for human in self.map_population:
+    #         human_serialized = human.dumps()
+    #         serialized_humans.append(human_serialized)
+    #
+    #     return {"serialized_humans": serialized_humans,
+    #             "serialized_buildings": serialized_buildings}
+    #
+    # def dump(self, filename: str) -> None:
+    #
+    #     """
+    #     Method for serialization ResearchMap-object to file
+    #
+    #     Parameters:
+    #     ----------
+    #
+    #     filename: str
+    #         Serialization stream name without format
+    #     """
+    #
+    #     with open(filename, "w") as file:
+    #
+    #         for human in self.map_population:
+    #             human.dump(io.BytesIO(human.dumps()))
+    #
+    #         for building in self.map_buildings:
+    #             building.dump(io.BytesIO(file))
+
+    # @staticmethod
+    # def load(filename: str) -> "ResearchMap":
+    #     bytes_data = yaml.load()
+
 
 def create_dummy_map() -> ResearchMap:
 
@@ -137,3 +204,10 @@ def create_dummy_map() -> ResearchMap:
                            Building(int32(4), 288, 418, BuildingType.HOUSE, int32(72), int32(76))]
     research_map.map_buildings = hardcoded_buildings
     return research_map
+
+
+test_map = ResearchMap("C:/Users/tyryk/PycharmProjects/infection_spread/tests/test_backend_config_1.txt")
+data = test_map.dumps()
+print(data)
+decoded_data = ResearchMap.loads(data)
+print(decoded_data)
