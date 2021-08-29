@@ -1,5 +1,5 @@
 from configparser import ConfigParser
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pure_protobuf.dataclasses_ import field, message
 
 
