@@ -31,7 +31,7 @@ class Config:
         Wall length divider to keep building dimensions to map scale
     """
 
-    config_name: str = field(1, default=0)
+    config_name: str = field(1, default="")
     population: int = field(2, default=0)
     buildings: int = field(3, default=0)
     map_length: int = field(4, default=0)
