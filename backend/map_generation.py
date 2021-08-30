@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import List
 
 DUMMY_MAP_CONFIG_NAME = "tests/dummy_test_config.txt"
-SERIALIZATION_FILE = "C:/Users/tyryk/PycharmProjects/infection_spread/tests/test_serialization.txt"
+SERIALIZATION_FILE = "tests/test_serialization.txt"
 HUMANS_KEY = "serialized_humans"
 BUILDINGS_KEY = "serialized_buildings"
 
