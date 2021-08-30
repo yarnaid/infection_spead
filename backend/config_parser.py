@@ -31,7 +31,6 @@ class Config:
         Wall length divider to keep building dimensions to map scale
     """
 
-    # config_name: str = field(1, default="")
     population: int = optional_field(2)
     buildings: int = optional_field(3)
     map_length: int = optional_field(4)
@@ -48,4 +47,3 @@ class Config:
             if hasattr(self, key):
                 attr_type = self.__annotations__.get(key)
                 setattr(self, key, attr_type(value))
-
