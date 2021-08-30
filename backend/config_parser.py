@@ -31,7 +31,7 @@ class Config:
         Wall length divider to keep building dimensions to map scale
     """
 
-    config_name: str = field(1, default="")
+    # config_name: str = field(1, default="")
     population: int = optional_field(2)
     buildings: int = optional_field(3)
     map_length: int = optional_field(4)
@@ -41,10 +41,11 @@ class Config:
     indent_from_borders: int = optional_field(8)
     wall_length_divider: int = optional_field(9)
 
-    def __post_init__(self):
+    def __init__(self, config_name: str):
         parser = ConfigParser()
-        parser.read(self.config_name)
+        parser.read(config_name)
         for key, value in parser.defaults().items():
             if hasattr(self, key):
                 attr_type = self.__annotations__.get(key)
                 setattr(self, key, attr_type(value))
+

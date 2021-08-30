@@ -2,11 +2,11 @@ from backend.config_parser import Config
 from dataStructure.gRPC import Building, HumanState, BaseUnit, BuildingType
 from pure_protobuf.types import int32
 from itertools import count
-from pure_protobuf.dataclasses_ import message, field
+from pure_protobuf.dataclasses_ import message, field, optional_field
 from dataclasses import dataclass
 from typing import List
 
-DUMMY_MAP_CONFIG_NAME = "tests/dummy_test_config.txt"
+DUMMY_MAP_CONFIG_NAME = "C:/Users/tyryk/PycharmProjects/infection_spread/tests/dummy_test_config.txt"
 SERIALIZATION_FILE = "tests/test_serialization.txt"
 HUMANS_KEY = "serialized_humans"
 BUILDINGS_KEY = "serialized_buildings"
@@ -22,8 +22,6 @@ class ResearchMap:
     Parameters:
     ----------
 
-     config_name: str:
-        Filename for reading map settings
      config_data: dict
         Attribute, that stores the map settings for building a model
      map_population: list
@@ -37,15 +35,14 @@ class ResearchMap:
 
     """
 
-    config_name: str = field(1, default="")
-    config_data: Config = field(2, default=None)
-    map_length: int = field(3, default=0)
-    map_width: int = field(4, default=0)
+    config_data: Config = optional_field(2)
+    map_length: int = optional_field(3)
+    map_width: int = optional_field(4)
     map_population: List[HumanState] = field(5, default_factory=list)
     map_buildings: List[Building] = field(6, default_factory=list)
 
-    def __post_init__(self):
-        self.config_data = Config(self.config_name)
+    def __init__(self, config_name: str):
+        self.config_data = Config(config_name)
         self.map_length = self.config_data.map_length
         self.map_width = self.config_data.map_width
 
@@ -158,3 +155,7 @@ def create_dummy_map() -> ResearchMap:
                            Building(int32(4), 288, 418, BuildingType.HOUSE, int32(72), int32(76))]
     research_map.map_buildings = hardcoded_buildings
     return research_map
+
+
+ff = Config(DUMMY_MAP_CONFIG_NAME)
+print(ff)
