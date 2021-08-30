@@ -6,7 +6,7 @@ from pure_protobuf.dataclasses_ import message, field, optional_field
 from dataclasses import dataclass
 from typing import List
 
-DUMMY_MAP_CONFIG_NAME = "C:/Users/tyryk/PycharmProjects/infection_spread/tests/dummy_test_config.txt"
+DUMMY_MAP_CONFIG_NAME = "tests/dummy_test_config.txt"
 SERIALIZATION_FILE = "tests/test_serialization.txt"
 HUMANS_KEY = "serialized_humans"
 BUILDINGS_KEY = "serialized_buildings"
