@@ -1,6 +1,6 @@
 from configparser import ConfigParser
 from dataclasses import dataclass
-from pure_protobuf.dataclasses_ import field, message
+from pure_protobuf.dataclasses_ import field, message, optional_field
 
 
 @message
@@ -32,14 +32,14 @@ class Config:
     """
 
     config_name: str = field(1, default="")
-    population: int = field(2, default=0)
-    buildings: int = field(3, default=0)
-    map_length: int = field(4, default=0)
-    map_width: int = field(5, default=0)
-    minimal_wall_length: int = field(6, default=0)
-    iteration_constraint: int = field(7, default=0)
-    indent_from_borders: int = field(8, default=0)
-    wall_length_divider: int = field(9, default=0)
+    population: int = optional_field(2)
+    buildings: int = optional_field(3)
+    map_length: int = optional_field(4)
+    map_width: int = optional_field(5)
+    minimal_wall_length: int = optional_field(6)
+    iteration_constraint: int = optional_field(7)
+    indent_from_borders: int = optional_field(8)
+    wall_length_divider: int = optional_field(9)
 
     def __post_init__(self):
         parser = ConfigParser()
