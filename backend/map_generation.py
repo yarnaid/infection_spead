@@ -157,5 +157,3 @@ def create_dummy_map() -> ResearchMap:
     return research_map
 
 
-ff = Config(DUMMY_MAP_CONFIG_NAME)
-print(ff)

@@ -1,6 +1,6 @@
 from configparser import ConfigParser
 from dataclasses import dataclass
-from pure_protobuf.dataclasses_ import message, optional_field
+from pure_protobuf.dataclasses_ import optional_field, message
 
 
 @message
