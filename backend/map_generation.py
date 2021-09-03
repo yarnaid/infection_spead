@@ -2,10 +2,18 @@ from backend.config_parser import Config
 from dataStructure.gRPC import Building, HumanState, BaseUnit, BuildingType
 from pure_protobuf.types import int32
 from itertools import count
+from pure_protobuf.dataclasses_ import message, field, optional_field
+from dataclasses import dataclass
+from typing import List
 
 DUMMY_MAP_CONFIG_NAME = "tests/dummy_test_config.txt"
+SERIALIZATION_FILE = "tests/test_serialization.txt"
+HUMANS_KEY = "serialized_humans"
+BUILDINGS_KEY = "serialized_buildings"
 
 
+@message
+@dataclass
 class ResearchMap:
 
     """
@@ -20,8 +28,18 @@ class ResearchMap:
         List of HumanState-objects, placed on the map
      map_buildings: list
         List of Building-objects, placed on the map
+     map_length: int
+        Length of model Map-object
+     map_width: int
+        Width of model Map-object
 
     """
+
+    config_data: Config = optional_field(2)
+    map_length: int = optional_field(3)
+    map_width: int = optional_field(4)
+    map_population: List[HumanState] = field(5, default_factory=list)
+    map_buildings: List[Building] = field(6, default_factory=list)
 
     def __init__(self, config_name: str):
         self.config_data = Config(config_name)

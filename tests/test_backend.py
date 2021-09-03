@@ -24,6 +24,7 @@ def test_intersection_check(test_data: Building) -> None:
     assert Building.intersection_check(first_building, second_building) == answer
 
 
+# testing dummy map
 def test_dummy_map():
     buildings = [Building(int32(1), 108, 228, BuildingType.HOUSE, int32(72), int32(114)),
                  Building(int32(2), 76, 288, BuildingType.HOUSE, int32(72), int32(76)),
@@ -43,3 +44,4 @@ def test_dummy_map():
 
     for key in test_map.config_data.__dict__.keys():
         assert dummy_map_parameters[key] == test_map.config_data.__getattribute__(key)
+
