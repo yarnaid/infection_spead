@@ -1,0 +1,11 @@
+{
+	"intensity_of_contacts" : "0.001",
+    "recovery_rate" : "0.1",
+    "base_normalization" : "1", 
+    "step_in_days" : "0.001",
+    "susceptible_individuals_initial":"1000",
+    "infected_individuals_initial" : "1",
+    "ill_individuals_initial" : "0",
+    "day" : "100"
+}
+
